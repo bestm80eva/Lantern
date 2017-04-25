@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label52 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.versionTextBox = new System.Windows.Forms.TextBox();
@@ -166,13 +168,14 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.coCoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tRS80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -205,6 +208,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label52);
+            this.tabPage1.Controls.Add(this.textBox4);
             this.tabPage1.Controls.Add(this.label20);
             this.tabPage1.Controls.Add(this.label19);
             this.tabPage1.Controls.Add(this.versionTextBox);
@@ -219,10 +224,27 @@
             this.tabPage1.Text = " Welcome";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(40, 22);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(364, 13);
+            this.label52.TabIndex = 7;
+            this.label52.Text = "Project Name (Used to create output directory when generating source files)";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(40, 41);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(180, 20);
+            this.textBox4.TabIndex = 6;
+            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(399, 154);
+            this.label20.Location = new System.Drawing.Point(399, 203);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(42, 13);
             this.label20.TabIndex = 5;
@@ -231,7 +253,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(40, 154);
+            this.label19.Location = new System.Drawing.Point(40, 203);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(38, 13);
             this.label19.TabIndex = 4;
@@ -239,7 +261,7 @@
             // 
             // versionTextBox
             // 
-            this.versionTextBox.Location = new System.Drawing.Point(467, 154);
+            this.versionTextBox.Location = new System.Drawing.Point(467, 203);
             this.versionTextBox.Name = "versionTextBox";
             this.versionTextBox.Size = new System.Drawing.Size(146, 20);
             this.versionTextBox.TabIndex = 3;
@@ -247,7 +269,7 @@
             // 
             // authorTextBox
             // 
-            this.authorTextBox.Location = new System.Drawing.Point(94, 155);
+            this.authorTextBox.Location = new System.Drawing.Point(94, 204);
             this.authorTextBox.Name = "authorTextBox";
             this.authorTextBox.Size = new System.Drawing.Size(197, 20);
             this.authorTextBox.TabIndex = 2;
@@ -256,7 +278,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(37, 33);
+            this.label16.Location = new System.Drawing.Point(37, 82);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(98, 13);
             this.label16.TabIndex = 1;
@@ -264,7 +286,7 @@
             // 
             // welcomeTextBox
             // 
-            this.welcomeTextBox.Location = new System.Drawing.Point(37, 52);
+            this.welcomeTextBox.Location = new System.Drawing.Point(37, 101);
             this.welcomeTextBox.Multiline = true;
             this.welcomeTextBox.Name = "welcomeTextBox";
             this.welcomeTextBox.Size = new System.Drawing.Size(593, 86);
@@ -1217,15 +1239,16 @@
             this.textBox3.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(631, 67);
+            this.textBox3.Location = new System.Drawing.Point(744, 64);
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(255, 183);
+            this.textBox3.Size = new System.Drawing.Size(286, 183);
             this.textBox3.TabIndex = 18;
             this.textBox3.Text = "Sentences map user input to functions in the game.  Sentences allow you to create" +
-    " custom logic such as: if the player types \"ring bell\" cal the RingBell() functi" +
-    "on";
+    " custom logic such as: if the player types \"ring bell\" call the RingBell() funct" +
+    "ion";
+            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // label36
             // 
@@ -1239,9 +1262,10 @@
             // sentencesListBox
             // 
             this.sentencesListBox.FormattingEnabled = true;
+            this.sentencesListBox.HorizontalScrollbar = true;
             this.sentencesListBox.Location = new System.Drawing.Point(238, 64);
             this.sentencesListBox.Name = "sentencesListBox";
-            this.sentencesListBox.Size = new System.Drawing.Size(363, 264);
+            this.sentencesListBox.Size = new System.Drawing.Size(481, 342);
             this.sentencesListBox.TabIndex = 16;
             this.sentencesListBox.SelectedIndexChanged += new System.EventHandler(this.sentencesListBox_SelectedIndexChanged);
             this.sentencesListBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.sentencesListBox_KeyPress);
@@ -1397,7 +1421,7 @@
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(331, 221);
+            this.textBox2.Size = new System.Drawing.Size(221, 259);
             this.textBox2.TabIndex = 14;
             this.textBox2.Text = resources.GetString("textBox2.Text");
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
@@ -1405,7 +1429,7 @@
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(212, 33);
+            this.label40.Location = new System.Drawing.Point(15, 28);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(81, 13);
             this.label40.TabIndex = 13;
@@ -1414,7 +1438,7 @@
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(539, 33);
+            this.label39.Location = new System.Drawing.Point(423, 28);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(35, 13);
             this.label39.TabIndex = 12;
@@ -1423,7 +1447,7 @@
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(372, 33);
+            this.label38.Location = new System.Drawing.Point(256, 28);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(61, 13);
             this.label38.TabIndex = 11;
@@ -1432,7 +1456,7 @@
             // rulesListBox
             // 
             this.rulesListBox.FormattingEnabled = true;
-            this.rulesListBox.Location = new System.Drawing.Point(372, 52);
+            this.rulesListBox.Location = new System.Drawing.Point(256, 47);
             this.rulesListBox.Name = "rulesListBox";
             this.rulesListBox.Size = new System.Drawing.Size(157, 329);
             this.rulesListBox.TabIndex = 9;
@@ -1440,7 +1464,7 @@
             // 
             // addRuleButton
             // 
-            this.addRuleButton.Location = new System.Drawing.Point(237, 78);
+            this.addRuleButton.Location = new System.Drawing.Point(135, 73);
             this.addRuleButton.Name = "addRuleButton";
             this.addRuleButton.Size = new System.Drawing.Size(75, 23);
             this.addRuleButton.TabIndex = 8;
@@ -1450,19 +1474,20 @@
             // 
             // ruleNameTextBox
             // 
-            this.ruleNameTextBox.Location = new System.Drawing.Point(212, 52);
+            this.ruleNameTextBox.Location = new System.Drawing.Point(15, 47);
             this.ruleNameTextBox.Name = "ruleNameTextBox";
-            this.ruleNameTextBox.Size = new System.Drawing.Size(100, 20);
+            this.ruleNameTextBox.Size = new System.Drawing.Size(195, 20);
             this.ruleNameTextBox.TabIndex = 7;
             // 
             // ruleCodeTextBox
             // 
-            this.ruleCodeTextBox.Location = new System.Drawing.Point(539, 52);
+            this.ruleCodeTextBox.Location = new System.Drawing.Point(423, 47);
             this.ruleCodeTextBox.Multiline = true;
             this.ruleCodeTextBox.Name = "ruleCodeTextBox";
             this.ruleCodeTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.ruleCodeTextBox.Size = new System.Drawing.Size(343, 329);
+            this.ruleCodeTextBox.Size = new System.Drawing.Size(619, 329);
             this.ruleCodeTextBox.TabIndex = 5;
+            this.ruleCodeTextBox.WordWrap = false;
             this.ruleCodeTextBox.TextChanged += new System.EventHandler(this.ruleCodeTextBox_TextChanged);
             // 
             // tabPage7
@@ -1576,6 +1601,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.exportToolStripMenuItem1,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -1588,9 +1614,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
-            this.exportToolStripMenuItem,
             this.loadToolStripMenuItem,
-            this.saveToolStripMenuItem1,
             this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -1600,36 +1624,53 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
-            // exportToolStripMenuItem
-            // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exportToolStripMenuItem.Text = "Export";
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveToolStripMenuItem.Text = "Save As...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // exportToolStripMenuItem1
+            // 
+            this.exportToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.coCoToolStripMenuItem,
+            this.tRS80ToolStripMenuItem});
+            this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
+            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(52, 20);
+            this.exportToolStripMenuItem1.Text = "Export";
+            // 
+            // coCoToolStripMenuItem
+            // 
+            this.coCoToolStripMenuItem.Name = "coCoToolStripMenuItem";
+            this.coCoToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.coCoToolStripMenuItem.Text = "CoCo";
+            this.coCoToolStripMenuItem.Click += new System.EventHandler(this.coCoToolStripMenuItem_Click);
+            // 
+            // tRS80ToolStripMenuItem
+            // 
+            this.tRS80ToolStripMenuItem.Name = "tRS80ToolStripMenuItem";
+            this.tRS80ToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.tRS80ToolStripMenuItem.Text = "TRS-80";
+            this.tRS80ToolStripMenuItem.Click += new System.EventHandler(this.tRS80ToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -1645,12 +1686,6 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // saveToolStripMenuItem1
-            // 
-            this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.saveToolStripMenuItem1.Text = "Save";
             // 
             // Form1
             // 
@@ -1763,7 +1798,6 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox versionTextBox;
         private System.Windows.Forms.TextBox authorTextBox;
-        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.TextBox initialDescTextBox;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.ComboBox parentComboBox;
@@ -1835,7 +1869,11 @@
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label51;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem coCoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tRS80ToolStripMenuItem;
     }
 }
 

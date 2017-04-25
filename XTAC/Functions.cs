@@ -67,7 +67,8 @@ namespace XTAC
             CreateDefaultVar("$score", "score", "0");
             CreateDefaultVar("$turn", "turn", "0");
             CreateDefaultVar("$health", "health", "100");
-            CreateDefaultVar("$nolight", "turnsWithoutlight ", "100");
+            CreateDefaultVar("$nolight", "turnsWithoutlight", "100");
+            CreateDefaultVar("$gameOver", "gameOver", "0");
 
         }
 
@@ -203,7 +204,7 @@ namespace XTAC
             string[] defaultVerbs = new string[] { 
                 "n,go north,north","s,go south,south","e,go east,east","w,go west,west","ne,go northeast,northeast","se,go southeast,southeast","sw,go southwest,southwest","nw,go northwest,northwest",
 "up,go up,u","down,go down,d","enter,go in,go into,go inside","out","get,take,grab,pick up","inventory,i","kill","drop","light","look,l","examine,x,look at","look in,inspect,search","open","lock","unlock","close,shut","eat","drink","put,place","quit","smell,sniff","listen","wait","climb",
-"yell,scream,shout", "jump", "talk to"
+"yell,scream,shout", "jump", "talk to", "turn on"
             };
 
             foreach (string s in defaultVerbs) { xproject.Project.Verbs.Builtinverbs.Verb.Add(s); }

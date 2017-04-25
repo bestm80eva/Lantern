@@ -11,15 +11,19 @@ using System.Xml;
 using System.IO;
 using System.Xml.Serialization;
 using System.Reflection;
+using XMLtoAdv;
 
 namespace XTAC
 {
     public partial class Form1 : Form
     {
         public static Xml xproject;
+        string fileName = "";
+
         string[] allChecks = new string[]
         {
-            "check_see_dobj", "check_have_dobj", "check_dobj_supplied", "check_iobj_supplied","check_dont_have_dobj","check_not_self_or_child"
+            "check_see_dobj", "check_have_dobj", "check_dobj_supplied", "check_iobj_supplied","check_dont_have_dobj","check_not_self_or_child",
+            "check_dobj_open", "check_dobj_closed", "check_dobj_opnable", "check_dobj_portable", "check_dobj_locked","check_dobj_unlocked"
         };
 
         static Form1()
@@ -81,25 +85,22 @@ namespace XTAC
             // a .CUR file was selected, open it.  
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-
-                //xmlDoc.Load(openFileDialog1.FileName);    
-
                 System.Xml.Serialization.XmlSerializer reader = new XmlSerializer(typeof(Xml));
 
                 // Read the XML file.
                 StreamReader file = new StreamReader(openFileDialog1.FileName);
+                fileName = openFileDialog1.FileName;
 
                 // Deserialize the content of the file into a Book object.
                 xproject = (Xml)reader.Deserialize(file);
-
                 ShowProject();
-
             }
         }
 
 
         void ShowProject()
         {
+            textBox4.Text = xproject.Project.ProjName;
             authorTextBox.Text = xproject.Project.Author;
             welcomeTextBox.Text = xproject.Project.Welcome;
             versionTextBox.Text = xproject.Project.Version;
@@ -540,6 +541,7 @@ namespace XTAC
         private void containerCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox cb = (CheckBox)sender; ToggleProperty(GetCurObj().Flags, cb.Text, !cb.Checked);
+
         }
 
         private void supporterCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -550,6 +552,12 @@ namespace XTAC
         private void visibleCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox cb = (CheckBox)sender; ToggleProperty(GetCurObj().Flags, cb.Text, !cb.Checked);
+
+            if (cb.Checked)
+            { //scenery objects aren't portable
+//                ToggleProperty(GetCurObj().Flags, "Portable", false);
+                portableCheckBox.Checked = false;
+            }
         }
 
         private void backdropCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -558,6 +566,10 @@ namespace XTAC
 
             if (cb.Checked)
             {
+//                ToggleProperty(GetCurObj().Flags, "Portable", false);
+//                ToggleProperty(GetCurObj().Flags, "Scenery", true);
+                portableCheckBox.Checked = false;
+                visibleCheckBox.Checked = false;
                 backdropTextBox.Enabled = true;
             }
             else
@@ -636,7 +648,7 @@ namespace XTAC
 
 
         string FormatCode(string code)
-        {
+        {/*
             if (code != null)
             {
                 string s = code;
@@ -650,7 +662,8 @@ namespace XTAC
             {
                 string s = "";
                 return s;
-            }
+            }*/
+            return CodeFormatter.Format(code);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -1083,26 +1096,31 @@ namespace XTAC
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            fileName = Save();
+        }
+
+        string Save()
+        {
             SaveFileDialog openFileDialog1 = new SaveFileDialog();
             openFileDialog1.Filter = "XML Files|*.xml";
             openFileDialog1.Title = "Select an XML File";
-
+         
             // Show the Dialog.  
             // If the user clicked OK in the dialog and  
             // a .CUR file was selected, open it.  
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                StreamWriter file=null;
+                StreamWriter file = null;
                 try
                 {
                     System.Xml.Serialization.XmlSerializer writer = new XmlSerializer(typeof(Xml));
 
                     // Read the XML file.
-                     file = new StreamWriter(openFileDialog1.FileName);
+                    file = new StreamWriter(openFileDialog1.FileName);
 
                     // Serialize the project
                     writer.Serialize(file, xproject);
-
+                    fileName = openFileDialog1.FileName;
                 }
                 catch (Exception ex)
                 {
@@ -1113,8 +1131,9 @@ namespace XTAC
                     if (file != null)
                         file.Close();
                 }
+
             }
-       
+            return fileName;      
         }
 
         private void authorTextBox_TextChanged(object sender, EventArgs e)
@@ -1139,7 +1158,7 @@ namespace XTAC
 
 
             //update its code
-            funcs.First<Routine>().Text = codeTextBox.Text;
+            funcs.First<Routine>().Text = CodeFormatter.Format(codeTextBox.Text);
             
 
         }
@@ -1333,6 +1352,53 @@ namespace XTAC
             varNameTextBox.Text = xproject.Project.Variables.User.Var[userVarsListBox.SelectedIndex].Name;
             valueTextBox.Text = xproject.Project.Variables.User.Var[userVarsListBox.SelectedIndex].Value;
         }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            string name = textBox4.Text;
+            name = name.Replace(' ','_');
+            name = name.Replace(".","");
+            xproject.Project.ProjName = name;
+            textBox4.Text = name;
+        }
+
+        private void tRS80ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (fileName != "")
+            {
+                XmlToTables converter = XmlToTables.GetInstance();
+                converter.ConvertZ80(fileName);  //"f3xml.xml"
+                MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+            }
+            else
+            {
+                MessageBox.Show("File name is null.  Please save your project before exporting.");
+            }
+        }
+
+        private void coCoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+//            fileName = Save();
+            if (fileName != "")
+            {
+                XmlToTables converter = XmlToTables.GetInstance();
+                converter.Convert6809(fileName);  //"f3xml.xml"
+                MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+            }
+            else
+            {
+                MessageBox.Show("");
+            }
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        
 
     }
 }

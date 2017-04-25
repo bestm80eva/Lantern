@@ -47,6 +47,7 @@
             public string N { get; set; }
             [XmlAttribute(AttributeName = "s")]
             public string S { get; set; }
+
             [XmlAttribute(AttributeName = "e")]
             public string E { get; set; }
             [XmlAttribute(AttributeName = "w")]
@@ -290,6 +291,8 @@
         [XmlRoot(ElementName = "project")]
         public class Project
         {
+            [XmlElement(ElementName = "projname")]
+            public string ProjName { get; set; }
             [XmlElement(ElementName = "welcome")]
             public string Welcome { get; set; }
             [XmlElement(ElementName = "author")]
