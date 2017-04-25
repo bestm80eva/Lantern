@@ -42,9 +42,9 @@ $lp?	ld a,(ix)
 		call printcr
 		nop ; need to test container/supporter
 		bit CONTAINER_BIT,(ix+PROPERTY_BYTE_1)
-		call z,print_container_contents
+		call nz,print_container_contents
 		bit SUPPORTER_BIT,(ix+PROPERTY_BYTE_1)
-		call z,print_supporter_contents
+		call nz,print_supporter_contents
 $c?		add ix,de
 		jp $lp?
 $x?		ld b,a	; found flag->a
@@ -166,8 +166,10 @@ $x?		pop bc
 print_container_contents
 		push bc
 		push hl
+		ld b,a
 		call has_contents
 		cp 1
+		ld a,b
 		jp nz,$x?
 		ld hl,initis
 		call OUTLIN
@@ -182,8 +184,10 @@ $x?		pop hl
 print_supporter_contents
 		push bc
 		push hl
+		ld b,a
 		call has_contents
 		cp 1
+		ld a,b
 		jp nz,$x?
 		ld hl,onitis
 		call OUTLIN
