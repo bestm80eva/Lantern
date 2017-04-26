@@ -173,6 +173,48 @@ look_at_sub
 		pop af
 		ret
 
+		
+;is b a visible ancestor of c
+;1 or 0 is returned in 'a'
+*MOD
+b_visible_to_c
+		push bc
+		push de
+		push ix
+		push iy
+$lp?	ld d,b	; save
+		ld a,b
+		cp c  ;if two objects are equal, we suceeded.
+		jp z,$y? 
+		ld ix,obj_table
+		;get child
+		ld b,OBJ_ENTRY_SIZE
+		call bmulc
+		add ix,bc
+		;get parent
+		ld b,(ix+HOLDER_ID)
+		ld e,b	; save parent
+		ld c,OBJ_ENTRY_SIZE
+		call bmulc
+		ld ix,obj_table
+		add ix,bc  
+		;is parent_a_closed_container
+		bit SUPPORTER_BIT,(IX+PROPERTY_BYTE_1) ; supporter?
+		jp nz,$c?
+		ld	a,(IX+PROPERTY_BYTE_1)
+		bit OPEN_BIT,(IX+PROPERTY_BYTE_1) ; must be a container
+		jp z,$n?  ; closed, return 0
+$c?		ld b,d   ;reload ancestor
+		ld c,e   ; parent is new child
+		jp $lp?
+$n?		ld a,0	 ;parent is closed container 	
+		jp $x?
+$y?		ld a,1
+$x?		pop iy
+		pop ix
+		pop de
+		pop bc
+		ret		
 ;iy contains addr of objects
 *MOD
 print_contents_header
