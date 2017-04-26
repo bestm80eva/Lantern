@@ -39,6 +39,7 @@ $lp?	ld a,(ix)
 		jp nz,$c?
 		ld a,(ix)
 		call indent
+		call printa
 		call print_obj_name
 		call printcr
 		nop ; need to test container/supporter
@@ -236,9 +237,17 @@ indent_less
 		ld (indentAmt),a
 		pop af
 		ret
+
+
+printa
+		push hl
+		ld hl,leadinga
+		call OUTLIN
+		pop hl
+		ret
 		
-indentAmt DB 0
-		
+indentAmt DB 0		
+leadinga DB "A ",0h
 taken DB "TAKEN.",0h		
 dropped DB "DROPPED.",0h
 noitems DB "YOU ARE EMPTY HANDED.",0h
