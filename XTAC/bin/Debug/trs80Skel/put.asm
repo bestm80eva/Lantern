@@ -11,7 +11,7 @@ put_sub
 		jp z,$bp?
 		ld ix,obj_table
 		ld de,PROPERTY_BYTE_1
-		ld a,(sentence+1)
+		ld a,(sentence+3)
 		ld b,a
 		ld c,OBJ_ENTRY_SIZE
 		call bmulc
@@ -36,7 +36,9 @@ $po?	nop ; is do a supporter?
 		call check_nested_containership
 		cp 1  ; 1 = invalid (message was printed)
 		jp z,$x?
-$mv?    ld c,HOLDER
+$mv?    ld a,(sentence+1)
+		ld b,a
+		ld c,HOLDER
 		ld a,(sentence+3)
 		call set_obj_attr
 		ld hl,done

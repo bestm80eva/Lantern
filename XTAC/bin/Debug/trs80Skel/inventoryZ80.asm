@@ -19,7 +19,7 @@ $n?		ld hl,noitems
 $x?		pop af
 		ret
 
-;prints contains of obj in 'a'
+;prints name of a and it's contents of obj in 'a'
 *MOD
 print_contents
 		push bc
@@ -38,6 +38,7 @@ $lp?	ld a,(ix)
 		bit SCENERY_BIT,(ix+PROPERTY_BYTE_1)  ; test scenery bit
 		jp nz,$c?
 		ld a,(ix)
+		call indent
 		call print_obj_name
 		call printcr
 		nop ; need to test container/supporter
@@ -174,7 +175,9 @@ print_container_contents
 		ld hl,initis
 		call OUTLIN
 		call printcr
+		call indent_more
 		call print_contents
+		call indent_less
 $x?		pop hl
 		pop bc
 		ret
@@ -192,10 +195,49 @@ print_supporter_contents
 		ld hl,onitis
 		call OUTLIN
 		call printcr
+		call indent_more
 		call print_contents
+		call indent_less
 $x?		pop hl
 		pop bc
 		ret
+
+*MOD	
+indent
+		push af
+		push bc
+		ld a,(indentAmt)
+		ld b,a
+		cp 0
+		jp z,$x?
+		ld a,32 ; space
+$lp?	call CRTBYTE
+		djnz $lp?
+$x?		pop bc
+		pop af
+		ret
+
+indent_more
+		push af
+		ld a,(indentAmt)
+		inc a
+		inc a
+		inc a
+ 		ld (indentAmt),a
+		pop af
+		ret
+		
+indent_less
+		push af
+		ld a,(indentAmt)
+		dec a
+		dec a
+		dec a
+		ld (indentAmt),a
+		pop af
+		ret
+		
+indentAmt DB 0
 		
 taken DB "TAKEN.",0h		
 dropped DB "DROPPED.",0h

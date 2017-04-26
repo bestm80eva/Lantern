@@ -60,11 +60,18 @@ print_obj_desc
 		
 ;prints the initial description for object in b
 ;if it has one. Otherwise it defaults to "THERE IS A ____ HERE"
+;the contents of the object are also printed.
+;ix contains addr of object in table
 *MOD
 list_object
 	push af
 	push bc
+	push de
 	push ix
+	push iy
+	push ix ; put obj addr in iy
+	pop iy
+	ld d,b ; save obj
 	ld c,INITIAL_DESC_ID
 	call get_obj_attr 
 	cp 0ffh		
@@ -83,7 +90,14 @@ $n?	ld hl,thereisa
 	ld hl,here
 	call OUTLIN
 	call printcr
-$x?	pop ix
+$x?	ld a,d
+    call indent_more
+	call print_contents_header ;  of object in 'a'
+	call print_contents  ; of object in 'a'
+	call indent_less
+	pop iy
+	pop ix
+	pop de
 	pop bc
 	pop af
 	ret
@@ -154,6 +168,35 @@ look_at_sub
 		call printcr
 		pop af
 		ret
+
+;iy contains addr of objects
+*MOD
+print_contents_header
+	push af
+	push bc
+	push hl
+	ld a,(iy)
+	call has_contents
+	cp 0
+	jp z,$x?
+	bit CONTAINER_BIT,(iy+PROPERTY_BYTE_1)
+	jp z,$s? ; if not check if supporter
+	bit OPEN_BIT,(iy+PROPERTY_BYTE_1)
+	jp z,$x?
+	ld hl,initis
+	call OUTLIN
+	call printcr
+	jp $x?
+$s?	bit SUPPORTER_BIT,(iy+PROPERTY_BYTE_1)
+	jp z,$x?
+	ld hl,onitis
+	call OUTLIN
+	call printcr	
+	jp $x?
+$x? pop hl
+	pop bc
+	pop af
+	ret
 		
 visobjs DB 0		
 thereisa DB  "THERE IS A ",0h

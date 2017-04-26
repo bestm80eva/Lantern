@@ -194,6 +194,22 @@ $x?	pop bc
 *MOD
 check_prep_supplied
 	ret
+
+
+*MOD
+check_iobj_container
+		ld a,(sentence+3)
+		ld b,a	
+		ld c,PROPERTY_BYTE_1
+		call get_obj_prop
+		and CONTAINER_MASK + SUPPORTER_MASK
+		jp nz,$x?
+		ld hl,notcontainer
+		call OUTLIN
+		call printcr
+		inc sp
+		inc sp
+$x?		ret
 	
 notlocked DB "YOU DON'T SEE THAT.",0h	
 nosee DB "YOU DON'T SEE THAT.",0h	
