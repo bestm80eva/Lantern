@@ -158,6 +158,8 @@ $x?		pop ix
 
 look_at_sub
 		push af
+		push bc
+		push ix
 		ld a,(sentence+1)
 		ld b,a
 		ld c,DESC_ID
@@ -166,6 +168,8 @@ look_at_sub
 		ld ix,string_table
 		call print_table_entry
 		call printcr
+		pop ix
+		pop bc
 		pop af
 		ret
 
