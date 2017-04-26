@@ -141,7 +141,7 @@ namespace XMLtoAdv
 
         protected override void WriteMoveStatement(StreamWriter sw)
         {
-            sw.WriteLine("\tcall move");
+            sw.WriteLine("\tcall move_player");
         }
 
 
