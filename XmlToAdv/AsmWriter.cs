@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace XMLtoAdv
 {
-    public abstract class AsmWriter
+    public  abstract class AsmWriter
     {
          
         protected int labelId = 97;

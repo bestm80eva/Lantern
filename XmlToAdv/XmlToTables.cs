@@ -338,6 +338,7 @@ namespace XMLtoAdv
 
         public void ConvertZ80(string fileName)
         {
+            string oldDir = Environment.CurrentDirectory;
 
             //get the file path 
             CreateTables(fileName, "_Z80");
@@ -357,6 +358,8 @@ namespace XMLtoAdv
             WriteEvents(doc, "Z80", new AsmWriterZ80());
             WriteUserVarTable(doc, "Z80");
             WriteBackdropTable(doc, "BackDropTableZ80.asm", "DB");
+
+            Environment.CurrentDirectory = oldDir;
         }
 
       
@@ -1105,6 +1108,10 @@ namespace XMLtoAdv
             string skelDir = skelDirs[tgtPlatform];
             string cmd = "COPY /Y ..\\" + skelDir + "\\*.*  .";
             Process p = Process.Start("cmd", "/c "+cmd);
+
+            //string output = p.StandardOutput.ReadToEnd();
+            //MessageBox.Show(output);
+
             p.WaitForExit();
 
             //run the build
