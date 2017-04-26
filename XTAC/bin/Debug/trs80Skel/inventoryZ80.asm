@@ -75,11 +75,11 @@ $lp?	ld a,(ix)
 		jp nz,$c?
 		bit SCENERY_BIT,(ix+PROPERTY_BYTE_1)  ; test scenery bit
 		jp nz,$c?
-		ld a,1
+		ld b,1	; set found flag
 		jp $x?
 $c?		add ix,de
 		jp $lp?
-$x?		ld b,a	; found flag->a
+$x?		ld a,b	; found flag->a
 		pop ix
 		pop hl
 		pop de
