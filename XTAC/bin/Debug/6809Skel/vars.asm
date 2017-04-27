@@ -54,7 +54,7 @@ addtovar
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;built-in vars
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-var_moves .dw 0
-var_health .dw 100
-var_prev_room .dw 0
+moves .dw 0
+health .dw 100
+prev_room .dw 0
 turns_without_light .db 0 
