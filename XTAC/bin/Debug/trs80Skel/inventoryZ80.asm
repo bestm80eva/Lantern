@@ -41,6 +41,8 @@ $lp?	ld a,(ix)
 		call indent
 		call printa
 		call print_obj_name
+		ld a,(ix) ; reload obj id
+		call append_adj  ; tack on providing light, being worn,...
 		call printcr
 		nop ; need to test container/supporter
 		bit CONTAINER_BIT,(ix+PROPERTY_BYTE_1)
@@ -245,6 +247,27 @@ printa
 		call OUTLIN
 		pop hl
 		ret
+
+;prints adjectives for object in 'a'
+*MOD
+append_adj
+		push bc
+		push ix
+		ld b,a
+		ld c,OBJ_ENTRY_SIZE
+		call bmulc
+		ld ix,obj_table
+		add ix,bc
+		bit LIT_BIT,(ix+PROPERTY_BYTE_2)
+		jp z,$x?
+		ld hl,providingLight
+		call OUTLIN
+$x?		pop ix
+		pop bc
+		ret
+
+providingLight DB "(PROVIDING LIGHT)",0h
+beingWorn DB "(BEING WORN)",0h
 		
 indentAmt DB 0		
 leadinga DB "A ",0h
