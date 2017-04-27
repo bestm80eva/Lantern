@@ -64,9 +64,9 @@ namespace XTAC
             CreateDefaultVar("$dobj", "sentence+1", "0");
             CreateDefaultVar("$iobj", "sentence+3", "0");
             CreateDefaultVar("$score", "score", "0");
-            CreateDefaultVar("$turn", "turn", "0");
+            CreateDefaultVar("$moves", "moves", "0");
             CreateDefaultVar("$health", "health", "100");
-            CreateDefaultVar("$turnsWithoutLight", "turnsWithoutLight", "100");
+            CreateDefaultVar("$turnsWithoutLight", "turns_without_light", "100");
             CreateDefaultVar("$gameOver", "gameOver", "0");
 
         }
