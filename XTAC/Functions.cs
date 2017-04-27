@@ -18,7 +18,6 @@ namespace XTAC
             r.Text = "println(\"IF YOU ARE EXPERIENCING SUICIDAL THOUGHTS, YOU SHOULD SEEK PSYCHIATRIC HELP.\");";
             xproject.Project.Routines.Routine.Add(r);
 
-            
             r = new Routine();
             r.Name = "kill_player";
             r.Text = "println(\"***YOU HAVE DIED***.\");player.holder=1;\n";
@@ -54,7 +53,7 @@ namespace XTAC
 
             r = new Routine();
             r.Name = "jump";
-            r.Text = "println(\"WHEEE!\");";
+            r.Text = "println(\"WHEEEEEE!\");";
             xproject.Project.Routines.Routine.Add(r);
         }
 

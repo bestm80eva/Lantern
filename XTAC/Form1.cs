@@ -23,7 +23,8 @@ namespace XTAC
         string[] allChecks = new string[]
         {
             "check_see_dobj", "check_have_dobj", "check_dobj_supplied", "check_iobj_supplied","check_dont_have_dobj","check_not_self_or_child",
-            "check_dobj_open", "check_dobj_closed", "check_dobj_opnable", "check_dobj_portable", "check_dobj_locked","check_dobj_unlocked"
+            "check_dobj_open", "check_dobj_closed", "check_dobj_opnable", "check_dobj_portable", "check_dobj_locked","check_dobj_unlocked",
+            "check_iobj_container", "check_light"
         };
 
         static Form1()
@@ -1394,6 +1395,11 @@ namespace XTAC
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
         {
 
         }
