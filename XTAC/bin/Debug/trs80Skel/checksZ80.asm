@@ -195,6 +195,18 @@ $x?	pop bc
 check_prep_supplied
 	ret
 
+*MOD
+check_light
+	call player_has_light
+	cp 1
+	jp $x?
+	ld hl,pitchdark
+	call OUTLIN
+	call printcr
+	inc sp
+	inc sp
+$x?	ret
+	
 
 *MOD
 check_iobj_container
@@ -212,5 +224,6 @@ check_iobj_container
 $x?		ret
 	
 notlocked DB "YOU DON'T SEE THAT.",0h	
-nosee DB "YOU DON'T SEE THAT.",0h	
+nosee DB "YOU DON'T SEE THAT.",0h
+	
 	

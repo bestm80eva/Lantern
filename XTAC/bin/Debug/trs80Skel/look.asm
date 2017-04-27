@@ -8,7 +8,14 @@ look_sub
 		push ix
 		ld de,OBJ_ENTRY_SIZE
 		nop ; can the player see?
-		call get_player_room
+		call player_has_light
+		cp 1
+		jp z,$y?
+		ld hl,pitchdark
+		call OUTLIN
+		call printcr
+		jp $x?
+$y?		call get_player_room
 		call print_obj_name
 		call printcr
 		ld b,a
@@ -113,7 +120,7 @@ player_has_light
 		ld b,a
 		ld c,EMITTING_LIGHT
 		call get_obj_prop
-		cp a
+		cp 1
 		jp z,$y?
 		ld hl,OBJ_ENTRY_SIZE
 		ld ix,obj_table ;loop over every object. if its a child of player
@@ -130,13 +137,9 @@ $lp?	ld a,(ix) ;and not inside a closed container return true
 		ld b,a
 		pop af
 		ld c,a ; object id
-		call b_ancestor_of_c ; is it a in same room as player
-		cp 0	
-		jp z,$skp?	; if it's not 'lit' we don't care about it
-		nop ; need to set up args
-		call inside_closed_container;
-		cp 0
-		jp z,$skp?	; inside closed container -> skip it
+		call b_visible_to_c ; is it a in same room as player
+		cp 1	
+		jp z,$y?	; if it's not 'lit' we don't care about it
 $skp?	add ix,hl ; skip to next object
 		jp $lp	;repeat
 $y?		ld a,1
