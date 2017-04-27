@@ -47,8 +47,6 @@ sentence_table
 	DW smell_sub
 	DB listen_verb_id
 	DW listen_sub
-	DB enter_verb_id
-	DW enter_sub
 	DB quit_verb_id
 	DW quit_sub
 	DB lock_verb_id

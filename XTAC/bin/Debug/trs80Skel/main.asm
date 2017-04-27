@@ -47,12 +47,12 @@ do_events
 	call player_has_light
 	cp 1
 	jp z,$y?
-	ld a,(turnsWithoutLight)
+	ld a,(turns_without_light)
 	inc a
-	ld (turnsWithoutLight),a
+	ld (turns_without_light),a
 	jp $x?
 $y?	ld a,0
-	ld (turnsWithoutLight),a
+	ld (turns_without_light),a
 $x?	ret
 	
 *INCLUDE io.asm	

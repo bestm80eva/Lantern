@@ -54,7 +54,26 @@ $x?		pop ix
 		pop bc
 		ret
 
+*MOD
 enter_sub
+		push bc
+		push hl
+		nop ; is the dobj enterable
+		ld a,(sentence+1)
+		ld b,a
+		ld c,ENTER
+		call get_obj_attr
+		cp 255
+		jp nz,$y?
+	    ld hl,noenter;
+		call OUTLINCR
+		jp $x?
+$y?	ld b,PLAYER_ID
+		ld c,HOLDER_ID
+		call set_obj_attr
+		call look_sub
+$x?		pop hl
+		pop bc
 		ret
 	
 ;puts move dir (attr) in a 	
@@ -91,3 +110,4 @@ direction_map
 	DB 0ffh
 	
 doorclosed DB "THE DOOR IS CLOSED.",0h	
+noenter DB "YOU CAN'T ENTER THAT.",0h
