@@ -116,9 +116,14 @@ $x?	ld a,d
 ;player has light result in 'a'
 *MOD
 player_has_light
+		push bc
+		push de
+		push hl
+		push ix
 		;is the room emitting light?
 		call get_player_room 
 		ld b,a
+		ld d,a
 		ld c,EMITTING_LIGHT
 		call get_obj_prop
 		cp 1
@@ -126,27 +131,31 @@ player_has_light
 		ld hl,OBJ_ENTRY_SIZE
 		ld ix,obj_table ;loop over every object. if its a child of player
 $lp?	ld a,(ix) ;and not inside a closed container return true
+		ld e,a ;save obj id
 		cp 0ffh	;hit end? jump out
+		jp z,$n?
 		nop ; is it emitting light?
 		ld b,a  ; put obj id in 'b'
 		ld c,EMITTING_LIGHT
 		call get_obj_prop
 		cp 0	
 		jp z,$skp?	; if it's not 'lit' we don't care about it
-		push af ; get player room into 'b'
-		ld a,(player_room)
-		ld b,a
-		pop af
-		ld c,a ; object id
+		ld b,d ; player room
+		ld c,e ; object id
 		call b_visible_to_c ; is it a in same room as player
 		cp 1	
 		jp z,$y?	; if it's not 'lit' we don't care about it
-$skp?	add ix,hl ; skip to next object
-		jp $lp	;repeat
+$skp?	ld bc,OBJ_ENTRY_SIZE
+		add ix,bc ; skip to next object
+		jp $lp?	;repeat
 $y?		ld a,1
 		jp $x?
 $n?		ld a,0		
-$x?		ret
+$x?		pop ix
+		pop hl
+		pop de
+		pop bc
+		ret
 
 *MOD
 count_visible_objects
@@ -178,7 +187,8 @@ look_at_sub
 		ret
 
 		
-;is b a visible ancestor of c
+;is b is an ancestor of c
+;and c can 'see' b
 ;1 or 0 is returned in 'a'
 *MOD
 b_visible_to_c
@@ -186,10 +196,12 @@ b_visible_to_c
 		push de
 		push ix
 		push iy
-$lp?	ld d,b	; save
-		ld a,b
+		ld d,b	; save parent
+$lp?	ld a,b
 		cp c  ;if two objects are equal, we suceeded.
 		jp z,$y? 
+		cp 0
+		jp z,$n?  ; hit top of table
 		ld ix,obj_table
 		;get child
 		ld b,OBJ_ENTRY_SIZE
@@ -197,6 +209,11 @@ $lp?	ld d,b	; save
 		add ix,bc
 		;get parent
 		ld b,(ix+HOLDER_ID)
+		ld a,b
+		cp d    ; is the parent the 'ancestor'
+		jp z,$y?
+		cp PLAYER_ID    ; is the parent the 'ancestor'		
+		jp z,$y?
 		ld e,b	; save parent
 		ld c,OBJ_ENTRY_SIZE
 		call bmulc
@@ -205,10 +222,9 @@ $lp?	ld d,b	; save
 		;is parent_a_closed_container
 		bit SUPPORTER_BIT,(IX+PROPERTY_BYTE_1) ; supporter?
 		jp nz,$c?
-		ld	a,(IX+PROPERTY_BYTE_1)
 		bit OPEN_BIT,(IX+PROPERTY_BYTE_1) ; must be a container
 		jp z,$n?  ; closed, return 0
-$c?		ld b,d   ;reload ancestor
+$c?		ld b,d 	 ; restore parent
 		ld c,e   ; parent is new child
 		jp $lp?
 $n?		ld a,0	 ;parent is closed container 	
