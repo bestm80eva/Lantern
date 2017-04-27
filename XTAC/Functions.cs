@@ -66,7 +66,7 @@ namespace XTAC
             CreateDefaultVar("$score", "score", "0");
             CreateDefaultVar("$turn", "turn", "0");
             CreateDefaultVar("$health", "health", "100");
-            CreateDefaultVar("$nolight", "turnsWithoutlight", "100");
+            CreateDefaultVar("$turnsWithoutLight", "turnsWithoutLight", "100");
             CreateDefaultVar("$gameOver", "gameOver", "0");
 
         }
