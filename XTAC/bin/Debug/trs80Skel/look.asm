@@ -12,8 +12,9 @@ look_sub
 		cp 1
 		jp z,$y?
 		ld hl,pitchdark
-		call OUTLIN
-		call printcr
+		;call OUTLIN
+		;call printcr
+		call OUTLINCR
 		jp $x?
 $y?		call get_player_room
 		call print_obj_name
@@ -239,8 +240,9 @@ print_contents_header
 $s?	bit SUPPORTER_BIT,(iy+PROPERTY_BYTE_1)
 	jp z,$x?
 	ld hl,onitis
-	call OUTLIN
-	call printcr	
+	;call OUTLIN
+	;call printcr	
+	call OUTLINCR
 	jp $x?
 $x? pop hl
 	pop bc

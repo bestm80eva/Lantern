@@ -65,7 +65,7 @@ print_ret_not_openable
 	
 	
 pitchdark DB "IT IS PITCH DARK.",0h
-dontsee DB "YOU DON'T SEE THAT.",0h
+dontseeep  DB "YOU DON'T SEE THAT.",0h
 donthave DB "YOU DON'T HAVE THAT.",0h
 cantopen DB "THAT'S N0T SOMETHING YOU CAN OPEN.",0h
 badnoun DB "I DON'T RECOGNIZE THE WORD '",0h ; null	

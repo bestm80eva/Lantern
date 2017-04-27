@@ -1,6 +1,7 @@
 BUFSIZE EQU 48
 KEYIN EQU 40H
 
+*MOD
 getlin
 		push bc
 		push de
@@ -41,7 +42,32 @@ $x?		pop iy
 		pop bc
 		pop af
 		ret
+		
+*MOD
+OUTLINCR
+		push af
+		push bc
+		push de
+		push hl
+		push ix
+		push iy
+$lp?	ld a,(hl)
+		cp 0
+		jp z,$x?
+		inc hl
+		call CRTBYTE
+		jp $lp?	
+$x?		call printcr
+		pop iy
+		pop ix
+		pop hl
+		pop de
+		pop bc
+		pop af
+		ret
 
+		
+		
 *MOD
 clrbuf
 		LD A,255

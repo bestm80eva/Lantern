@@ -41,10 +41,19 @@ getcommand
 		call do_events
 		ret
 		
-
+*MOD
 do_events
 *INCLUDE event_jumps_Z80.asm
-	ret
+	call player_has_light
+	cp 1
+	jp z,$y?
+	ld a,(turnsWithoutLight)
+	inc a
+	ld (turnsWithoutLight),a
+	jp $x?
+$y?	ld a,0
+	ld (turnsWithoutLight),a
+$x?	ret
 	
 *INCLUDE io.asm	
 *INCLUDE parser.asm
@@ -80,6 +89,8 @@ do_events
 *INCLUDE UserVarsZ80.asm
 score DB 0
 gameOver DB 0
-
+turn DB 0
+turns_without_light DB 0
+health DB 100
 	END START
 ;END
