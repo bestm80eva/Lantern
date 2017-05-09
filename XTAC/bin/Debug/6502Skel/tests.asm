@@ -14,6 +14,5 @@ chkix
 	jsr get_word_index
 	rts
 
- 
 testInput .text "FSIHH"
 	.byte 0

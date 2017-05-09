@@ -54,6 +54,10 @@ start
 	sta strAddr
 	jsr printcr
 	jsr printstr
+	
+	lda #4
+	jsr print_obj_name
+	
 ;	pla
 ;	tax ;x
 ;	pla 
