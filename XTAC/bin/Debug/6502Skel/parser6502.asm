@@ -29,7 +29,21 @@ validate_encoding
 ;make sure any words were actually mapped
 ;return if they weren't
 run_sentence
-	rts
+		rts
+	
+trim_input
+		pha
+		txa
+		pha
+		tya
+		pha
+		
+		pla
+		tay
+		pla
+		tax
+		pla
+		rts
 
 	
 word1 resb 32

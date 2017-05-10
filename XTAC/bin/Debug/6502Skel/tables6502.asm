@@ -1,4 +1,4 @@
-;6502 table routines
+;6502 table  routines
 
  
 
@@ -20,7 +20,7 @@ get_entry_id
 		ldx #0  ; loop counter
 		ldy #0
 _lp		lda ($tableAddr),y	;
-		cmp #255	; hit end?
+		cmp #255 	; hit end?
 		beq _x
 		jsr inc_tabl_addr ; skip id byte
 		jsr tab_addr_to_str_src ; position str src at string
@@ -106,6 +106,53 @@ dec_tabl_addr
 		sta $tableAddr+1 ; store hi byte 		
 		pla
 		rts
+
+;this function returns the id of the object
+;whose word id is supplied in register 'a'
+;		
+		.module get_obj_id
+get_obj_id
+		sta objId
+		pha
+		tax
+		pha
+		tay
+		pha
+		lda #obj_word_table/256
+		sta $tableAddr+1
+		lda #obj_word_table%256
+		sta $tableAddr
+_lp		ldy #0
+		lda ($tableAddr),y	;get the id
+		cmp #255
+		beq _ntfnd
+		nop ; if it isn't visible, skip it
+		ldy #1
+		lda ($tableAddr),y
+		cmp $objId
+		beq _found
+		ldy #2
+		lda ($tableAddr),y
+		cmp $objId
+		beq _found
+		ldy #3
+		lda ($tableAddr),y
+		cmp $objId
+		beq _found
+		jsr inc_tabl_addr ; skip to next entry
+		jsr inc_tabl_addr
+		jsr inc_tabl_addr
+		jsr inc_tabl_addr
+		jmp _lp
+_found	ldy #0
+		lda ($tableAddr),y	;get the id
+_ntfnd	sta $objId
+		pla
+		tay
+		pla
+		tax
+		pla
+		rts
 		
 ;skips to the next table entry in 
 ;the string table stored in 
@@ -129,4 +176,5 @@ next_string
 		rts
 
 strIndex .byte 0		
+;objId .byte 0  ; defined in printing 6502.asm
 wrdId .byte 0

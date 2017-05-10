@@ -146,7 +146,7 @@ printcr:
 
 printsp
 		pha
-		lda #$20 ; non-flashing cr
+		lda #$A0  ; non-flashing cr
 		jsr $cout1
 		pla
 		rts

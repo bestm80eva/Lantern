@@ -46,7 +46,11 @@ start
 	lda #3
 	jsr printix 
 
-	jsr chkix
+;	jsr chkix ; test print object name
+	
+	lda #10
+	jsr get_obj_id ; should return 4 - Inside Tardis
+	
 	
 	lda #$goodbye/256; 
 	sta strAddr+1
