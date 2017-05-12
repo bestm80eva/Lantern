@@ -48,7 +48,7 @@ remove_articles
 		sta $tableAddr+1		
 		ldy #0
 _lp1	jsr mov_to_next_word ;  move to start of word (space)
-		lda ($tableAddr),y  ; is char at word start a null
+_lp2	lda ($tableAddr),y  ; is char at word start a null
 		cmp #0 ;null
 		beq _x
  		jsr mov_to_word_end	 ;  move to end of word1
@@ -158,9 +158,12 @@ is_article
 		pha
 		tya
 		pha
-		lda #0
+		lda 
 		ldy $wrdEnd
-		sta  ($tableAddr),y; remove null
+		lda  ($tableAddr),y; save old terminator (space? null?)
+		pha
+		lda #0
+		sta  ($tableAddr),y;  
 		lda #article_table/256  ; set up table to search
 		sta $tableAddr+1
 		lda article_table%256
@@ -171,7 +174,7 @@ is_article
 		sta $strSrc					
 		jsr get_word_index
 		sta $isNoise
-		lda #14 ; space replace  null
+		pha ; restore char
 		sta ($tableAddr),y; 
 		pla
 		tya
