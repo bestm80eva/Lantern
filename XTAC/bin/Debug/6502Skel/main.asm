@@ -59,8 +59,10 @@ start
 	jsr printcr
 	jsr printstr
 	
-	lda #4
-	jsr print_obj_name
+;;	lda #4
+;;	jsr print_obj_name
+	
+	jsr shift_test
 	
 ;	pla
 ;	tax ;x
@@ -72,6 +74,7 @@ start
 .include "input.asm"
 .include "strings6502.asm"
 .include "printing6502.asm"
+.include "parser6502.asm"
 .include "tables6502.asm"
 .include "testtables.asm"
 .include "tests.asm"

@@ -452,3 +452,17 @@ obj_word_table
 	.byte 31,51,255,255   ;   TRAFFIC
 	.byte 255
 obj_table_size	.byte 32	
+
+
+article_table
+	.byte 3
+	.byte "THE"
+	.byte 0
+	.byte 1
+	.byte "A"
+	.byte 0
+	.byte 2
+	.byte "AN"
+	.byte 0
+	.byte 255
+	

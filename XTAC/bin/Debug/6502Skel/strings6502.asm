@@ -66,14 +66,10 @@ strcpy
 		pha
 		ldy #0
 _lp		lda (strSrc),y
-		sta ($strDest),y
+		sta (strDest),y
 		cmp #0
 		beq _x
-		cmp #20 ; space
-		bne _c
-		lda #0
-		sta ($strDest),y
-_c		iny
+		iny
 		jmp _lp
 _x		pla
 		rts

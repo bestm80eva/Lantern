@@ -150,7 +150,7 @@ printsp
 		jsr $cout1
 		pla
 		rts
-		
+		 
 printstrcr:
 		jsr printstr
 		jsr printcr
