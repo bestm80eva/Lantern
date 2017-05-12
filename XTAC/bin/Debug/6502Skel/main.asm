@@ -18,7 +18,7 @@
 #define tableAddr FE
 #define strSrc 	$EB ; some zero page addr
 #define strDest	$FA ; some zero page addr
-
+#define kbBufHi $02
 
 .org $800
 

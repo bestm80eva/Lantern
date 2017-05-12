@@ -44,7 +44,7 @@ remove_articles
 		pha
 		lda #0 ;  put kb buff in tableAddr
 		sta $tableAddr
-		lda #$0C ;  set up addr  in $200
+		lda #kbBufHi ;  set up addr  in $200
 		sta $tableAddr+1		
 		ldy #0
 _lp1	jsr mov_to_next_word ;  move to start of word (space)
@@ -148,8 +148,9 @@ _x		sty $wrdEnd	;
 		pla
 		rts
 
-;sets isNoise to a 1 or 0 if
-;if the word at strDest is an 
+;sets strIndex to the index of the
+;word in strDest in the prep table or
+;255 if not found
 ;article
 	.module shift_down
 is_article
@@ -158,25 +159,33 @@ is_article
 		pha
 		tya
 		pha
-		lda 
-		ldy $wrdEnd
 		lda  ($tableAddr),y; save old terminator (space? null?)
-		pha
+		pha  ; save it
+		ldy $wrdEnd ; get index of white space/null at end
 		lda #0
-		sta  ($tableAddr),y;  
+		sta  ($tableAddr),y;  ; repace it with null (for strcmp)
+		ldy #0 
+		lda $tableAddr+1  ; set up word to find's addr
+		sta $strDest+1
+		lda $tableAddr
+		sta $strDest					
+		lda $tableAddr  ;save old tableAddr
+		pha
+		lda $tableAddr+1
+		pha
 		lda #article_table/256  ; set up table to search
 		sta $tableAddr+1
-		lda article_table%256
+		lda #article_table%256
 		sta $tableAddr
-		lda #$tableAddr/256  ; set up word to find's addr
-		sta $strSrc+1
-		lda #$tableAddr%256
-		sta $strSrc					
 		jsr get_word_index
-		sta $isNoise
-		pha ; restore char
-		sta ($tableAddr),y; 
-		pla
+		lda $strIndex
+		pla 				;restore prev tableAddr		
+		sta $tableAddr+1
+		pla 
+		sta $tableAddr
+		pla ; restore char (space or null)
+		sta ($tableAddr),y;
+		pla ; restore registers
 		tya
 		pla
 		txa
