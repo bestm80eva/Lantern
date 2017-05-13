@@ -53,11 +53,11 @@ _lp2	lda ($tableAddr),y  ; is char at word start a null
 		beq _x
  		jsr mov_to_word_end	 ;  move to end of word1
 		jsr is_article ;  is it 'noise'?
-		lda $isNoise
-		cmp #1 ;  shift down by wrdEnd letters
-		bne _c
+		lda $strIndex
+		cmp #255 ;  shift down by wrdEnd letters
+		beq _c
 		jsr shift_down ; collapse the sentence to squish out the article
-_c		jmp _lp2
+_c		;jmp _lp2
 _x 		pla
 		tay
 		pla
@@ -70,16 +70,14 @@ _x 		pla
 	.module shift_down
 shift_down
 		pha
-		txa
-		pha
-		ldy $wrdEnd
+		lda $wrdEnd
 _lp		jsr shift_left
-		dey 
+		sec
+		sbc #1
+		cmp #255
 		beq _x
 		jmp _lp 
-_x 		pla
-		tax
-		pla
+_x		pla
 		rts
 		
 	.module shift_left
@@ -106,11 +104,8 @@ _x 		pla
 	.module mov_to_next_word
 mov_to_next_word
 		pha 
-		txa
-		pha
 		tya
 		pha
-		ldx #0
 		ldy #0
 _lp		lda ($tableAddr),y 
 		cmp #$20 ; space
@@ -120,8 +115,6 @@ _c		jsr $inc_tabl_addr
 		jmp _lp
 _x		pla
 		tay
-		pla
-		tax 
 		pla
 		rts
 
@@ -155,6 +148,45 @@ _x		sty $wrdEnd	;
 	.module shift_down
 is_article
 		pha
+		tya
+		pha
+	    ldy $wrdEnd ; get index of white space/null at end
+		lda  ($tableAddr),y; save old terminator (space? null?)
+		pha  ; save it
+		lda $tableAddr  ;save old tableAddr (lo)
+		pha
+		lda $tableAddr+1 ; (hi)
+		pha
+		lda #0
+		sta  ($tableAddr),y;  ; repace it with null (for strcmp)
+		lda $tableAddr+1  ; set up word to find's addr
+		sta $strDest+1
+		lda $tableAddr
+		sta $strDest					
+		lda #article_table/256  ; set up table to search
+		sta $tableAddr+1
+		lda #article_table%256
+		sta $tableAddr
+		jsr get_word_index
+		pla 				;restore prev tableAddr (hi)		
+		sta $tableAddr+1
+		pla 				;restore prev tableAddr (lo)
+		sta $tableAddr
+		pla ; restore char (space or null)
+		sta ($tableAddr),y;
+		pla ; restore registers
+		tya
+		pla
+		rts
+
+
+;sets strIndex to the index of the
+;word in strDest in the prep table or
+;255 if not found
+;article
+	.module shift_down
+is_preposition
+		pha
 		txa
 		pha
 		tya
@@ -173,9 +205,9 @@ is_article
 		pha
 		lda $tableAddr+1
 		pha
-		lda #article_table/256  ; set up table to search
+		lda #prep_table/256  ; set up table to search
 		sta $tableAddr+1
-		lda #article_table%256
+		lda #prep_table%256
 		sta $tableAddr
 		jsr get_word_index
 		lda $strIndex
@@ -190,8 +222,7 @@ is_article
 		pla
 		txa
 		pla
-		rts
-	
+		rts		
 		
 word1 .block 32
 word2 .block 32

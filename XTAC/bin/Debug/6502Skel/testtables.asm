@@ -466,3 +466,43 @@ article_table
 	.byte 0
 	.byte 255
 	
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; PrepTableZ80.asm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+prep_table
+	.byte 2
+	.byte "IN" ; 0
+	.byte 0 ; null terminator
+	.byte 2
+	.byte "AT" ; 1
+	.byte 0 ; null terminator
+	.byte 2
+	.byte "TO" ; 2
+	.byte 0 ; null terminator
+	.byte 6
+	.byte "INSIDE" ; 3
+	.byte 0 ; null terminator
+	.byte 3
+	.byte "OUT" ; 4
+	.byte 0 ; null terminator
+	.byte 5
+	.byte "UNDER" ; 5
+	.byte 0 ; null terminator
+	.byte 2
+	.byte "ON" ; 6
+	.byte 0 ; null terminator
+	.byte 3
+	.byte "OFF" ; 7
+	.byte 0 ; null terminator
+	.byte 4
+	.byte "INTO" ; 8
+	.byte 0 ; null terminator
+	.byte 2
+	.byte "UP" ; 9
+	.byte 0 ; null terminator
+	.byte 4
+	.byte "WITH" ; 10
+	.byte 0 ; null terminator
+	.byte 255 ; end of table
+	

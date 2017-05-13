@@ -70,9 +70,9 @@ _c		jsr next_string
 		inx ; increment loop counter
 		jmp _lp
 _x		pla
-		tax
-		pla
 		tay
+		pla
+		tax
 		pla
 		rts
 		

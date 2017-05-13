@@ -36,7 +36,7 @@ shift_test
 ;	jsr remove_articles	
 	ldy #3
 	sty $wrdEnd
-	jsr is_article
+	jsr remove_articles
 	rts
 	
  	
