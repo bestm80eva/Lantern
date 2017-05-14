@@ -57,7 +57,9 @@ _lp2	lda ($tableAddr),y  ; is char at word start a null
 		cmp #255 ;  shift down by wrdEnd letters
 		beq _c
 		jsr shift_down ; collapse the sentence to squish out the article
-_c		;jmp _lp2
+		jmp _lp2
+_c		jsr catch_up ; advance to next word
+		jmp _lp1
 _x 		pla
 		tay
 		pla
@@ -74,7 +76,7 @@ shift_down
 _lp		jsr shift_left
 		sec
 		sbc #1
-		cmp #255
+		cmp #255 ; >=0 
 		beq _x
 		jmp _lp 
 _x		pla
@@ -223,6 +225,25 @@ is_preposition
 		txa
 		pla
 		rts		
+
+
+;this subroutine advances table addr by the length of the
+;last word so that table addr points to the next word
+catch_up
+	pha
+	tya
+	pha
+	clc
+	lda $tableAddr
+	adc $wrdEnd
+	sta $tableAddr
+	lda $tableAddr+1
+	adc #0
+	sta $tableAddr+1
+	pla
+	tay
+	pla
+	rts
 		
 word1 .block 32
 word2 .block 32
