@@ -37,6 +37,7 @@ shift_test
 	ldy #3
 	sty $wrdEnd
 	jsr remove_articles
+	jsr get_verb
 	rts
 	
  	

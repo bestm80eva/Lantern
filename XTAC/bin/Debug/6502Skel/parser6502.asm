@@ -69,6 +69,7 @@ _x 		pla
 
 ;this subroutine shifts the sentence by 
 ;repeatedly calling shift_left 
+;the number is shifts is read from wrdEnd
 	.module shift_down
 shift_down
 		pha
@@ -81,7 +82,8 @@ _lp		jsr shift_left
 		jmp _lp 
 _x		pla
 		rts
-		
+
+;shifts the input buffer left by 1		
 	.module shift_left
 shift_left
 		pha
@@ -147,7 +149,7 @@ _x		sty $wrdEnd	;
 ;word in strDest in the prep table or
 ;255 if not found
 ;article
-	.module shift_down
+	.module is_article
 is_article
 		pha
 		tya
@@ -183,47 +185,23 @@ is_article
 
 
 ;sets strIndex to the index of the
-;word in strDest in the prep table or
+;word in keybd buffer is in the prep table or
 ;255 if not found
+;assumes word is null terminated
 ;article
-	.module shift_down
+	.module is_preposition
 is_preposition
 		pha
-		txa
-		pha
-		tya
-		pha
-		lda  ($tableAddr),y; save old terminator (space? null?)
-		pha  ; save it
-		ldy $wrdEnd ; get index of white space/null at end
 		lda #0
-		sta  ($tableAddr),y;  ; repace it with null (for strcmp)
-		ldy #0 
-		lda $tableAddr+1  ; set up word to find's addr
+		sta $strDest	; set table to search
+		lda #kbBufHi
 		sta $strDest+1
-		lda $tableAddr
-		sta $strDest					
-		lda $tableAddr  ;save old tableAddr
-		pha
-		lda $tableAddr+1
-		pha
-		lda #prep_table/256  ; set up table to search
+ 		lda #prep_table/256  ; set up table to search
 		sta $tableAddr+1
 		lda #prep_table%256
 		sta $tableAddr
 		jsr get_word_index
-		lda $strIndex
-		pla 				;restore prev tableAddr		
-		sta $tableAddr+1
-		pla 
-		sta $tableAddr
-		pla ; restore char (space or null)
-		sta ($tableAddr),y;
-		pla ; restore registers
-		tya
-		pla
-		txa
-		pla
+  		pla ; restore registers
 		rts		
 
 
@@ -244,6 +222,78 @@ catch_up
 	tay
 	pla
 	rts
+		
+;this function copies the verb into word1 
+;if the second word is a preposition, that word is copied, too
+;precondition: the input buffer is shifted down
+;registers are preserved
+	.module concat_verb
+get_verb
+		pha
+		txa 
+		pha
+		tya
+		pha
+		ldy #0
+_lp1	lda $200,y			;copy 1st word to word1
+		sta word1,y
+		iny
+		cmp #0
+		beq _shft1
+		cmp #32	;space
+		beq _shft1
+		jmp _lp1
+_shft1	sty $wrdEnd			; shift keyboard buffer left	
+		lda #0				; set address to shift from
+		sta $tableAddr
+		lda #kbBufHi
+		sta $tableAddr+1		
+		dec $wrdEnd
+		jsr shift_down
+		tya  ; save y (y->x)
+		tax  ;
+		cmp #0	; bail if no second word
+		beq _x	
+		ldx #0	;start over at beginning of buffer
+		stx $wrdEnd
+_lp2	lda $200,x			;find end of 2nd word
+		cmp #32 ; space
+		beq _out
+		sta word1,y
+		inc $wrdEnd
+		inx 
+		iny
+		cmp #0
+		beq _out
+		jmp _lp2	
+_out	pha   ; save whitespace char
+		lda #0
+		sta $200,x  ; null terminate the 2nd word
+		jsr is_preposition ; (uses tableAddr as src)
+		pla 		; replace whitespace char
+		sta $200,x  ; replace whitespace char
+		lda $strIndex
+		cmp #255
+		bne _prp 		; if a prep, shift input down
+		ldy $wrdEnd 	; else null terminate 1st word
+		lda #0
+		sta $word1,y
+		jmp _x
+_prp	lda #0				; set address to shift from
+		sta $tableAddr
+		lda #kbBufHi
+		sta $tableAddr+1		
+		jsr shift_down
+		ldy $wrdEnd		; else pull null at end of 1st wrd
+		lda #0
+		sta $word1,y
+ 		;shift down the part that's not the verb
+_x		pla
+		tay
+		pla
+		tax
+		pla
+		rts
 		
 word1 .block 32
 word2 .block 32
