@@ -5,8 +5,9 @@
 ;get_table_index
 ;tries to look up a word's id in a table 
 ;that where the entries have ids
-;the word to find is stored in the strDest
+;the word to find is stored in the
 ;zero page variable strDest
+;table addr is stored in tableAddr
 ;result is stored in tableIndex
 	.module get_entry_id
 get_entry_id

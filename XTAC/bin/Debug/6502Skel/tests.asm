@@ -2,17 +2,17 @@
 
 
 		.module chkix
-chkix
-	lda #$testInput/256	; set up input dest
-	sta strDest+1
-	lda #$testInput%256
-	sta strDest
-	lda #dictionary/256 ; setup table addr
-	sta $tableAddr+1
-	lda #dictionary%256
-	sta $tableAddr
-	jsr get_word_index
-	rts
+;chkix
+;	lda #$testInput/256	; set up input dest
+;	sta strDest+1
+;	lda #$testInput%256
+;	sta strDest
+;	lda #dictionary/256 ; setup table addr
+;	sta $tableAddr+1
+;	lda #dictionary%256
+;	sta $tableAddr
+;	jsr get_word_index
+;	rts
 
 ;test to see if we can shift a sentence down by some number
 	.module shift_test
@@ -38,12 +38,9 @@ shift_test
 	sty $wrdEnd
 	jsr remove_articles
 	jsr get_verb
+	jsr get_nouns ; 
+	jsr encode_sentence
 	rts
 	
- 	
-testInput .text "FSIHH"
-	.byte 0
-	
-	
-testSentence .text "THE HAT ON THE THE DALEK."
+testSentence .text "GUPPY THE HAT ON THE THE DALEK."
 	.byte 0

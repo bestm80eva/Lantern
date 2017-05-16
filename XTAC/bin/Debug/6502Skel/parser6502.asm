@@ -20,8 +20,43 @@ find_words
 	
 ;tries to match words to object id numbers
 encode_sentence
+	pha
+	lda #verb_table%256	    ;print "I don't know the verb '"
+	sta $tableAddr
+	lda #verb_table/256 	    
+	sta $tableAddr+1    
+	lda #word1%256
+	sta strDest
+	lda #word1/256
+	sta $strDest+1
+	jsr get_entry_id	; result to
+	lda $wrdId
+	cmp #255
+	beq bad_verb
+	pla
 	rts
 
+;this is not a function! it must
+;pull all the regs pushed by encode_sentence
+bad_verb
+		lda #badverb%256	 ;print "I don't know the verb '"
+		sta $strAddr
+		lda #badverb/256
+		sta $strAddr+1		
+		jsr printstr
+		lda #word1%256
+		sta $strAddr
+		lda #word1/256
+		sta $strAddr+1
+		jsr printstr ; ; 'print the verb'
+		lda #endquote%256
+		sta $strAddr
+		lda #endquote/256
+		sta $strAddr+1		
+		jsr printstr
+		pla
+		rts
+	
 ;make sure any words were actually mapped
 ;return if they weren't
 validate_encoding
@@ -82,7 +117,19 @@ _lp		jsr shift_left
 		jmp _lp 
 _x		pla
 		rts
-
+		
+;shifts the 1st word out of the input buffer		
+	.module collapse_buffer
+collapse_buffer
+		pha
+		lda #0
+		sta $tableAddr
+		lda #$kbBufHi
+		sta $tableAddr+1
+		jsr shift_down
+		pla
+		rts
+		
 ;shifts the input buffer left by 1		
 	.module shift_left
 shift_left
@@ -122,6 +169,28 @@ _x		pla
 		pla
 		rts
 
+;moves to the end of the 1st word in the buffer
+;sets wrdEnd (index)
+	.module mov_to_end_of_first_word
+mov_to_end_of_first_word
+		pha 
+		tya
+		pha
+		ldy #0
+_lp		lda $200,y 
+		cmp #$20 ; space
+		beq _x		
+		cmp #0 ; null
+		beq _x		
+		iny 
+		jmp _lp
+_x		sty $wrdEnd
+		pla
+		tay
+		pla
+		rts		
+		
+		
 ;moves to 1st null or space past $tableAddr
 ;wrdEnd is set
 ;tableAddr is not affected
@@ -244,6 +313,8 @@ _lp1	lda $200,y			;copy 1st word to word1
 		beq _shft1
 		jmp _lp1
 _shft1	sty $wrdEnd			; shift keyboard buffer left	
+		dey
+		sty $firstWrdLen
 		lda #0				; set address to shift from
 		sta $tableAddr
 		lda #kbBufHi
@@ -275,7 +346,7 @@ _out	pha   ; save whitespace char
 		lda $strIndex
 		cmp #255
 		bne _prp 		; if a prep, shift input down
-		ldy $wrdEnd 	; else null terminate 1st word
+		ldy $firstWrdLen 	; else null terminate 1st word
 		lda #0
 		sta $word1,y
 		jmp _x
@@ -284,10 +355,112 @@ _prp	lda #0				; set address to shift from
 		lda #kbBufHi
 		sta $tableAddr+1		
 		jsr shift_down
-		ldy $wrdEnd		; else pull null at end of 1st wrd
-		lda #0
-		sta $word1,y
+;		ldy $wrdEnd		; else pull null at end of 1st wrd
+;		lda #0
+;		sta $word1,y
  		;shift down the part that's not the verb
+_x		pla
+		tay
+		pla
+		tax
+		pla
+		rts
+
+		
+	.module get_nouns
+get_nouns
+		pha
+		tya
+		pha
+		tax
+		pha
+		jsr mov_to_end_of_first_word
+		lda $200 ; hit end?
+		cmp #0
+		beq _x
+		ldx #0
+_lp		lda $200,x
+		cmp #32 ; space?
+		beq _out
+		cmp #0 ; null?
+		beq _x
+		sta $word2,x
+		inx
+		jmp _lp
+		pla 		; restore old word end marker
+		sta $200,y
+_out    jsr collapse_buffer ; shift input down over space		
+		jsr get_preposition
+_x		pla
+		tay
+		pla
+		tax
+		pla
+		rts
+
+;called by get_prep
+;assumes there is a word to read
+	.module get_indirect_obj
+get_indirect_obj
+		pha
+		txa
+		pha
+		ldx #0
+_lp		lda $200,x
+		cmp #32 ; space?
+		beq _x
+		cmp #0 ; null?
+		beq _x
+		sta $word4,x
+		inx
+		jmp _lp
+_x		pla
+		tax
+		pla
+		rts
+
+
+;examines (and discards) words until a 
+;preposition is hit. If one is found, it is
+;stored and get_indirect_obj is called.
+;If a preposition isn't hit
+;the input buffer will be left as 'null'
+	.module get_preposition
+get_preposition
+		pha
+		txa
+		pha
+		tya 
+		pha
+_lp		lda $200
+		cmp #0
+		beq _x
+		jsr mov_to_end_of_first_word
+		ldy $wrdEnd
+		lda $200,y ; get and save 
+		pha 
+		lda #0
+		sta $200,y ; null terminate word
+		jsr is_preposition
+		pla
+		sta $200,y ; restore null/white space'
+		lda $strIndex
+		cmp #255			
+		bne _cpyprp				; it was a prep, copy it to word 3
+		jsr collapse_buffer			; shift all words down
+;		jsr get_indirect_obj  ; this looks questionable
+		jmp _lp
+_cpyprp ldx #0
+_lp2	lda $200,x		
+		cmp #32 ; space?
+		beq _io
+		cmp #0 ; null?
+		beq _x;  ; should display and error message 
+		sta $word3,x		
+		inx
+		jmp _lp2
+_io		jsr collapse_buffer  ;
+		jsr get_indirect_obj		
 _x		pla
 		tay
 		pla
@@ -304,6 +477,8 @@ word4 .block 32
 sentence .db 255,255,255,255
 
 badword  .db "I DON'T KNOW THE WORD '",0h
+badverb .db "I DON'T KNOW THE VERB '",0h
 endquote .db "'",0h
 wrdEnd 	 .db 0 ;  how many bytes past start
 isNoise .db	0;
+firstWrdLen .db 0;
