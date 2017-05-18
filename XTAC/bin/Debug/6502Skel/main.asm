@@ -1,3 +1,9 @@
+;main.asm
+;evanwright 2017
+
+.include "defs6502.asm"	
+
+
 #define strAddr $CE
 #define fmtByte $32
 #define altChar1 $C00E
@@ -5,7 +11,7 @@
 #define RDALTCHAR $C01E
 #define getlin $FD67 
 #define rdkey $FD0C
-	
+
 
 #define keyin  $FD0C
 #define getlin $FD6A 
@@ -23,6 +29,9 @@
 .org $800
 	.module main
 start
+	
+	jsr look_sub
+
 _lp
  	jsr clr_buffr
 	jsr clr_words
@@ -40,9 +49,9 @@ _c 	jsr toascii
 	jsr encode_sentence
 	
 	lda #$goodbye/256; 
-	sta strAddr+1
+	sta $strAddr+1
 	lda #$goodbye%256
-	sta strAddr
+	sta $strAddr
 	jsr printcr
 	jsr printstrcr
 	jsr _lp
@@ -51,16 +60,21 @@ _c 	jsr toascii
 .include "input.asm"
 .include "strings6502.asm"
 .include "printing6502.asm"
+.include "look6502.asm"
 .include "parser6502.asm"
 .include "tables6502.asm"
+.include "routines6502.asm"
+.include "attributes6502.asm"
 .include "testtables.asm"
 .include "tests.asm"
-	
+.include "ObjectTable6502.asm"	
 msg	.text	"HELLO"
 	.byte 0
 goodbye .text "BYE"
 	.byte 0
 prompt 	.text ">"
 	.byte 0
- 
+
+
+	
 .end

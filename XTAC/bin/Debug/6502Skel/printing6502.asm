@@ -39,6 +39,11 @@ _x			clc
 			tax
 			pla
 			rts
+			
+printixcr
+	jsr printix
+	jsr printcr
+	rts
 
 ;prints the word whose index is in 'a'
 ;tableAddr is preserved			
@@ -156,5 +161,21 @@ printstrcr:
 		jsr printcr
 		rts
 
+;prints description of item in 'a'
+;registers are not preserved
+
+print_obj_description
+		ldy #DESC_ID
+		jsr get_obj_attr  ; puts desc is in 'a'
+		pha
+		lda #string_table%256
+		sta $tableAddr
+		lda #string_table/256
+		sta $tableAddr+1		
+		pla
+		jsr printix
+		jsr printcr
+		rts
+		
 objId .byte 0		
 srchIndex .byte  0
