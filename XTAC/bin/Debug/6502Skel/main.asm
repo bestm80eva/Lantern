@@ -21,55 +21,28 @@
 #define kbBufHi $02
 
 .org $800
-
+	.module main
 start
-;	pha ;a
-;	tya ;y
-;	pha
-;	txa	;x
-;	pha
 
-;	jsr printcr
-;	lda #$msg/256
-;	sta strAddr+1
-;	lda #$msg%256
-;	sta strAddr
-;	jsr printstr
-;	jsr readkb
-;	jsr readkb
-;	jsr rdkey
-	lda #$string_table/256; 
-	sta $tableAddr+1
-	lda #$string_table%256
-	sta $tableAddr
+_lp
+ 	jsr clr_buffr
+	jsr clr_words
 
-	lda #3
-	jsr printix 
-
-;	jsr chkix ; test print object name
-	
-	lda #10
-	jsr get_obj_id ; should return 4 - Inside Tardis
-	
+	jsr readkb
+ 	jsr toascii
+	jsr remove_articles
+	jsr get_verb
+	jsr get_nouns ; 
+	jsr encode_sentence
 	
 	lda #$goodbye/256; 
 	sta strAddr+1
 	lda #$goodbye%256
 	sta strAddr
 	jsr printcr
-	jsr printstr
-	
-;;	lda #4
-;;	jsr print_obj_name
-	
-	jsr shift_test
-	
-;	pla
-;	tax ;x
-;	pla 
-;	tay ;y
-;	pla ;a
-	rts
+	jsr printstrcr
+	jsr _lp
+ 	rts
 
 .include "input.asm"
 .include "strings6502.asm"
@@ -85,6 +58,5 @@ goodbye .text "BYE"
 	.byte 0
 prompt 	.text ">"
 	.byte 0
-buffer	.block 32
-
+ 
 .end

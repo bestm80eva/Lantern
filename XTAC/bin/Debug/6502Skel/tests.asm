@@ -35,12 +35,8 @@ shift_test
 ;	jsr shift_left	
 ;	jsr remove_articles	
 	ldy #3
-	sty $wrdEnd
-	jsr remove_articles
-	jsr get_verb
-	jsr get_nouns ; 
-	jsr encode_sentence
+
 	rts
 	
-testSentence .text "GUPPY THE HAT ON THE THE DALEK."
+testSentence .text "LOOK AT THE HAT ON"
 	.byte 0

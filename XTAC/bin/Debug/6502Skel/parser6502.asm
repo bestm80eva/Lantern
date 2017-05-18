@@ -1,5 +1,21 @@
 ;6502 parse routines
 
+
+;clr_buffr
+;sets page to all 0s
+;registers are not preserved
+	.module clr_buffr
+clr_buffr
+		ldy #255
+		lda #0
+_lp		sta $200,y
+		iny
+		cpy #255
+		beq _x
+		jmp _lp
+_x		rts
+		
+
 ;clears the buffer where the words will
 ;be stored
 	.module clr_words
@@ -8,17 +24,22 @@ clr_words
 		ldy #0
 _lp		sta $word1,y
 		iny
-		cpy #(4*32)
+		cpy #128  ; 4 32 byte words
 		beq _x
-		iny
 		jmp _lp
-_x		rts
+_x		lda #255	
+		sta $sentence
+		sta $sentence+1
+		sta $sentence+2
+		sta $sentence+3		
+		rts
 
 ;breaks up the user input into words
 find_words
 	rts
 	
 ;tries to match words to object id numbers
+	.module encode_sentence
 encode_sentence
 	pha
 	lda #verb_table%256	    ;print "I don't know the verb '"
@@ -33,7 +54,39 @@ encode_sentence
 	lda $wrdId
 	cmp #255
 	beq bad_verb
-	pla
+	sta $sentence
+	lda $word2 ;					; verify 
+	beq _x
+	lda #word2%256						;verify wrd 2
+	sta $strDest				    ;set string to find
+	lda #word2/256					
+	sta $strDest+1
+	lda #dictionary%256				;set up table addr
+	sta $tableAddr			
+	lda #dictionary/256
+	sta $tableAddr+1	
+	jsr get_word_index
+	lda $strIndex
+	cmp #255
+	beq bad_dobj
+	lda $word3 ;					; if no prep -> done
+	beq _x									; get index of prep
+	lda $word4 ;					; verify word 4
+	bne _c
+	jmp missing_noun
+_c	lda #word4%256						;verify wrd 2
+	sta $strDest				    ;set string to find
+	lda #word4/256					
+	sta $strDest+1
+	lda #dictionary%256				;set up table addr
+	sta $tableAddr			
+	lda #dictionary/256
+	sta $tableAddr+1	
+	jsr get_word_index
+	lda $strIndex
+	cmp #255
+	beq bad_iobj 
+_x	pla
 	rts
 
 ;this is not a function! it must
@@ -53,9 +106,71 @@ bad_verb
 		sta $strAddr
 		lda #endquote/256
 		sta $strAddr+1		
-		jsr printstr
+		jsr printstrcr
 		pla
 		rts
+
+bad_dobj
+		lda #badword%256	 ;print "I DONT' RECOGNIZE"...
+		sta $strAddr
+		lda #badword/256
+		sta $strAddr+1		
+		jsr printstr
+		lda #word2%256
+		sta $strAddr
+		lda #word2/256
+		sta $strAddr+1
+		jsr printstr ; ; 'print the verb'
+		lda #endquote%256
+		sta $strAddr
+		lda #endquote/256
+		sta $strAddr+1		
+		jsr printstrcr
+		pla
+		rts
+
+bad_iobj
+		lda #badword%256	 ;print "I DONT' RECOGNIZE"...
+		sta $strAddr
+		lda #badword/256
+		sta $strAddr+1		
+		jsr printstr
+		lda #word4%256
+		sta $strAddr
+		lda #word4/256
+		sta $strAddr+1
+		jsr printstr ; ; 'print the verb'
+		lda #endquote%256
+		sta $strAddr
+		lda #endquote/256
+		sta $strAddr+1		
+		jsr printstrcr
+		pla
+		rts		
+
+;this is not a function! it must
+;pull all the regs pushed by encode_sentence
+		
+missing_noun
+		lda #nonoun%256	 ;print "MISSING NOUN"...
+		sta $strAddr
+		lda #nonoun/256
+		sta $strAddr+1		
+		jsr printstrcr
+		pla
+		rts
+		
+;this is not a function! it must
+;pull all the regs pushed by encode_sentence	
+dont_see
+		lda #dontsee%256	 ;print "YOU DON'T SEE THAT."
+		sta $strAddr
+		lda #dontsee/256
+		sta $strAddr+1		
+		jsr printstrcr
+		pla
+		rts
+	
 	
 ;make sure any words were actually mapped
 ;return if they weren't
@@ -313,8 +428,7 @@ _lp1	lda $200,y			;copy 1st word to word1
 		beq _shft1
 		jmp _lp1
 _shft1	sty $wrdEnd			; shift keyboard buffer left	
-		dey
-		sty $firstWrdLen
+		sty firstWrdLen
 		lda #0				; set address to shift from
 		sta $tableAddr
 		lda #kbBufHi
@@ -346,7 +460,8 @@ _out	pha   ; save whitespace char
 		lda $strIndex
 		cmp #255
 		bne _prp 		; if a prep, shift input down
-		ldy $firstWrdLen 	; else null terminate 1st word
+		ldy firstWrdLen 	; else null terminate 1st word
+		dey
 		lda #0
 		sta $word1,y
 		jmp _x
@@ -467,6 +582,45 @@ _x		pla
 		tax
 		pla
 		rts
+
+		
+		
+;converts apple text to ascii
+;addr to convert is in strSrc
+;registers are preserved
+	.module toascii
+toascii
+		pha
+		tay
+		pha
+		ldy #0
+_lp		lda $200,y
+		cmp #$8D
+		bne _s
+		lda #0
+		sta $200,y
+		jmp _x
+_s		cmp #0
+		beq _x
+		cmp #$A0 ; space?
+		bne _g
+		lda #$20
+		jmp _h
+_g		cmp #$C1
+		bmi _c
+		cmp #$DA
+		bpl _c
+		and #$3F
+		clc
+		adc #64
+_h		sta $200,y
+_c		iny 
+		jmp _lp
+_x		pla
+		tay
+		pla
+		rts
+
 		
 word1 .block 32
 word2 .block 32
@@ -475,9 +629,13 @@ word4 .block 32
 
 
 sentence .db 255,255,255,255
-
+pardon  .db "PARDON?",0h
 badword  .db "I DON'T KNOW THE WORD '",0h
 badverb .db "I DON'T KNOW THE VERB '",0h
+nonoun .db "IT LOOKS LIKE YOU'RE MISSING A NOUN."
+	.db 0
+dontsee .db "YOU DON'T SEE THAT."
+	.db 0
 endquote .db "'",0h
 wrdEnd 	 .db 0 ;  how many bytes past start
 isNoise .db	0;

@@ -1,5 +1,7 @@
 ;6052 input routine
+#define buffer 200
 
+	.module  readkb
 readkb
 		pha ;save a
 		txa ;save x
@@ -14,8 +16,10 @@ readkb
 _kblp	lda $c000 	; kb strobe
 		bpl _kblp   
 		sta $c010; ;clear strobe 
-		sta buffer,y; ;store key 
+		pha
 		jsr cout1 
+		pla
+		sta $200,y; ;store key 
 		cmp #8Dh
 		beq _kbout
 		jsr undrscr

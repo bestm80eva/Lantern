@@ -40,6 +40,7 @@ _x		pla
 		pla
 		rts
 
+ 		
 ;assumes the zero-page address tableAddr
 ;the addr of the string to find must be in 
 ;the strDest 0 page var
@@ -112,7 +113,7 @@ dec_tabl_addr
 ;whose word id is supplied in register 'a'
 ;		
 		.module get_obj_id
-get_obj_id
+get_object_id
 		sta objId
 		pha
 		tax
