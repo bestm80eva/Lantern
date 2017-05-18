@@ -23,13 +23,17 @@
 .org $800
 	.module main
 start
-
 _lp
  	jsr clr_buffr
 	jsr clr_words
 
 	jsr readkb
- 	jsr toascii
+	lda $200
+	cmp #$8D ; cr
+	bne _c
+	jsr no_input
+	jmp _lp
+_c 	jsr toascii
 	jsr remove_articles
 	jsr get_verb
 	jsr get_nouns ; 

@@ -621,6 +621,14 @@ _x		pla
 		pla
 		rts
 
+no_input
+		lda #$pardon%256
+		sta strAddr
+		lda #$pardon/256
+		sta strAddr+1
+		jsr printstrcr
+		rts 
+		
 		
 word1 .block 32
 word2 .block 32
