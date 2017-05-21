@@ -9,3 +9,5 @@ c:\users\evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.pdb
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.NoGoMessages.resources
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.csprojResolveAssemblyReference.cache
 C:\Users\Evan\Documents\Visual Studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.SyntaxHelpForm.resources
+C:\Users\Evan\Documents\Visual Studio 2013\Projects\XTAC\XTAC\bin\Debug\XmlToAdv.dll
+C:\Users\Evan\Documents\Visual Studio 2013\Projects\XTAC\XTAC\bin\Debug\XmlToAdv.pdb

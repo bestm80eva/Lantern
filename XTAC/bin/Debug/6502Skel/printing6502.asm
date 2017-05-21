@@ -161,6 +161,37 @@ printstrcr:
 		jsr printcr
 		rts
 
+;prints the string in 'a' from the string 
+;table		
+print_frm_str_tbl
+		sta $objId		
+		pha	; save regs
+		tax
+		pha
+		tya
+		pha
+		lda $tableAddr ; save old addr
+		pha
+		lda $tableAddr+1
+		pha
+ 		lda #string_table%256
+		sta $tableAddr
+		lda #string_table/256
+		sta $tableAddr+1		
+		lda $objId
+		jsr printix
+		jsr printcr
+		pla				;restore table addr
+		sta $tableAddr+1
+		pla
+		sta $tableAddr
+		pla	;restore
+		tay
+		pla
+		tax
+		pla
+		rts
+		
 ;prints description of item in 'a'
 ;registers are not preserved
 
@@ -176,6 +207,23 @@ print_obj_description
 		jsr printix
 		jsr printcr
 		rts
+
+;direction is in 'a'		
+print_nogo_msg
+		sec				; take two's complement of number
+		lda #255
+		sbc direction
+		clc
+		adc #1
+		pha
+		lda #nogo_table%256	; set up table addr
+		sta $tableAddr
+		lda #nogo_table/256
+		sta $tableAddr+1
+		pla
+		jsr printixcr	; print
+		rts
+		
 		
 objId .byte 0		
 srchIndex .byte  0

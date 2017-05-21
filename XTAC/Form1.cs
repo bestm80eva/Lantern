@@ -1404,6 +1404,20 @@ namespace XTAC
 
         }
 
+        private void appleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fileName != "")
+            {
+                XmlToTables converter = XmlToTables.GetInstance();
+                converter.ConvertApple2(fileName);  //"f3xml.xml"
+                MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+            }
+            else
+            {
+                MessageBox.Show("File name is null.  Please save your project before exporting.");
+            }
+        }
+
         
 
     }

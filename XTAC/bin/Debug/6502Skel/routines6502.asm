@@ -4,3 +4,14 @@ get_player_room
 	ldy #HOLDER_ID
 	jsr get_obj_attr
 	rts
+	
+enter_sub
+		rts
+		
+look_at_sub
+		rts
+		
+quit_sub
+		rts
+		
+	

@@ -597,6 +597,7 @@
       <check verb="unlock" check="check_see_dobj" />
       <check verb="wear" check="check_see_dobj" />
       <check verb="wear" check="check_have_dobj" />
+      <check verb="look,l" check="check_light" />
     </checks>
     <sentences>
       <sentence verb="burn" do="pile of leaves" prep="" io="" type="instead" sub="burn_leaves" />
@@ -706,7 +707,7 @@ if (cigarette lighter.holder == player)
 			printl("FUELED BY THE DRAFT FROM ABOVE, THE LEAVES EVAPORATE IN CLOUD OF ACRID SMOKE WHICH RISES QUICKLY UP THE SHAFT.");
 			add(score,10);
 			on ladder.up=top of shaft;
-			leaves_burned=1;
+			burnedLeaves=1;
 			pile of leaves.holder=offscreen;	
 		}
 		else if (player.holder == on ladder)
@@ -722,7 +723,7 @@ if (cigarette lighter.holder == player)
 	{
 		printl("THE LEAVES (WHICH YOU ARE CARRYING) IGNTIE. UNFORTUNATELY, THE FIRE RAPIDLY SPREADS TO YOU.");
 		printl("NEXT TIME TRY DROPPING THE LEAVES.");
-		kill_player();
+		call kill_player();
 	}
 }
 else
@@ -883,7 +884,7 @@ if (player.holder==top of shaft)
 {
 	println("FOR SOME INEXPLICABLE REASON YOU DECIDE TO JUMP OFF THE LADDER.");
 	println("UNFORTUNATELY, THE ROCK FLOOR AT THE BOTTOM OF THE SHAFT ISN'T QUITE AS FORGIVING AS YOU HAD ANTICIPATED.");
-	kill_player();
+	call kill_player();
 }
 else if (player.holder==on ladder)
 {
@@ -954,8 +955,11 @@ printl("THERE ARE SEVERAL ENTERTAINING WAYS TO DIE IN THIS ADVENTURE...NO NEED T
       <routine name="unlock_door">
 printl("THE KEY HAS LONG SINCE BEEN LOST."); 
 </routine>
-      <routine name="listen_sub">
+      <routine name="listen">
 println("YOU HEAR NOTHING UNEXPECTED.");
+</routine>
+      <routine name="smell">
+println("YOU SMELL NOTHING UNEXPECTED.");
 </routine>
       <routine name="wont_fit">
 printl("IT WON'T FIT."); 
@@ -1006,9 +1010,9 @@ if (player.holder==on ladder)
         <var name="$dobj" addr="sentence+1" value="0" />
         <var name="$iobj" addr="sentence+3" value="0" />
         <var name="$score" addr="score" value="0" />
-        <var name="$turn" addr="turn  " value="0" />
+        <var name="$turn" addr="turn" value="0" />
         <var name="$health" addr="health" value="100" />
-        <var name="$nolight" addr="turnsWithoutlight " value="100" />
+        <var name="$turnsWithoutlight" addr="turnsWithoutlight" value="100" />
       </builtin>
       <user>
         <var name="gotGold" addr="gotGold" value="0" />

@@ -39,14 +39,14 @@
 #define OPEN_CONTAINER  OPEN+CONTAINER 
 
 ;byte 2
-#define SCENERY_BIT  0
-#define SUPPORTER_BIT  1
-#define CONTAINER_BIT  2
-#define TRANSPARENT_BIT  3
-#define OPENABLE_BIT  4
-#define OPEN_BIT  5
-#define LOCKABLE_BIT  6
-#define LOCKED_BIT	 7
+;#define SCENERY_BIT  0
+;#define SUPPORTER_BIT  1
+;#define CONTAINER_BIT  2
+;#define TRANSPARENT_BIT  3
+;#define OPENABLE_BIT  4
+;#define OPEN_BIT  5
+;#define LOCKABLE_BIT  6
+;#define LOCKED_BIT	 7
 
 ; objdefs.asm
 

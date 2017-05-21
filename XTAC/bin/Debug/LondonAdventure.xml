@@ -317,11 +317,11 @@
         <nogo />
         <backdrop />
       </object>
-      <object id="23" holder="9" name="HAT">
+      <object id="23" holder="9" name="STYLISH HAT">
         <description>THE HAT IS A STYLISH FEDORA.</description>
         <initialdescription>A STYLISH HAT RESTS ATOP THE MANNEQUIN.</initialdescription>
         <directions n="255" s="255" e="255" w="255" ne="255" se="255" sw="255" nw="255" up="255" down="255" in="255" out="255" mass="0" />
-        <flags scenery="0" portable="1" container="0" supporter="0" transparent="0" openable="0" open="0" backdrop="0" drinkable="0" emittinglight="0" locked="0" lockable="0" flammable="0" lightable="0" door="0" unused="0" />
+        <flags scenery="0" portable="1" container="1" supporter="0" transparent="0" openable="0" open="0" backdrop="0" drinkable="0" emittinglight="0" locked="0" lockable="0" flammable="0" lightable="0" door="0" unused="0" />
         <synonyms names="FEDORA" />
         <nogo />
         <backdrop />
@@ -444,6 +444,7 @@
       <check verb="open" check="check_dobj_opnable" />
       <check verb="open" check="check_dobj_closed" />
       <check verb="close,shut" check="check_dobj_open" />
+      <check verb="get,take,grab,pick up" check="check_light" />
     </checks>
     <sentences>
       <sentence verb="kill" do="PLAYER" prep="" io="" type="instead" sub="kill_self" />
@@ -469,7 +470,8 @@
       <sentence verb="read" do="*" prep="" io="" type="instead" sub="read_anything" />
     </sentences>
     <routines>
-      <routine name="kill_self">println("IF YOU ARE EXPERIENCING SUICIDAL THOUGHTS, YOU SHOULD SEEK PHSYCIATRIC HELP.");</routine>
+      <routine name="kill_self">println("IF YOU ARE EXPERIENCING SUICIDAL THOUGHTS, YOU SHOULD SEEK PHSYCIATRIC HELP.");
+</routine>
       <routine name="kill_player">println("***YOU HAVE DIED***.");
 player.holder=1;
 
@@ -528,58 +530,41 @@ println("(TAKEN)");
    readNote = 1;  add(score, 5);
 }
 </routine>
-      <routine name="hit_anything">println("WOULD PUNCHING RANDOM THINGS MAKE YOU FEEL BETTER?");</routine>
-      <routine name="hit_mannequin_with_bat">println("WITH A PRECISE BLOW, YOU NEATLY DECAPITATE THE MANNEQUIN.");println("ROSE STAGGERS TO HER FEET.");mannequin.holder = 0;torso.holder=inventory room;plastic head.holder=inventory room;rose.initial_description = "ROSE IS HERE CHECKING THE INVENTORY.";add(score,10); println("ROSE HANDS YOU THE KEY TO HER FLAT.");key.holder = player;</routine>
-      <routine name="hit_dalek_with_bat">println("TBD");</routine>
-      <routine name="read_anything">println("THAT'S A STRANGE THING TO READ.");</routine>
+      <routine name="hit_anything">println("WOULD PUNCHING RANDOM THINGS MAKE YOU FEEL BETTER?");
+</routine>
+      <routine name="hit_mannequin_with_bat">println("WITH A PRECISE BLOW, YOU NEATLY DECAPITATE THE MANNEQUIN.");
+println("ROSE STAGGERS TO HER FEET.");
+mannequin.holder = 0;
+torso.holder=inventory room;
+plastic head.holder=inventory room;
+rose.initial_description = "ROSE IS HERE CHECKING THE INVENTORY.";
+add(score,10);
+println("ROSE HANDS YOU THE KEY TO HER FLAT.");
+key.holder = player;
+</routine>
+      <routine name="hit_dalek_with_bat">println("TBD");
+</routine>
+      <routine name="read_anything">println("THAT'S A STRANGE THING TO READ.");
+</routine>
       <routine name="before_read">if ($dobj.portable==1)
-
 {
-
-  if ($dobj.holder != player)
-
-{
-
-    println("(TAKEN)");
-
-   $dobj.holder = player;
-
+     if ($dobj.holder != player)
+     {
+          println("(TAKEN)");
+          $dobj.holder = player;
+     }
 }
-
-}</routine>
+</routine>
       <routine name="enter_tardis">if (tardis.open == 1)
-
-
-
 {
-
-
-
-  player.holder = inside tardis;
-
-
-
-  look();
-
-
-
+     player.holder = inside tardis;
+     look();
 }
-
-
-
-else 
-
-
-
+else
 {
-
-
-
- println("THE TARDIS IS CLOSED.");
-
-
-
-}</routine>
+     println("THE TARDIS IS CLOSED.");
+}
+</routine>
       <routine name="push_button">if (elevator.e == lobby)
 {
    println("THE LIFT SLOWLY RISES TO THE UPPER FLOOR.");   println("THE DOOR OPENS, LEADING EAST TO A HALLWAY.");   elevator.e = hallway;
@@ -760,9 +745,20 @@ else
 
 
 }</routine>
-      <routine name="throw_hat_at_dalek">call cover_eye();</routine>
-      <routine name="cover_eye">println("YOU DEFTLY TOSS THE FEDORA ONTO THE DALEK'S EYESTALK.");println("IN AN ATTEMPT TO DESTROY THE HAT, THE DALEK FIRES A LASER AT IT,  ACCIDENTALLY VAPORIZING ITS OWN EYE.");println("'IMPOSSIBLE! IMPOSSIBLE! MUST DESTROY IMPERFECTION!'");println("THE DALEK, HAVING ACTIVATED A SELF DESTRUCT MECHANISM IS NOW GLOWING BRIGHT RED.");eyestalk.holder=0;add(score,25);set(activated,1);</routine>
-      <routine name="unlock_door_with_key">println("THE DOOR IS NOW UNLOCKED");29.open = 1;29.locked = 0;</routine>
+      <routine name="throw_hat_at_dalek">call cover_eye();
+</routine>
+      <routine name="cover_eye">println("YOU DEFTLY TOSS THE FEDORA ONTO THE DALEK'S EYESTALK.");
+println("IN AN ATTEMPT TO DESTROY THE HAT, THE DALEK FIRES A LASER AT IT,  ACCIDENTALLY VAPORIZING ITS OWN EYE.");
+println("'IMPOSSIBLE! IMPOSSIBLE! MUST DESTROY IMPERFECTION!'");
+println("THE DALEK, HAVING ACTIVATED A SELF DESTRUCT MECHANISM IS NOW GLOWING BRIGHT RED.");
+eyestalk.holder=0;
+add(score,25);
+set(activated,1);
+</routine>
+      <routine name="unlock_door_with_key">println("THE DOOR IS NOW UNLOCKED");
+29.open = 1;
+29.locked = 0;
+</routine>
       <routine name="unlock_door">if (key.holder == player)
 {
 println("THE DOOR IS NOW UNLOCKED");29.open = 1;29.locked = 0;
@@ -771,22 +767,31 @@ else
 {
 println("YOU NEED THE KEY.");
 }</routine>
-      <routine name="after_open_tardis">println("THE TARDIS CREAKS OPEN.");</routine>
+      <routine name="after_open_tardis">println("THE TARDIS CREAKS OPEN.");
+</routine>
       <routine name="hit_mannequin">println("PUNCHING THE MANNEQUIN HURTS ONLY YOUR FISTS.");
 </routine>
     </routines>
     <events>
       <event name="move_mannequin">if (player.holder == 2nd floor)
 {
-   if (mannequinMoved == 0)
-{
-dalek.holder = inside tardis;tardis.locked=1;tardis.open=0;tardis.lockable=0;mannequinMoved=1;mannequin.holder=inventory room;door.locked = 0;door.lockable = 0;mannequin.description = "THE MANNEQUIN IS OBVIOUSLY ALIVE AND VERY DANGEROUS.";mannequin.initial_description = "THE MANNEQUIN IS STANDING OVER ROSE'S BODY.";if (hat.holder == 1st floor)
-{
-hat.initial_description = "A STYLISH HAT LIES ON THE FLOOR.";
-}
-
-}
-
+     if (mannequinMoved == 0)
+     {
+          dalek.holder = inside tardis;
+          tardis.locked=1;
+          tardis.open=0;
+          tardis.lockable=0;
+          mannequinMoved=1;
+          mannequin.holder=inventory room;
+          door.locked = 0;
+          door.lockable = 0;
+          mannequin.description = "THE MANNEQUIN IS OBVIOUSLY ALIVE AND VERY DANGEROUS.";
+          mannequin.initial_description = "THE MANNEQUIN IS STANDING OVER ROSE'S BODY.";
+          if (hat.holder == 1st floor)
+          {
+               stylish hat.initial_description = "A STYLISH HAT LIES ON THE FLOOR.";
+          }
+     }
 }
 </event>
       <event name="countdown">if (activated==1)

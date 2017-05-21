@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsmWriter.cs" />
+    <Compile Include="AsmWriter6502.cs" />
     <Compile Include="AsmWriter6809.cs" />
     <Compile Include="AsmWriterZ80.cs" />
     <Compile Include="GameObject.cs" />

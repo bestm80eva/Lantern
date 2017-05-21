@@ -177,10 +177,7 @@ dont_see
 validate_encoding
 	rts
 
-;make sure any words were actually mapped
-;return if they weren't
-run_sentence
-		rts
+ 
 	
 ;this function shifts the letters in the input down
 ;
