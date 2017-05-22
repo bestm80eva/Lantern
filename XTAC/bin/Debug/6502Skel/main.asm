@@ -47,7 +47,8 @@ _lp
 _c 	jsr toascii
 	lda #0
 	sta strSrc
-	lda #kbBufHi
+	
+	lda #kbBufHi ; did the user type quit
 	sta strSrc+1
 	lda #quit%256
 	sta strDest
@@ -56,17 +57,13 @@ _c 	jsr toascii
 	jsr streq6
 	cmp #1
 	beq _x
+
 	jsr remove_articles
 	jsr get_verb
 	jsr get_nouns ; 
 	jsr encode_sentence
 	jsr run_sentence	
-	lda #$goodbye/256; 
-	sta $strAddr+1
-	lda #$goodbye%256
-	sta $strAddr
-	jsr printcr
-	jsr printstrcr
+
 	jsr _lp
 _x 	jsr printcr
 	rts

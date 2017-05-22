@@ -10,7 +10,7 @@ get_player_room
 	pla
 	tay
 	pla
-	sta playerRoom
+	lda playerRoom
 	rts
 	
 enter_sub
