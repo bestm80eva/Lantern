@@ -58,12 +58,13 @@ _lp		lda ($tableAddr),y
 		ldy #1
 		lda ($tableAddr),y
 		sta jumpVector+1
-        lda #_nxt%256		; push return address (so we can fake a jump)
+        lda #_nxt/256		; push return address (so we can fake a jump)
 		pha
-		lda #_nxt/256
+		lda #_nxt%256
 		pha
 		jmp ($jumpVector)  ; can't don an indirect function call 
-_nxt	jmp _x
+_nxt	nop ; padding for byte alignment
+		jmp _x
 _skp	jsr inc_tabl_addr
 		jsr inc_tabl_addr
 		jsr inc_tabl_addr

@@ -29,17 +29,20 @@ _x		lda ($tableAddr),y
 ;x contains new value
 	.module set_obj_attr
 set_obj_attr
+		pha
 		lda #obj_table%256
 		sta $tableAddr
 		lda #obj_table/256
 		sta $tableAddr+1   
+		pla
 _lp		cmp #0				; loop through table to correct entry
 		beq _x
 		jsr next_entry
-		dec
+		sec
+		sbc #1
 		jmp _lp
-_x		pla
-		stx ($tableAddr),y
+_x		txa
+		sta ($tableAddr),y
 		rts
 
 ;skips ahead one entry in the object table		

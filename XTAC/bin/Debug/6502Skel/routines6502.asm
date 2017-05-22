@@ -1,8 +1,7 @@
 
 get_player_room
-	lda #PLAYER_ID
-	ldy #HOLDER_ID
-	jsr get_obj_attr
+	ldy #OBJ_ENTRY_SIZE+HOLDER_ID
+	lda $obj_table,y
 	rts
 	
 enter_sub
