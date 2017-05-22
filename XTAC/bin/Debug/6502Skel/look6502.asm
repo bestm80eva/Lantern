@@ -58,7 +58,18 @@ _c		jsr next_entry
 		jmp _lp
 _x
 		rts
-	
+
+;describes the object in $sentence+1
+;if the object has contents
+;those are listed
+look_at_sub
+		lda $sentence+1
+		jsr print_obj_description
+		jsr printcr
+		nop ; does it have contents
+		nop ; if yes, list them
+		rts
+		
 playerRoom .byte 0	
 ambientLight .byte 1 ;	
 thereisa .byte "THERE IS A ",0h

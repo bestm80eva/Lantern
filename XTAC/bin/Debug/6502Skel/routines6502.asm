@@ -16,8 +16,7 @@ get_player_room
 enter_sub
 		rts
 		
-look_at_sub
-		rts
+
 		
 quit_sub
 		rts

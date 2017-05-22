@@ -62,6 +62,7 @@ _c 	jsr toascii
 	jsr get_verb
 	jsr get_nouns ; 
 	jsr encode_sentence
+	jsr map_nouns
 	jsr run_sentence	
 
 	jsr _lp
@@ -82,11 +83,16 @@ _x 	jsr printcr
 .include "inventory6502.asm"
 .include "containers6502.asm"
 .include "Events6502.asm"
-.include "testtables.asm"
+;.include "testtables.asm"
 ;.include "tests.asm"
+.include "ObjectWordTable6502.asm"
+.include "Dictionary6502.asm"
+.include "StringTable6502.asm"
 .include "VerbTable6502.asm"
 .include "ObjectTable6502.asm"	
 .include "NogoTable6502.asm"
+.include "PrepTable6502.asm"
+.include "articles6502.asm"
 .include "sentence_table_6502.asm"
 .include "instead_table_6502.asm"
 

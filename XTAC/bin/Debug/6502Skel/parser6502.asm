@@ -67,6 +67,8 @@ encode_sentence
 	sta $tableAddr+1	
 	jsr get_word_index
 	lda $strIndex
+	sta $sentence+1
+	lda $strIndex  ; reload to set flags?
 	cmp #255
 	beq bad_dobj
 	lda $word3 ;					; if no prep -> done
@@ -84,11 +86,14 @@ _c	lda #word4%256						;verify wrd 2
 	sta $tableAddr+1	
 	jsr get_word_index
 	lda $strIndex
+	sta $sentence+3
 	cmp #255
 	beq bad_iobj 
 _x	pla
 	rts
 
+	
+	
 ;this is not a function! it must
 ;pull all the regs pushed by encode_sentence
 bad_verb
@@ -562,7 +567,8 @@ _lp		lda $200
 		jsr collapse_buffer			; shift all words down
 ;		jsr get_indirect_obj  ; this looks questionable
 		jmp _lp
-_cpyprp ldx #0
+_cpyprp sta $sentence+2
+		ldx #0
 _lp2	lda $200,x		
 		cmp #32 ; space?
 		beq _io
@@ -625,7 +631,25 @@ no_input
 		sta strAddr+1
 		jsr printstrcr
 		rts 
-		
+
+;this function maps words to their object
+;ids.  If no visible object is found, the
+;noun is set to 255 (couldn't be mapped)
+	.module map_nouns
+map_nouns
+		lda $sentence+1
+		cmp #255
+		beq _x
+_do		jsr get_object_id	
+		lda $objId
+		sta $sentence+1
+_io		lda $sentence+3
+		cmp #255
+		beq _x
+		jsr get_object_id
+		lda $objId
+		sta $sentence+3
+_x		rts
 		
 word1 .block 32
 word2 .block 32

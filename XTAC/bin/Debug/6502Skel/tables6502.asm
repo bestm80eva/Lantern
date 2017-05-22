@@ -112,7 +112,8 @@ dec_tabl_addr
 
 ;this function returns the id of the object
 ;whose word id is supplied in register 'a'
-;		
+;the result is stored in objId
+;registers are preserved		
 		.module get_obj_id
 get_object_id
 		sta objId
