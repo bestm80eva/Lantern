@@ -1,3 +1,6 @@
+;look6502.asm
+;Evan Wright, 2017
+
 look_sub
 	pha
 	txa
@@ -5,6 +8,8 @@ look_sub
 	tay
 	pha
 	jsr get_player_room
+	jsr print_obj_name
+	jsr printcr
 	jsr print_obj_description
 	jsr list_objects
 	pla
@@ -16,10 +21,11 @@ look_sub
 
 	.module list_objects
 list_objects
-		jsr get_player_room
-		sta $playerRoom
+		jsr get_player_room	
 		ldy #0
 _lp		lda ($tableAddr),y
+		cmp #1	; skip player
+		beq _c
 		cmp #255
 		beq _x
 		ldy #HOLDER_ID

@@ -208,11 +208,13 @@ print_obj_description
 		jsr printcr
 		rts
 
+
+		
 ;direction is in 'a'		
 print_nogo_msg
 		sec				; take two's complement of number
 		lda #255
-		sbc direction
+		sbc  $newRoom
 		clc
 		adc #1
 		pha

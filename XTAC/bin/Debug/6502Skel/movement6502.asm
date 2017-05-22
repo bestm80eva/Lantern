@@ -5,6 +5,7 @@ move_player
 		jsr verb_to_direction ; puts dir in y
 		jsr get_player_room 
 		jsr get_obj_attr ; obj=a attr=y  (get room's property)
+		sta newRoom
 		pha
 		cmp #127 
 		bpl _ng
@@ -26,6 +27,7 @@ _x		rts
 ;it in $direction
 
 	.module verb_to_direction
+	.module verb_to_direction
 verb_to_direction
 		pha
 		clc
@@ -39,3 +41,4 @@ verb_to_direction
 
  
 direction .byte 0
+newRoom .byte 0
