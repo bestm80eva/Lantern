@@ -60,7 +60,7 @@ next_entry
 		
 ;get a property bit on an object
 ;a=object
-;x=property
+;x=property (1-16)
 ;the subroutine figures out 
 	.module get_obj_prop
 get_obj_prop
@@ -74,45 +74,33 @@ _x      rts
 
 ;set a property bit on an object to a 1
 ;a=object
-;x=property
+;x=property (1-16)
 ;y=value		
 	.module set_obj_prop
 set_obj_prop 
-	jsr get_property_byte ; set table position 
-	beq $set_prop_bit 
-	jsr clr_prop_bit
-	rts
-	 
-;set a property bit on an object to a 1
-;don't call this directly.  call it from set_obj_prop
-;a=object
-;x=property
-
-		.module set_prop_bit
-set_prop_bit
-		ldy propByteOffset
-		ora $propMask 
-		sta ($tableAddr),y
-_x      rts
-		
-		
-		.module clr_prop_bit
-clr_prop_bit
-		sec
-		lda #$ff		;invert the mask
-		sbc $propMask
-		sta $propMask
-		lda $propByte	;reload the data byte
-		and $propByte   ;clear the bit
-		ldy $propByteOffset
-		sta ($tableAddr),y  ;write the byte back
-_x		rts
+			jsr get_property_byte ; set table position and mask
+			beq _set_bit 
+			jmp _clr_bit
+			jmp _x
+_set_bit	ldy propByteOffset
+			ora $propMask 
+			sta ($tableAddr),y
+			jmp _x
+_clr_bit	sec
+			lda #$ff		;invert the mask
+			sbc $propMask
+			sta $propMask
+			lda $propByte	;reload the data byte
+			and $propByte   ;clear the bit
+			ldy $propByteOffset
+			sta ($tableAddr),y  ;write the byte back
+_x			rts
 		
 		
 		
 ;get a property bit on an object
 ;a=object
-;x=property
+;x=property (1-16)
 ;byte returned in 'a'		
 		.module get_property_byte
 get_property_byte
@@ -133,6 +121,7 @@ _t		sty $propByteOffset
 		sta $propByte;
 		rts
 
+ 
 holderAttr .byte 0
 descAttr .byte 0
 initialDescAttr .byte 0
