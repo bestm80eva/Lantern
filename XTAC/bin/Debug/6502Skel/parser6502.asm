@@ -487,9 +487,9 @@ _x		pla
 	.module get_nouns
 get_nouns
 		pha
-		tya
+		txa
 		pha
-		tax
+		tya
 		pha
 		jsr mov_to_end_of_first_word
 		lda $200 ; hit end?

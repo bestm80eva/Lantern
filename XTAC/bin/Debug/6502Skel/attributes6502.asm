@@ -25,8 +25,8 @@ _x		lda ($tableAddr),y
 		rts
 
 ;a contains obj id
-;y contains attr id#
 ;x contains new value
+;y contains attr id#
 	.module set_obj_attr
 set_obj_attr
 		pha
