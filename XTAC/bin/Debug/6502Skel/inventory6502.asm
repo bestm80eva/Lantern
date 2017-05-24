@@ -93,10 +93,23 @@ _lp		ldy #0
 		lda ($tableAddr),y
 		cmp $parentId
 		bne _c
+		lda $tableAddr	;save table (lo)
+		pha
+		lda $tableAddr+1 	;save table (hi)
+		pha
 		ldy #0				;reload id
 		lda ($tableAddr),y
 		jsr print_obj_name
 		jsr printcr
+		jsr supporter_or_open_container
+		lda showContents
+		cmp #0
+		beq _s
+		jsr print_list_header
+_s		pla 
+		sta $tableAddr+1	;restory table (hi)
+		pla 
+		sta $tableAddr	;restory table (lo)		
 _c		jsr next_entry
 		jmp _lp
 _x		rts

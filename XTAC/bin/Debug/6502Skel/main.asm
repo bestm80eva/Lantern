@@ -61,7 +61,12 @@ _c 	jsr toascii
 	jsr remove_articles
 	jsr get_verb
 	jsr get_nouns ; 
+	
 	jsr encode_sentence
+	lda #1
+	cmp encodeFailed
+	beq _lp
+	
 	jsr map_nouns
 	jsr run_sentence	
 
@@ -89,6 +94,7 @@ _x 	jsr printcr
 .include "Dictionary6502.asm"
 .include "StringTable6502.asm"
 .include "VerbTable6502.asm"
+.include "CheckRules6502.asm"
 .include "ObjectTable6502.asm"	
 .include "NogoTable6502.asm"
 .include "PrepTable6502.asm"

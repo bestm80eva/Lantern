@@ -14,6 +14,11 @@ get_player_room
 	rts
 	
 enter_sub
+	    lda #PLAYER_ID
+		ldx $sentence+1
+		ldy #HOLDER_ID
+		jsr set_obj_attr
+		jsr look_sub
 		rts
 		
 

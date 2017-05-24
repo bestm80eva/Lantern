@@ -42,6 +42,8 @@ find_words
 	.module encode_sentence
 encode_sentence
 	pha
+	lda #0
+	sta encodeFailed
 	lda #verb_table%256	    ;print "I don't know the verb '"
 	sta $tableAddr
 	lda #verb_table/256 	    
@@ -76,6 +78,7 @@ encode_sentence
 	lda $word4 ;					; verify word 4
 	bne _c
 	jmp missing_noun
+	jmp _x
 _c	lda #word4%256						;verify wrd 2
 	sta $strDest				    ;set string to find
 	lda #word4/256					
@@ -97,6 +100,8 @@ _x	pla
 ;this is not a function! it must
 ;pull all the regs pushed by encode_sentence
 bad_verb
+		lda #1
+		sta encodeFailed
 		lda #badverb%256	 ;print "I don't know the verb '"
 		sta $strAddr
 		lda #badverb/256
@@ -116,6 +121,8 @@ bad_verb
 		rts
 
 bad_dobj
+		lda #1
+		sta encodeFailed
 		lda #badword%256	 ;print "I DONT' RECOGNIZE"...
 		sta $strAddr
 		lda #badword/256
@@ -135,6 +142,8 @@ bad_dobj
 		rts
 
 bad_iobj
+		lda #1
+		sta encodeFailed
 		lda #badword%256	 ;print "I DONT' RECOGNIZE"...
 		sta $strAddr
 		lda #badword/256
@@ -162,6 +171,8 @@ missing_noun
 		lda #nonoun/256
 		sta $strAddr+1		
 		jsr printstrcr
+		lda #1
+		sta encodeFailed
 		pla
 		rts
 		
@@ -669,3 +680,4 @@ endquote .db "'",0h
 wrdEnd 	 .db 0 ;  how many bytes past start
 isNoise .db	0;
 firstWrdLen .db 0;
+encodeFailed .db 0

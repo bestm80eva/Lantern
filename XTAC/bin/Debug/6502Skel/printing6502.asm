@@ -105,6 +105,10 @@ print_obj_name
 		pha
 		tya
 		pha
+		lda $tableAddr	;save old tableAddr (lo)
+		pha
+		lda $tableAddr+1	;save old tableAddr (hi)
+		pha
 		lda #$obj_word_table/256	; load obj_name_table into 0 page
 		sta $tableAddr+1;
 		lda #$obj_word_table%256	
@@ -135,6 +139,10 @@ _out	ldy #1
 		jsr printsp ;print a space
 		jsr print_word
 _x		jsr printsp ;print a space
+		pla 	;restore tableAddr (hi)
+		sta $tableAddr+1
+		pla		 ;restore tableAddr (lo)
+		sta $tableAddr
 		pla	;pull regs
 		tay
 		pla
@@ -225,7 +233,61 @@ print_nogo_msg
 		pla
 		jsr printixcr	; print
 		rts
+
+print_on_a_is
+		pha
+		lda #the%256
+		sta strAddr
+		lda #the/256
+		sta strAddr+1
+		jsr printstr
+		pla ;restore a	
+		pha
+		jsr print_obj_name
+		lda #contains%256
+		sta strAddr
+		lda #contains/256
+		sta strAddr+1
+		jsr printstrcr		
+		pla
+		rts		
 		
+print_a_contains
+		pha 
+		lda #onthe%256
+		sta strAddr
+		lda #onthe/256
+		sta strAddr+1
+		jsr printstr
+		pla ;restore a	
+		pha
+		jsr print_obj_name
+		lda #is%256
+		sta strAddr
+		lda #is/256
+		sta strAddr+1
+		jsr printstrcr		
+		pla
+		rts
+
+;the object to print is stored in objId
+	.module print_list_header
+print_list_header
+		lda supporter
+		cmp #1
+		beq _x
+		jsr print_on_a_is
+		jmp _x
+_c		jsr printstr
+_x		rts
 		
+contains .text "CONTAINS..."	
+	.byte 0
+onthe .text "ON THE "	
+	.byte 0
+is .text "IS..."	
+	.byte 0
+	
 objId .byte 0		
 srchIndex .byte  0
+
