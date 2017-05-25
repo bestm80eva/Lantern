@@ -579,7 +579,7 @@ namespace XMLtoAdv
                 sw.WriteLine("");
                 sw.WriteLine("obj_word_table");
 
-                char[] delimiterChars = { ' ' };
+                char[] delimiterChars = { ' ' }; 
 
                 foreach (GameObject o in objects)
                 {
@@ -1215,12 +1215,12 @@ namespace XMLtoAdv
             CreateTables(fileName, "_Apple2");
             
             WriteWelcomeMessage("Welcome6502.asm", ".strz", "");
-            WriteStringTable6502("DescriptionTable6502.asm", "description_table", descriptionTable);
+            WriteStringTable6502("StringTable6502.asm", "string_table", descriptionTable);
             WriteStringTable6502("Dictionary6502.asm", "dictionary", dict);
             WriteStringTable6502("NogoTable6502.asm", "nogo_table", nogoTable);
             WriteStringTable6502("PrepTable6502.asm", "prep_table", prepTable);
             WriteObjectTable6502("ObjectTable6502.asm");
-            WriteObjectWordTable("ObjectWordTable6502.asm", ".db");
+            WriteObjectWordTable("ObjectWordTable6502.asm", ".byte");
             WriteVerbTable6502("VerbTable6502.asm");
             WriteCheckTable("CheckRules6502.asm", ".byte", ".word");
             WriteSentenceTable("6502", "before", ".byte", ".word");

@@ -46,9 +46,9 @@ namespace XMLtoAdv
 
             sw.WriteLine("\tpha ; print " + text);
             sw.WriteLine("\tlda #$string_table%256");
-            sw.WriteLine("\tsta $strAddr");
+            sw.WriteLine("\tsta $tableAddr");
             sw.WriteLine("\tlda #$string_table/256");
-            sw.WriteLine("\tsta $strAddr+1");
+            sw.WriteLine("\tsta $tableAddr+1");
             sw.WriteLine("\tlda #" + project.GetStringId(text) + " ; " + text);
             sw.WriteLine("\tjsr printix");
             sw.WriteLine("\tpla ; end print");
@@ -102,14 +102,18 @@ namespace XMLtoAdv
         {
         }
 
-
-
         protected override void WritePropAssignment(StreamWriter sw, int objId, string obj, string propName, int val)
         {
             if (!propBytes.ContainsKey(propName))
             {
                 throw new Exception("Invalid property:" + propName);
             }
+
+            sw.WriteLine("\tlda #" + objId + " ; " + obj);
+            sw.WriteLine("\tldx #" + val + " ; " + obj);
+            sw.WriteLine("\tldy #" + propBits[propName] + " ; " + propName);
+            sw.WriteLine("\tjsr set_obj_prop");
+            
         }
 
         protected override void WriteSetVar(StreamWriter sw, string code)
@@ -151,6 +155,14 @@ namespace XMLtoAdv
                return name;
            }
             return name.Substring(0,20);
+        }
+
+        private void WritePushRegs()
+        {
+        }
+
+        private void WritePullRegs()
+        {
         }
 
     }
