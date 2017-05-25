@@ -1214,7 +1214,7 @@ namespace XMLtoAdv
             //get the file path 
             CreateTables(fileName, "_Apple2");
             
-            WriteWelcomeMessage("Welcome6502.asm", ".strz", "");
+            WriteWelcomeMessage("Welcome6502.asm", ".text", "\n.byte 0\n");
             WriteStringTable6502("StringTable6502.asm", "string_table", descriptionTable);
             WriteStringTable6502("Dictionary6502.asm", "dictionary", dict);
             WriteStringTable6502("NogoTable6502.asm", "nogo_table", nogoTable);
