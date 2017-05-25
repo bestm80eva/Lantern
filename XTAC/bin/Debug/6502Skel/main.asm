@@ -29,11 +29,8 @@
 .org $800
 	.module main
 start
-	lda #23
-	ldx #CONTAINER
-	jsr get_obj_prop
-	jsr printcr	
-	jsr look_sub
+	jsr show_intro
+ 	jsr look_sub
 _lp
  	jsr clr_buffr
 	jsr clr_words
@@ -75,6 +72,7 @@ _x 	jsr printcr
 	rts
 
 .include "input.asm"
+.include "intro6502.asm"
 .include "strings6502.asm"
 .include "printing6502.asm"
 .include "look6502.asm"
@@ -103,6 +101,8 @@ _x 	jsr printcr
 .include "before_table_6502.asm"
 .include "instead_table_6502.asm"
 .include "after_table_6502.asm"
+.include "Welcome6502.asm"
+
 
 msg	.text	"HELLO"
 	.byte 0
