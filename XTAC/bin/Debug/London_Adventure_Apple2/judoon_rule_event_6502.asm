@@ -10,9 +10,9 @@ judoon_rule_event
 	nop ; println("AS YOU ENTER THE LOBBY, A HULKING JUDOON WALKS BY, KNOCKING YOU BACK OUTSIDE."
 	pha ; print AS YOU ENTER THE LOBBY, A HULKING JUDOON WALKS BY, KNOCKING YOU BACK OUTSIDE.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #45 ; AS YOU ENTER THE LOBBY, A HULKING JUDOON WALKS BY, KNOCKING YOU BACK OUTSIDE.
 	jsr printix
 	pla ; end print

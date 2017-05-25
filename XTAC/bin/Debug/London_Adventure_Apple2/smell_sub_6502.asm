@@ -10,9 +10,9 @@ smell_sub
 	nop ; println("YOU SMELL NOTHING UNEXPECTED.")
 	pha ; print YOU SMELL NOTHING UNEXPECTED.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #53 ; YOU SMELL NOTHING UNEXPECTED.
 	jsr printix
 	pla ; end print

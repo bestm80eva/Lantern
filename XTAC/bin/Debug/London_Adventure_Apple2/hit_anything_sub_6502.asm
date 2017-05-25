@@ -10,9 +10,9 @@ hit_anything_sub
 	nop ; println("WOULD PUNCHING RANDOM THINGS MAKE YOU FEEL BETTER?")
 	pha ; print WOULD PUNCHING RANDOM THINGS MAKE YOU FEEL BETTER?
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #60 ; WOULD PUNCHING RANDOM THINGS MAKE YOU FEEL BETTER?
 	jsr printix
 	pla ; end print

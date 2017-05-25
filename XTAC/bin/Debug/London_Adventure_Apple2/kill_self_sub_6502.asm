@@ -10,9 +10,9 @@ kill_self_sub
 	nop ; println("IF YOU ARE EXPERIENCING SUICIDAL THOUGHTS, YOU SHOULD SEEK PHSYCIATRIC HELP.")
 	pha ; print IF YOU ARE EXPERIENCING SUICIDAL THOUGHTS, YOU SHOULD SEEK PHSYCIATRIC HELP.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #49 ; IF YOU ARE EXPERIENCING SUICIDAL THOUGHTS, YOU SHOULD SEEK PHSYCIATRIC HELP.
 	jsr printix
 	pla ; end print

@@ -10,9 +10,9 @@ take_portable_sub
 	nop ; println("(TAKEN)")
 	pha ; print (TAKEN)
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #57 ; (TAKEN)
 	jsr printix
 	pla ; end print

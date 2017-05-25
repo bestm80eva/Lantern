@@ -1,3 +1,6 @@
+;look6502.asm
+;Evan Wright, 2017
+
 look_sub
 	pha
 	txa
@@ -5,6 +8,8 @@ look_sub
 	tay
 	pha
 	jsr get_player_room
+	jsr print_obj_name
+	jsr printcr
 	jsr print_obj_description
 	jsr list_objects
 	pla
@@ -16,10 +21,17 @@ look_sub
 
 	.module list_objects
 list_objects
-		jsr get_player_room
-		sta $playerRoom
-		ldy #0
-_lp		lda ($tableAddr),y
+		jsr get_player_room	 ; make sure player room is set
+		lda #obj_table%256
+		sta $tableAddr
+		lda #obj_table/256
+		sta $tableAddr+1		
+_lp		ldy #0	; need to index with 0
+		lda ($tableAddr),y
+		cmp #0	; skip 'offscreen'
+		beq _c
+		cmp #1	; skip player
+		beq _c
 		cmp #255
 		beq _x
 		ldy #HOLDER_ID
@@ -46,7 +58,18 @@ _c		jsr next_entry
 		jmp _lp
 _x
 		rts
-	
+
+;describes the object in $sentence+1
+;if the object has contents
+;those are listed
+look_at_sub
+		lda $sentence+1
+		jsr print_obj_description
+		jsr printcr
+		nop ; does it have contents
+		nop ; if yes, list them
+		rts
+		
 playerRoom .byte 0	
 ambientLight .byte 1 ;	
 thereisa .byte "THERE IS A ",0h

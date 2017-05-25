@@ -10,9 +10,9 @@ listen_sub
 	nop ; println("YOU HEAR NOTHING UNEXPECTED.")
 	pha ; print YOU HEAR NOTHING UNEXPECTED.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #52 ; YOU HEAR NOTHING UNEXPECTED.
 	jsr printix
 	pla ; end print

@@ -47,7 +47,8 @@ _lp
 _c 	jsr toascii
 	lda #0
 	sta strSrc
-	lda #kbBufHi
+	
+	lda #kbBufHi ; did the user type quit
 	sta strSrc+1
 	lda #quit%256
 	sta strDest
@@ -56,17 +57,19 @@ _c 	jsr toascii
 	jsr streq6
 	cmp #1
 	beq _x
+
 	jsr remove_articles
 	jsr get_verb
 	jsr get_nouns ; 
+	
 	jsr encode_sentence
-	jsr run_sentence	
-	lda #$goodbye/256; 
-	sta $strAddr+1
-	lda #$goodbye%256
-	sta $strAddr
-	jsr printcr
-	jsr printstrcr
+	lda #1
+	cmp encodeFailed
+	beq _lp
+	
+	jsr map_nouns
+	jsr process_sentence	
+
 	jsr _lp
 _x 	jsr printcr
 	rts
@@ -85,13 +88,21 @@ _x 	jsr printcr
 .include "inventory6502.asm"
 .include "containers6502.asm"
 .include "Events6502.asm"
-.include "testtables.asm"
+;.include "testtables.asm"
 ;.include "tests.asm"
+.include "ObjectWordTable6502.asm"
+.include "Dictionary6502.asm"
+.include "StringTable6502.asm"
 .include "VerbTable6502.asm"
+.include "CheckRules6502.asm"
 .include "ObjectTable6502.asm"	
 .include "NogoTable6502.asm"
+.include "PrepTable6502.asm"
+.include "articles6502.asm"
 .include "sentence_table_6502.asm"
+.include "before_table_6502.asm"
 .include "instead_table_6502.asm"
+.include "after_table_6502.asm"
 
 msg	.text	"HELLO"
 	.byte 0

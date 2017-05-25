@@ -63,18 +63,50 @@ check_dobj_opnable
 		jsr thats_not_something
 _x		rts
 
-check_dobj_open		
-		rts
-		
-check_dobj_unlocked
-		rts
-		
-check_dobj_locked
-		rts
-		
-check_dobj_closed
-		rts
 
+	.module check_dobj_lockable
+check_dobj_lockable
+		lda $sentence+1
+		ldx #OPENABLE
+		jsr get_obj_prop
+		cmp #1
+		bne _x
+		jsr thats_not_something
+_x		rts
+	.module check_dobj_open
+check_dobj_open		
+		lda $sentence+1
+		ldx #OPEN
+		jsr get_obj_prop
+		cmp #1
+		bne _x
+		jsr dobj_already_open
+_x		rts
+		
+ 
+
+	.module check_dobj_locked
+check_dobj_locked
+		lda $sentence+1
+		ldx #LOCKED
+		jsr get_obj_prop
+		cmp #0
+		bne _x
+		jsr dobj_already_unlocked
+_x		rts
+			
+		.module check_dobj_closed
+check_dobj_closed
+		lda $sentence+1
+		ldx #OPEN
+		jsr get_obj_prop
+		cmp #0
+		bne _x
+		jsr dobj_already_closed
+_x		rts
+
+
+ 
 check_dobj_enterable
 		rts
 
@@ -114,13 +146,78 @@ thats_not_something
 		sta $strAddr+1		
 		jsr printstrcr	; print period	
 		rts
+
+dobj_already_unlocked
+		lda #1
+		sta checkFailed
+
+		lda #the%256
+		sta $strAddr
+		lda #the/256
+		sta $strAddr+1
+		jsr printstr  ; print that's not ...
 		
+		lda $sentence+1
+		jsr print_obj_name
+		
+		lda #alreadyUnlocked%256
+		sta $strAddr
+		lda #alreadyUnlocked/256
+		sta $strAddr+1		
+		rts
+		
+
+dobj_already_open
+		lda #1
+		sta encodeFailed
+		
+		lda #the%256
+		sta $strAddr
+		lda #the/256
+		sta $strAddr+1
+		jsr printstr  ; print that's not ...
+		
+		lda $sentence+1
+		jsr print_obj_name
+		
+		lda #alreadyOpen%256
+		sta $strAddr
+		lda #alreadyOpen/256
+		sta $strAddr+1		
+		rts
+
+dobj_already_closed
+		lda #1
+		sta encodeFailed
+		
+		lda #the%256
+		sta $strAddr
+		lda #the/256
+		sta $strAddr+1
+		jsr printstr  ; print that's not ...
+		
+		lda $sentence+1
+		jsr print_obj_name
+		
+		lda #alreadyClosed%256
+		sta $strAddr
+		lda #alreadyOpen/256
+		sta $strAddr+1		
+		rts		
 checkFailed .byte 0		
 missingDobj .text "IT LOOKS LIKE YOU ARE MISSING A NOUN."
 .byte 0		
 thatsNotSomething .text "THAT'S NOT SOMETHING YOU CAN "
 .byte 0		
 notContainer .text "THAT'S NOT SOMETHING YOU CAN "
-.byte 0		
+.byte 0	
+alreadyUnlocked	.text " IS ALREADY UNLOCKED."
+.byte 0
+alreadyOpen	.text " IS ALREADY OPEN."
+.byte 0
+alreadyClosed	.text "IS ALREADY CLOSED."
+.byte 0
+isntLockable	.text "ISN'T LOCKABLE."
+.byte 0
 period .text "."
 .byte 0		

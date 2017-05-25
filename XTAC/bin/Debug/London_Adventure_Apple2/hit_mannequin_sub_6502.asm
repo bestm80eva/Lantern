@@ -10,9 +10,9 @@ hit_mannequin_sub
 	nop ; println("PUNCHING THE MANNEQUIN HURTS ONLY YOUR FISTS.")
 	pha ; print PUNCHING THE MANNEQUIN HURTS ONLY YOUR FISTS.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #83 ; PUNCHING THE MANNEQUIN HURTS ONLY YOUR FISTS.
 	jsr printix
 	pla ; end print

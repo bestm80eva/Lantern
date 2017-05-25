@@ -10,9 +10,9 @@ hit_mannequin_with_b
 	nop ; println("WITH A PRECISE BLOW, YOU NEATLY DECAPITATE THE MANNEQUIN.")
 	pha ; print WITH A PRECISE BLOW, YOU NEATLY DECAPITATE THE MANNEQUIN.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #61 ; WITH A PRECISE BLOW, YOU NEATLY DECAPITATE THE MANNEQUIN.
 	jsr printix
 	pla ; end print
@@ -20,9 +20,9 @@ hit_mannequin_with_b
 	nop ; println("ROSE STAGGERS TO HER FEET.")
 	pha ; print ROSE STAGGERS TO HER FEET.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #62 ; ROSE STAGGERS TO HER FEET.
 	jsr printix
 	pla ; end print
@@ -41,9 +41,9 @@ hit_mannequin_with_b
 	nop ; println("ROSE HANDS YOU THE KEY TO HER FLAT.")
 	pha ; print ROSE HANDS YOU THE KEY TO HER FLAT.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #64 ; ROSE HANDS YOU THE KEY TO HER FLAT.
 	jsr printix
 	pla ; end print

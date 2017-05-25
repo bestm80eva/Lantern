@@ -10,9 +10,9 @@ after_open_tardis_su
 	nop ; println("THE TARDIS CREAKS OPEN.")
 	pha ; print THE TARDIS CREAKS OPEN.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #82 ; THE TARDIS CREAKS OPEN.
 	jsr printix
 	pla ; end print

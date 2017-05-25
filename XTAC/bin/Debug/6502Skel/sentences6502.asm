@@ -1,41 +1,68 @@
 ;sentences6502.asm
 
-	.module run_sentence
-run_sentence
+	.module process_sentence
+process_sentence
 		jsr run_checks ; do checks
 		lda checkFailed
 		cmp #1
 		beq _x
-		nop ; run preactions
-		jsr run_default_actions ; run default
-		nop ; was it handled?
-		nop ; if not, run instead
-		nop ; run postactions
+		jsr run_preactions ; run preactions
+		jsr run_actions ;
+		jsr run_postactions ;
 _x		rts
 		
-run_pre_actions
+run_preactions
+		lda #preactions_table%256
+		sta $tableAddr
+		lda #preactions_table/256
+		sta $tableAddr+1
+		jsr run_user_sentences
  		rts
 
+;try exact matches
+;if nothing run, try wildcard match
+;if nothing run, run default
+		.module run_actions
+run_actions	
+		lda #0
+		sta sentenceRun
 		
-run_instead_actions
-		lda #actions_table%256
+		lda #actions_table%256  ;set up table
 		sta $tableAddr
 		lda #actions_table/256
 		sta $tableAddr+1
-		jsr run_actions
+		jsr run_user_sentences
+		
+		lda sentenceRun	; matched?
+		cmp #1		
+		beq _skip
+		
+		lda #actions_table%256 ; reload table 
+		sta $tableAddr
+		lda #actions_table/256
+		sta $tableAddr+1
+
+		lda #0
+		sta sentenceRun
+		jsr run_wildcards_sentences
+		
+		lda sentenceRun	; matched?
+		cmp #1
+		beq _skip
+		jsr run_default_actions
+_skip		
 		rts		
 		
-run_post_actions
-		rts
-
-;loops through the actions table whose 
-;address is stored in tableAddr		
-	.module run_actions
-run_actions
+run_postactions
+		lda #postactions_table%256
+		sta $tableAddr
+		lda #postactions_table/256
+		sta $tableAddr+1
+		jsr run_user_sentences
 		rts
 
 ;loops through jump table		
-	.module run_deault_actions
+	.module run_default_actions
 run_default_actions
 		lda #0
 		sta defaultHandled
@@ -51,8 +78,8 @@ _lp		lda ($tableAddr),y
 		bne _skp
 		jsr inc_tabl_addr
 		lda #1
-	;		jsr ($tableAddr)  can't don an indirect function call
-		ldx ($tableAddr)
+	 
+		ldx ($tableAddr)  ; set up the indirect jump
 		ldy ($tableAddr+1)
 		stx $tableAddr
 		sty $tableAddr+1
@@ -115,5 +142,71 @@ _c		jsr inc_tabl_addr  ; skip to next entry
 		jmp _lp
 _x		rts
 
+;table address is set by caller in tableAddr
+	.module run_user_sentences
+run_user_sentences
+_lp		ldy #0
+		lda ($tableAddr),y
+		cmp #255
+		beq _x
+		cmp $sentence 
+		bne _c
+		iny 
+		lda ($tableAddr),y ;word2
+		cmp $sentence+1
+		bne _c
+		iny 
+		lda ($tableAddr),y ;word3
+		cmp $sentence+2
+		bne _c
+		iny 
+		lda ($tableAddr),y ;word4
+		cmp $sentence+3
+		bne _c	
+_run	ldy #4
+		lda ($tableAddr),y	; put jumpAddr in vector
+		sta $jumpVector
+		iny
+		lda ($tableAddr),y
+		sta $jumpVector+1
+		
+		lda #_nxt/256		; put return addr onto stack
+		pha
+		lda #_nxt%256
+		pha
+		
+		jmp ($jumpVector)	; run the sentence
+		
+_nxt	nop ; padding - don not remove!
+		
+		lda #1			; flag that we ran a sentence
+		sta sentenceRun
+
+		jmp _x
+_c		clc				;add 6 bytes to skip to next entry
+		lda $tableAddr
+		adc #6
+		sta $tableAddr
+		lda $tableAddr+1
+		adc #0
+		sta $tableAddr+1
+		jmp _lp
+_x		rts
+		
+run_wildcards_sentences
+		lda $oldDobj
+		pha
+		lda $oldIObj
+		pha
+		jsr run_user_sentences
+		pla
+		sta $oldIObj
+		pla
+		sta $oldDobj
+		rts
+
 jumpVector .word 0
 defaultHandled .byte 0
+sentenceRun .byte 0
+oldDobj .byte 0
+oldIObj .byte 0

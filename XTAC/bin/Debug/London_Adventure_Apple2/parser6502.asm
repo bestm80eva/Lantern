@@ -42,6 +42,8 @@ find_words
 	.module encode_sentence
 encode_sentence
 	pha
+	lda #0
+	sta encodeFailed
 	lda #verb_table%256	    ;print "I don't know the verb '"
 	sta $tableAddr
 	lda #verb_table/256 	    
@@ -67,6 +69,8 @@ encode_sentence
 	sta $tableAddr+1	
 	jsr get_word_index
 	lda $strIndex
+	sta $sentence+1
+	lda $strIndex  ; reload to set flags?
 	cmp #255
 	beq bad_dobj
 	lda $word3 ;					; if no prep -> done
@@ -74,6 +78,7 @@ encode_sentence
 	lda $word4 ;					; verify word 4
 	bne _c
 	jmp missing_noun
+	jmp _x
 _c	lda #word4%256						;verify wrd 2
 	sta $strDest				    ;set string to find
 	lda #word4/256					
@@ -84,14 +89,19 @@ _c	lda #word4%256						;verify wrd 2
 	sta $tableAddr+1	
 	jsr get_word_index
 	lda $strIndex
+	sta $sentence+3
 	cmp #255
 	beq bad_iobj 
 _x	pla
 	rts
 
+	
+	
 ;this is not a function! it must
 ;pull all the regs pushed by encode_sentence
 bad_verb
+		lda #1
+		sta encodeFailed
 		lda #badverb%256	 ;print "I don't know the verb '"
 		sta $strAddr
 		lda #badverb/256
@@ -111,6 +121,8 @@ bad_verb
 		rts
 
 bad_dobj
+		lda #1
+		sta encodeFailed
 		lda #badword%256	 ;print "I DONT' RECOGNIZE"...
 		sta $strAddr
 		lda #badword/256
@@ -130,6 +142,8 @@ bad_dobj
 		rts
 
 bad_iobj
+		lda #1
+		sta encodeFailed
 		lda #badword%256	 ;print "I DONT' RECOGNIZE"...
 		sta $strAddr
 		lda #badword/256
@@ -157,6 +171,8 @@ missing_noun
 		lda #nonoun/256
 		sta $strAddr+1		
 		jsr printstrcr
+		lda #1
+		sta encodeFailed
 		pla
 		rts
 		
@@ -482,9 +498,9 @@ _x		pla
 	.module get_nouns
 get_nouns
 		pha
-		tya
+		txa
 		pha
-		tax
+		tya
 		pha
 		jsr mov_to_end_of_first_word
 		lda $200 ; hit end?
@@ -562,7 +578,8 @@ _lp		lda $200
 		jsr collapse_buffer			; shift all words down
 ;		jsr get_indirect_obj  ; this looks questionable
 		jmp _lp
-_cpyprp ldx #0
+_cpyprp sta $sentence+2
+		ldx #0
 _lp2	lda $200,x		
 		cmp #32 ; space?
 		beq _io
@@ -625,7 +642,25 @@ no_input
 		sta strAddr+1
 		jsr printstrcr
 		rts 
-		
+
+;this function maps words to their object
+;ids.  If no visible object is found, the
+;noun is set to 255 (couldn't be mapped)
+	.module map_nouns
+map_nouns
+		lda $sentence+1
+		cmp #255
+		beq _x
+_do		jsr get_object_id	
+		lda $objId
+		sta $sentence+1
+_io		lda $sentence+3
+		cmp #255
+		beq _x
+		jsr get_object_id
+		lda $objId
+		sta $sentence+3
+_x		rts
 		
 word1 .block 32
 word2 .block 32
@@ -645,3 +680,4 @@ endquote .db "'",0h
 wrdEnd 	 .db 0 ;  how many bytes past start
 isNoise .db	0;
 firstWrdLen .db 0;
+encodeFailed .db 0

@@ -10,9 +10,9 @@ jump_sub
 	nop ; println("WHEEEEE!")
 	pha ; print WHEEEEE!
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #56 ; WHEEEEE!
 	jsr printix
 	pla ; end print

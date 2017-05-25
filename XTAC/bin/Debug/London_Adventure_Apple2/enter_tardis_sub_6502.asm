@@ -15,9 +15,9 @@ _a	nop ; close (tardis.open == 1)
 	nop ; println("THE TARDIS IS CLOSED.")
 	pha ; print THE TARDIS IS CLOSED.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #67 ; THE TARDIS IS CLOSED.
 	jsr printix
 	pla ; end print

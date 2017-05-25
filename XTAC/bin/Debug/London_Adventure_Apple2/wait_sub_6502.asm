@@ -10,9 +10,9 @@ wait_sub
 	nop ; println("TIME PASSES...")
 	pha ; print TIME PASSES...
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #54 ; TIME PASSES...
 	jsr printix
 	pla ; end print

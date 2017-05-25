@@ -10,9 +10,9 @@ kill_player_sub
 	nop ; println("***YOU HAVE DIED***.")
 	pha ; print ***YOU HAVE DIED***.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #50 ; ***YOU HAVE DIED***.
 	jsr printix
 	pla ; end print

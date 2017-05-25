@@ -68,7 +68,7 @@ _c 	jsr toascii
 	beq _lp
 	
 	jsr map_nouns
-	jsr run_sentence	
+	jsr process_sentence	
 
 	jsr _lp
 _x 	jsr printcr
@@ -100,7 +100,9 @@ _x 	jsr printcr
 .include "PrepTable6502.asm"
 .include "articles6502.asm"
 .include "sentence_table_6502.asm"
+.include "before_table_6502.asm"
 .include "instead_table_6502.asm"
+.include "after_table_6502.asm"
 
 msg	.text	"HELLO"
 	.byte 0

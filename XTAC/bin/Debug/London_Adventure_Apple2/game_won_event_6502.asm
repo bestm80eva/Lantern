@@ -10,9 +10,9 @@ game_won_event
 	nop ; println("CONGRATULATIONS!  WITH THE DALEK DESTROYED, YOU AND THE TARDIS ARE NOW READY FOR YOUR FURTHER ADVENTURES.")
 	pha ; print CONGRATULATIONS!  WITH THE DALEK DESTROYED, YOU AND THE TARDIS ARE NOW READY FOR YOUR FURTHER ADVENTURES.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #46 ; CONGRATULATIONS!  WITH THE DALEK DESTROYED, YOU AND THE TARDIS ARE NOW READY FOR YOUR FURTHER ADVENTURES.
 	jsr printix
 	pla ; end print
@@ -20,9 +20,9 @@ game_won_event
 	nop ; println("STORY COMPLETE.")
 	pha ; print STORY COMPLETE.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #47 ; STORY COMPLETE.
 	jsr printix
 	pla ; end print
@@ -30,9 +30,9 @@ game_won_event
 	nop ; println("TYPE 'QUIT' TO EXIT GAME.")
 	pha ; print TYPE 'QUIT' TO EXIT GAME.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #48 ; TYPE 'QUIT' TO EXIT GAME.
 	jsr printix
 	pla ; end print

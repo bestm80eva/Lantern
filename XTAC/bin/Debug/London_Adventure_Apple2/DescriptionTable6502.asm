@@ -2,12 +2,12 @@
 ; DescriptionTable6502.asm
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-description_table
+string_table
 .byte 59
 .text "OFFSTAGE.  MOVE OBJECTS HERE TO REMOVE THEM FROM THE WORLD." ; 0
 .byte 0 ; null terminator
-.byte 63
-.text "YOU ARE SPORTING A SKINNY BLACK AND MATCHING CONVERSE SNEAKERS." ; 1
+.byte 67
+.text "YOU ARE SPORTING A SKINNY BLACK TIE AND MATCHING CONVERSE SNEAKERS." ; 1
 .byte 0 ; null terminator
 .byte 59
 .text "THIS IS A NARROW ALLEY.  TO THE NORTH, YOU CAN SEE TRAFFIC." ; 2

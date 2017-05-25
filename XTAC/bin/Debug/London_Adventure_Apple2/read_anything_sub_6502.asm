@@ -10,9 +10,9 @@ read_anything_sub
 	nop ; println("THAT'S A STRANGE THING TO READ.")
 	pha ; print THAT'S A STRANGE THING TO READ.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #66 ; THAT'S A STRANGE THING TO READ.
 	jsr printix
 	pla ; end print

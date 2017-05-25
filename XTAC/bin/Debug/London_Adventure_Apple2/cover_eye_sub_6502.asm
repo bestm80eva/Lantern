@@ -10,9 +10,9 @@ cover_eye_sub
 	nop ; println("YOU DEFTLY TOSS THE FEDORA ONTO THE DALEK'S EYESTALK.")
 	pha ; print YOU DEFTLY TOSS THE FEDORA ONTO THE DALEK'S EYESTALK.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #76 ; YOU DEFTLY TOSS THE FEDORA ONTO THE DALEK'S EYESTALK.
 	jsr printix
 	pla ; end print
@@ -20,9 +20,9 @@ cover_eye_sub
 	nop ; println("IN AN ATTEMPT TO DESTROY THE HAT, THE DALEK FIRES A LASER AT IT,  ACCIDENTALLY VAPORIZING ITS OWN EYE.")
 	pha ; print IN AN ATTEMPT TO DESTROY THE HAT, THE DALEK FIRES A LASER AT IT,  ACCIDENTALLY VAPORIZING ITS OWN EYE.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #77 ; IN AN ATTEMPT TO DESTROY THE HAT, THE DALEK FIRES A LASER AT IT,  ACCIDENTALLY VAPORIZING ITS OWN EYE.
 	jsr printix
 	pla ; end print
@@ -30,9 +30,9 @@ cover_eye_sub
 	nop ; println("'IMPOSSIBLE! IMPOSSIBLE! MUST DESTROY IMPERFECTION!'")
 	pha ; print 'IMPOSSIBLE! IMPOSSIBLE! MUST DESTROY IMPERFECTION!'
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #78 ; 'IMPOSSIBLE! IMPOSSIBLE! MUST DESTROY IMPERFECTION!'
 	jsr printix
 	pla ; end print
@@ -40,9 +40,9 @@ cover_eye_sub
 	nop ; println("THE DALEK, HAVING ACTIVATED A SELF DESTRUCT MECHANISM IS NOW GLOWING BRIGHT RED.")
 	pha ; print THE DALEK, HAVING ACTIVATED A SELF DESTRUCT MECHANISM IS NOW GLOWING BRIGHT RED.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #79 ; THE DALEK, HAVING ACTIVATED A SELF DESTRUCT MECHANISM IS NOW GLOWING BRIGHT RED.
 	jsr printix
 	pla ; end print

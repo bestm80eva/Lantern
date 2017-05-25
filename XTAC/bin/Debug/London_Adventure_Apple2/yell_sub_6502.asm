@@ -10,9 +10,9 @@ yell_sub
 	nop ; println("AAAAAAAAAAAAARRRRGGGGGG!")
 	pha ; print AAAAAAAAAAAAARRRRGGGGGG!
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #55 ; AAAAAAAAAAAAARRRRGGGGGG!
 	jsr printix
 	pla ; end print

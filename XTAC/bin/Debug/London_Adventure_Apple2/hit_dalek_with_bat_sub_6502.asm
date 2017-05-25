@@ -10,9 +10,9 @@ hit_dalek_with_bat_s
 	nop ; println("TBD")
 	pha ; print TBD
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #65 ; TBD
 	jsr printix
 	pla ; end print

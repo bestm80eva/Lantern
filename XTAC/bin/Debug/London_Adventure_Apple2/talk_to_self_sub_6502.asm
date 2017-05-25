@@ -10,9 +10,9 @@ talk_to_self_sub
 	nop ; println("TALKING TO YOURSELF IS A SIGN OF IMPENDING MENTAL COLLAPSE.")
 	pha ; print TALKING TO YOURSELF IS A SIGN OF IMPENDING MENTAL COLLAPSE.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #51 ; TALKING TO YOURSELF IS A SIGN OF IMPENDING MENTAL COLLAPSE.
 	jsr printix
 	pla ; end print

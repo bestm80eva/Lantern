@@ -10,9 +10,9 @@ follow_player_event
 	nop ; println("THE DALEK IS FOLLOWING YOU.")
 	pha ; print THE DALEK IS FOLLOWING YOU.
 	lda #$string_table%256
-	sta $strAddr
+	sta $tableAddr
 	lda #$string_table/256
-	sta $strAddr+1
+	sta $tableAddr+1
 	lda #44 ; THE DALEK IS FOLLOWING YOU.
 	jsr printix
 	pla ; end print
