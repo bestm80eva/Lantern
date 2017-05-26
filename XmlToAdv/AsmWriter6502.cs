@@ -94,12 +94,86 @@ namespace XMLtoAdv
         {
         }
 
+        //val is the rhs
         protected override void WriteAttrTest(StreamWriter sw, string code, string objName, string attrName, int attrNum, string op, string val, string label)
         {
+            sw.WriteLine("\tnop ; test (" + code + ")");
+
+            //   sw.WriteLine("\tlda " + ToRegisterLoadOperand(val) + " ;" + val);
+            //    sw.WriteLine("\tpshs a    ; push right side");
+            GetRHS(sw, val); // puts rhs in a
+            sw.WriteLine("\tpha ; save it");
+
+            sw.WriteLine("\tlda #1 ; setup zero page stack address");   
+            sw.WriteLine("\tsta $tableAddr+1");   
+            sw.WriteLine("\ttsx ; get stack ptr");   
+            sw.WriteLine("\tstx $tableAddr; get stack ptr");
+            sw.WriteLine("\tldy #0");
+
+            sw.WriteLine("\tlda #" + project.GetObjectId(objName));
+            sw.WriteLine("\tldx #" + attrIndexes[attrName] + " ; " + attrName);
+            sw.WriteLine("\tjsr get_obj_attr ; result in 'a'");
+            
+            sw.WriteLine("\tcmp ($tableAddr),y");
+            sw.WriteLine("\tphp ; save flags in x");
+            sw.WriteLine("\tpla ; ");
+            sw.WriteLine("\ttax ; flags now in x");
+            sw.WriteLine("\tpla ; pull rhs");
+            sw.WriteLine("\ttxa ; put x back in status register");
+            sw.WriteLine("\tpha ; ");
+            sw.WriteLine("\tplp ; flags restored");
+            string lbl = GetNextLabel();
+            sw.WriteLine("\t" + OperatorToCC(op) + " " + lbl + " ; skip over jump");  //THIS DOESN't WORK
+            sw.WriteLine("\tjmp "  + label + " ; finally do the actual jump");
+            sw.WriteLine(lbl + " \tnop ; stupid thing because 6502 has no lbeq instruction");
         }
 
         protected override void WriteAttrAssignment(StreamWriter sw, string lhs, string rhs)
         {
+            GetRHS(sw, rhs); //get value and leave on stack
+
+            if (lhs.IndexOf(".") != -1)
+            {//attr or prop
+                string obj;
+                string attr;
+                SplitOnDot(lhs, out obj, out attr);
+
+                if (project.GetObjectId(obj) == -1 && !project.IsVar(obj))
+                {
+                    throw new Exception("Invalid object:" + obj);
+                }
+
+               // sw.WriteLine("\tpla ; get rhs");
+                sw.WriteLine("\ttay ; put it in y");
+                sw.WriteLine("\tlda #" + project.GetObjectId(obj) + " ; " + obj);
+               
+
+                if (IsAttribute(attr))
+                {
+                    sw.WriteLine("\tldx #" + attrIndexes[attr] + " ; " + attr);
+                    sw.WriteLine("\tjsr set_obj_attr");
+                }
+                else if (IsProperty(attr))
+                {
+                    sw.WriteLine("ldx #" + propBytes[attr] + " ; " + attr);
+                    sw.WriteLine("jsr set_obj_prop");                     
+                }
+                else
+                {
+                    throw new Exception("Invalid property" + attr);
+                }
+            }
+            else if (project.IsVar(lhs))
+            {
+                GetRHS(sw, rhs);
+                //sw.WriteLine("\tpla");
+                sw.WriteLine("\tsta $" + project.GetVarAddr(lhs));
+            }
+            else
+            {
+                throw new Exception("lhs is not an object or variable: " + lhs);
+            }
+
         }
 
         protected override void WritePropAssignment(StreamWriter sw, int objId, string obj, string propName, int val)
@@ -110,7 +184,7 @@ namespace XMLtoAdv
             }
 
             sw.WriteLine("\tlda #" + objId + " ; " + obj);
-            sw.WriteLine("\tldx #" + val + " ; " + obj);
+            sw.WriteLine("\tldx #" + val + " ; ");
             sw.WriteLine("\tldy #" + propBits[propName] + " ; " + propName);
             sw.WriteLine("\tjsr set_obj_prop");
             
@@ -163,6 +237,79 @@ namespace XMLtoAdv
 
         private void WritePullRegs()
         {
+        }
+
+        //figures out what the rhs is an pushes it onto stack
+        void GetRHS(StreamWriter sw, string rhs)
+        {
+            int result;
+            if (Int32.TryParse(rhs, out result))
+            {
+                sw.WriteLine("\tlda #" + result.ToString());
+            }
+            else if (project.IsVar(rhs) || rhs.ToUpper().Equals("DOBJ") || rhs.ToUpper().Equals("IOBJ"))
+            {
+                sw.WriteLine("\tlda $" + project.GetVarAddr(rhs) + "; " + rhs);
+
+            }
+            else if (rhs.IndexOf("\"") == 0)
+            {
+                string left = rhs.Substring(1);
+                string str = left.Substring(0, left.IndexOf("\""));
+                sw.WriteLine("\tlda #" + project.GetStringId(str).ToString() + " ;" + rhs);
+            }
+            else if (rhs.IndexOf(".")!=-1)
+            {
+                string obj, prop;
+                SplitOnDot(rhs, out obj, out prop);
+
+                sw.WriteLine("\tlda #" + project.GetObjectId(obj) + " ; " + obj);
+
+                if (IsAttribute(prop))
+                {
+                    //write push attr
+
+                    sw.WriteLine("\tldx #" + attrIndexes[prop] + " ; " + prop);
+                    sw.WriteLine("\tjsr get_obj_attr");                  
+                }
+                else if (IsProperty(prop))
+                {
+                    sw.WriteLine("\tldx #" + propBits[prop] + " ; " + prop);
+                    sw.WriteLine("\tjsr get_object_prop" + obj + " ; " + obj);
+                }
+                else
+                {
+                    throw new Exception("invalid property or attribute: " + prop);
+                }
+
+            }
+            else if (project.GetObjectId(rhs) != -1)
+            {
+                try
+                {
+                    sw.WriteLine("\t lda #" + project.GetObjectId(rhs).ToString() + " ;" + rhs);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+
+            }
+            else throw new Exception("Unable to evaluate: " + rhs);
+
+            //sw.WriteLine("\tpha ");  //push the result
+         
+
+        }
+
+        string OperatorToCC(string op)
+        {
+            if (op.Equals("=="))
+                return "bne";
+            if (op.Equals("!="))
+                return "beq";
+            else throw new Exception ("Unsupported operator :  " + op);
+            
         }
 
     }
