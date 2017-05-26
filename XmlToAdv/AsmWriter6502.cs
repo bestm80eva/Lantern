@@ -88,44 +88,37 @@ namespace XMLtoAdv
 
         protected override void WritePropTest(StreamWriter sw, string code, string objName, string propName, string op, int val, string label)
         {
+            GetRHS(sw, objName + "." + propName);
+            sw.WriteLine("\tnop ; test (" + code + ")");
+            sw.WriteLine("\tcmp #" + val);
+         //   GetRHS(sw, val); // puts rhs in a
+            Write6502Jump(sw, op, label);            
         }
 
         protected override void WriteVarTest(StreamWriter sw, string code, string varName, string op, string val, string label)
         {
+            sw.WriteLine("\tnop ; test (" + code + ")");
+            GetRHS(sw, val); // puts rhs in a
+            sw.WriteLine("\tcmp " + project.GetVarAddr(varName));
+            Write6502Jump(sw, op, label);            
         }
 
         //val is the rhs
         protected override void WriteAttrTest(StreamWriter sw, string code, string objName, string attrName, int attrNum, string op, string val, string label)
         {
             sw.WriteLine("\tnop ; test (" + code + ")");
-
-            //   sw.WriteLine("\tlda " + ToRegisterLoadOperand(val) + " ;" + val);
-            //    sw.WriteLine("\tpshs a    ; push right side");
+ 
             GetRHS(sw, val); // puts rhs in a
-            sw.WriteLine("\tpha ; save it");
+            sw.WriteLine("\tsta temp ; save it");
 
-            sw.WriteLine("\tlda #1 ; setup zero page stack address");   
-            sw.WriteLine("\tsta $tableAddr+1");   
-            sw.WriteLine("\ttsx ; get stack ptr");   
-            sw.WriteLine("\tstx $tableAddr; get stack ptr");
-            sw.WriteLine("\tldy #0");
-
-            sw.WriteLine("\tlda #" + project.GetObjectId(objName));
-            sw.WriteLine("\tldx #" + attrIndexes[attrName] + " ; " + attrName);
-            sw.WriteLine("\tjsr get_obj_attr ; result in 'a'");
+ //           sw.WriteLine("\tlda #" + project.GetObjectId(objName));
+ //          sw.WriteLine("\tldx #" + attrIndexes[attrName] + " ; " + attrName);
+ //           sw.WriteLine("\tjsr get_obj_attr ; result in 'a'");
+            GetRHS(sw, objName + "." + attrName); // puts rhs in a
             
-            sw.WriteLine("\tcmp ($tableAddr),y");
-            sw.WriteLine("\tphp ; save flags in x");
-            sw.WriteLine("\tpla ; ");
-            sw.WriteLine("\ttax ; flags now in x");
-            sw.WriteLine("\tpla ; pull rhs");
-            sw.WriteLine("\ttxa ; put x back in status register");
-            sw.WriteLine("\tpha ; ");
-            sw.WriteLine("\tplp ; flags restored");
-            string lbl = GetNextLabel();
-            sw.WriteLine("\t" + OperatorToCC(op) + " " + lbl + " ; skip over jump");  //THIS DOESN't WORK
-            sw.WriteLine("\tjmp "  + label + " ; finally do the actual jump");
-            sw.WriteLine(lbl + " \tnop ; stupid thing because 6502 has no lbeq instruction");
+            sw.WriteLine("\tcmp temp");
+       
+            Write6502Jump(sw, op, label);
         }
 
         protected override void WriteAttrAssignment(StreamWriter sw, string lhs, string rhs)
@@ -144,17 +137,19 @@ namespace XMLtoAdv
                 }
 
                // sw.WriteLine("\tpla ; get rhs");
-                sw.WriteLine("\ttay ; put it in y");
-                sw.WriteLine("\tlda #" + project.GetObjectId(obj) + " ; " + obj);
                
 
                 if (IsAttribute(attr))
                 {
-                    sw.WriteLine("\tldx #" + attrIndexes[attr] + " ; " + attr);
+                    sw.WriteLine("\ttax ; move previous result to x");
+                    sw.WriteLine("\tlda #" + project.GetObjectId(obj) + " ; " + obj);
+                    sw.WriteLine("\tldy #" + attrIndexes[attr] + " ; " + attr);
                     sw.WriteLine("\tjsr set_obj_attr");
                 }
                 else if (IsProperty(attr))
                 {
+                    sw.WriteLine("\ttay ; move previous result to y");
+                    sw.WriteLine("\tlda #" + project.GetObjectId(obj) + " ; " + obj);
                     sw.WriteLine("ldx #" + propBytes[attr] + " ; " + attr);
                     sw.WriteLine("jsr set_obj_prop");                     
                 }
@@ -256,7 +251,13 @@ namespace XMLtoAdv
             {
                 string left = rhs.Substring(1);
                 string str = left.Substring(0, left.IndexOf("\""));
-                sw.WriteLine("\tlda #" + project.GetStringId(str).ToString() + " ;" + rhs);
+                int objId = project.GetStringId(str);
+                if (objId == -1)
+                {
+                    throw new Exception("Unknown object : " + str + ".  Check spelling an be sure to use the object's full name.");
+                }
+
+                sw.WriteLine("\tlda #" + objId + " ;" + rhs);
             }
             else if (rhs.IndexOf(".")!=-1)
             {
@@ -269,13 +270,13 @@ namespace XMLtoAdv
                 {
                     //write push attr
 
-                    sw.WriteLine("\tldx #" + attrIndexes[prop] + " ; " + prop);
+                    sw.WriteLine("\tldy #" + attrIndexes[prop] + " ; " + prop);
                     sw.WriteLine("\tjsr get_obj_attr");                  
                 }
                 else if (IsProperty(prop))
                 {
                     sw.WriteLine("\tldx #" + propBits[prop] + " ; " + prop);
-                    sw.WriteLine("\tjsr get_object_prop" + obj + " ; " + obj);
+                    sw.WriteLine("\tjsr get_obj_prop ; " + obj);
                 }
                 else
                 {
@@ -305,11 +306,19 @@ namespace XMLtoAdv
         string OperatorToCC(string op)
         {
             if (op.Equals("=="))
-                return "bne";
-            if (op.Equals("!="))
                 return "beq";
+            if (op.Equals("!="))
+                return "bne";
             else throw new Exception ("Unsupported operator :  " + op);
             
+        }
+
+        void Write6502Jump(StreamWriter sw, string op, string label)
+        {
+            string lbl = GetNextLabel();
+            sw.WriteLine("\t" + OperatorToCC(op) + " " + lbl + " ; skip over jump");  //THIS DOESN't WORK
+            sw.WriteLine("\tjmp " + label + " ; finally do the actual jump");
+            sw.WriteLine(lbl + " \tnop ; stupid thing because 6502 has no lbeq instruction");
         }
 
     }
