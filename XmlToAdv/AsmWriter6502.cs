@@ -272,10 +272,11 @@ namespace XMLtoAdv
 
                     sw.WriteLine("\tldy #" + attrIndexes[prop] + " ; " + prop);
                     sw.WriteLine("\tjsr get_obj_attr");                  
-                }
+                } 
                 else if (IsProperty(prop))
                 {
-                    sw.WriteLine("\tldx #" + propBits[prop] + " ; " + prop);
+                    int bit = (int)Math.Log(Convert.ToDouble(propBits[prop]), 2)+1;
+                    sw.WriteLine("\tldx #" + bit + " ; " + prop);
                     sw.WriteLine("\tjsr get_obj_prop ; " + obj);
                 }
                 else
