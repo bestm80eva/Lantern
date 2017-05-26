@@ -12,8 +12,8 @@ get_obj_attr
 		sta $tableAddr+1
 _lp		cpx #0		
 		beq _x
-		lda $tableAddr
 		clc
+		lda $tableAddr
 		adc #OBJ_ENTRY_SIZE
 		sta $tableAddr
 		lda $tableAddr+1

@@ -66,8 +66,10 @@ _c 	jsr toascii
 	
 	jsr map_nouns
 	jsr process_sentence	
-
-	jsr _lp
+	
+	jsr do_events
+	
+	jmp _lp
 _x 	jsr printcr
 	rts
 
@@ -85,6 +87,7 @@ _x 	jsr printcr
 .include "movement6502.asm"
 .include "inventory6502.asm"
 .include "containers6502.asm"
+.include "doevents6502.asm"
 .include "Events6502.asm"
 ;.include "testtables.asm"
 ;.include "tests.asm"

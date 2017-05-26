@@ -1,6 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;article table
 ;1st byte is length number
+;(c) Evan Wright, 2017
 ;;;;;;;;;;;;;;;;;;;;;;;
 article_table
 	.byte 3
