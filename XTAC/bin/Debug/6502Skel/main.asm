@@ -115,4 +115,5 @@ quit .byte "QUIT",0h
 
 .include "UserVars6502.asm"	
 score .byte 0
+gameOver .byte 0
 .end
