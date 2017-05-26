@@ -214,9 +214,9 @@ _skp1
 _skp2
 		jsr run_user_sentences
 		pla
-		sta $oldIObj
+		sta $sentence+3
 		pla
-		sta $oldDobj
+		sta $sentence+1
 		rts
 
 jumpVector .word 0

@@ -24,16 +24,16 @@ close_sub
 		
 lock_sub
 		lda $sentence+1
-		ldx #1
-		ldy #LOCKED
+		ldx #LOCKED
+		ldy #1
 		jsr set_obj_prop
 		jsr print_done
 		rts
 		
 unlock_sub
 		lda $sentence+1
-		ldx #0
-		ldy #LOCKED
+		ldx #LOCKED
+		ldy #0
 		jsr set_obj_prop
 		jsr print_done
 		rts
