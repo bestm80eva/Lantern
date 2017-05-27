@@ -48,6 +48,11 @@ cover_eye_sub
 	pla ; end print
 	jsr printcr
 	nop ; eyestalk.holder=0
+	lda #0
+	tax ; move previous result to x
+	lda #27 ; eyestalk
+	ldy #1 ; holder
+	jsr set_obj_attr
 	nop ; add(score,25)
 	pha
 	lda score

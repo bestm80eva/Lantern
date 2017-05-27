@@ -8,16 +8,16 @@ put_sub
 		
 open_sub
 		lda $sentence+1
-		ldx #1
-		ldy #OPEN
+		ldx #OPEN
+		ldy #1
 		jsr set_obj_prop
 		jsr print_done
 		rts
 		
 close_sub
 		lda $sentence+1
-		ldx #0
-		ldy #OPEN
+		ldx #OPEN
+		ldy #0
 		jsr set_obj_prop
 		jsr print_done
 		rts		

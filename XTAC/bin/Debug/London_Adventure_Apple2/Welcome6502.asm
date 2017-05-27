@@ -2,6 +2,12 @@
 ; welcome message include file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-welcome .strz  "WELCOME TO LONDON ADVENTURE."
-author .strz "AUTHORS: ELLIOT AND EVAN WRIGHT"
-version .strz "VERSION 1.0, 2017"
+welcome .text  "WELCOME TO LONDON ADVENTURE."
+.byte 0
+
+author .text "AUTHORS: ELLIOT AND EVAN WRIGHT"
+.byte 0
+
+version .text "VERSION 1.0, 2017"
+.byte 0
+

@@ -7,10 +7,23 @@ enter_tardis_sub
 	pha
 	tya
 	pha
+	lda #3 ; tardis
+	ldx #6 ; open
+	jsr get_obj_prop ; tardis
+	nop ; test ((tardis.open == 1))
+	cmp #1
+	beq _b ; skip over jump
+	jmp _a ; finally do the actual jump
+_b 	nop ; stupid thing because 6502 has no lbeq instruction
 	nop ; player.holder = inside tardis
+	 lda #4 ;inside tardis
+	tax ; move previous result to x
+	lda #1 ; player
+	ldy #1 ; holder
+	jsr set_obj_attr
 	nop ; look()
 	jsr look_sub
-	jmp _b
+	jmp _c
 _a	nop ; close (tardis.open == 1)
 	nop ; println("THE TARDIS IS CLOSED.")
 	pha ; print THE TARDIS IS CLOSED.
@@ -22,7 +35,7 @@ _a	nop ; close (tardis.open == 1)
 	jsr printix
 	pla ; end print
 	jsr printcr
-_b	nop ; end else
+_c	nop ; end else
 	pla
 	tax
 	pla

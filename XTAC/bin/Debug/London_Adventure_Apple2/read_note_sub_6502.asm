@@ -27,8 +27,17 @@ read_note_sub
 	jsr printix
 	pla ; end print
 	jsr printcr
+	nop ; test ((readNote == 0))
+	lda #0
+	cmp readNote
+	beq _b ; skip over jump
+	jmp _a ; finally do the actual jump
+_b 	nop ; stupid thing because 6502 has no lbeq instruction
 	nop ; readNote = 1
 	nop ; this code hasn't been tested.
+	lda #1
+	lda #1
+	sta $readNote
 	nop ; add(score, 5)
 	pha
 	lda score

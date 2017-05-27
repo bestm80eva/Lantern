@@ -54,7 +54,7 @@ _lp		ldy #0
 		lda ($tableAddr),y
 		cmp $parentId
 		bne _c
-		ldy #PROPERTY_BYTE_2
+		ldy #PROPERTY_BYTE_1
 		lda ($tableAddr),y
 		and #SCENERY_MASK
 		cmp #1

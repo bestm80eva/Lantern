@@ -12,8 +12,8 @@ get_obj_attr
 		sta $tableAddr+1
 _lp		cpx #0		
 		beq _x
-		lda $tableAddr
 		clc
+		lda $tableAddr
 		adc #OBJ_ENTRY_SIZE
 		sta $tableAddr
 		lda $tableAddr+1
@@ -78,15 +78,17 @@ _x      rts
 ;y=value		
 	.module set_obj_prop
 set_obj_prop 
-			jsr get_property_byte ; set table position and mask
+			cpy #1
 			beq _set_bit 
 			jmp _clr_bit
+_set_bit	jsr get_property_byte ; set table position and mask
+			ldy propByteOffset
+			lda ($tableAddr),y ; get byte
+			ora $propMask  ; set bit
+			sta ($tableAddr),y	; write it back
 			jmp _x
-_set_bit	ldy propByteOffset
-			ora $propMask 
-			sta ($tableAddr),y
-			jmp _x
-_clr_bit	sec
+_clr_bit	jsr get_property_byte ; set table position and mask
+			sec
 			lda #$ff		;invert the mask
 			sbc $propMask
 			sta $propMask

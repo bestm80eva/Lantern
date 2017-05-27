@@ -32,7 +32,7 @@ actions_table
 	.word unlock_tardis_with_s
 	.byte 20,3,10,26	;open TARDIS with SONIC SCREWDRIVER
 	.word unlock_tardis_with_s
-	.byte 26,-1,6,27	;put HAT on EYESTALK
+	.byte 26,23,6,27	;put STYLISH HAT on EYESTALK
 	.word cover_eye_sub
 	.byte 22,29,10,30	;unlock ROSE'S DOOR with KEY
 	.word unlock_door_with_key

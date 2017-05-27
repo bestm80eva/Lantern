@@ -7,6 +7,14 @@ unlock_tardis_with_s
 	pha
 	tya
 	pha
+	lda #3 ; tardis
+	ldx #8 ; locked
+	jsr get_obj_prop ; tardis
+	nop ; test ((tardis.locked==1))
+	cmp #1
+	beq _b ; skip over jump
+	jmp _a ; finally do the actual jump
+_b 	nop ; stupid thing because 6502 has no lbeq instruction
 	nop ; println("AFTER SOME CLICKS AND BUZZES, THE TARDIS POPS OPEN.")
 	pha ; print AFTER SOME CLICKS AND BUZZES, THE TARDIS POPS OPEN.
 	lda #$string_table%256
@@ -18,21 +26,21 @@ unlock_tardis_with_s
 	pla ; end print
 	jsr printcr
 	nop ; tardis.open = 1
-	lda 3 ; tardis
-	ldx #1 ; tardis
+	lda #3 ; tardis
+	ldx #1 ; 
 	ldy #32 ; open
 	jsr set_obj_prop
 	nop ; tardis.locked=0
-	lda 3 ; tardis
-	ldx #0 ; tardis
+	lda #3 ; tardis
+	ldx #0 ; 
 	ldy #128 ; locked
 	jsr set_obj_prop
 	nop ; tardis.lockable=0
-	lda 3 ; tardis
-	ldx #0 ; tardis
+	lda #3 ; tardis
+	ldx #0 ; 
 	ldy #64 ; lockable
 	jsr set_obj_prop
-	jmp _b
+	jmp _c
 _a	nop ; close (tardis.locked==1)
 	nop ; println("THE TARDIS IS ALREADY OPEN.")
 	pha ; print THE TARDIS IS ALREADY OPEN.
@@ -44,7 +52,7 @@ _a	nop ; close (tardis.locked==1)
 	jsr printix
 	pla ; end print
 	jsr printcr
-_b	nop ; end else
+_c	nop ; end else
 	pla
 	tax
 	pla

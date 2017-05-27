@@ -13,7 +13,7 @@ move_player
 		cmp #0
 		beq _go
 		lda $newRoom; it's a door get the direction the door leads
-		ldx direction
+		ldy direction
 		jsr get_obj_attr
 		sta doorDirection
 		lda $newRoom	; now see if the door is open/closed_door

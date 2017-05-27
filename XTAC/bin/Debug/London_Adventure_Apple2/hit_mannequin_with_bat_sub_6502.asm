@@ -28,9 +28,29 @@ hit_mannequin_with_b
 	pla ; end print
 	jsr printcr
 	nop ; mannequin.holder = 0
+	lda #0
+	tax ; move previous result to x
+	lda #19 ; mannequin
+	ldy #1 ; holder
+	jsr set_obj_attr
 	nop ; torso.holder=inventory room
+	 lda #12 ;inventory room
+	tax ; move previous result to x
+	lda #25 ; torso
+	ldy #1 ; holder
+	jsr set_obj_attr
 	nop ; plastic head.holder=inventory room
+	 lda #12 ;inventory room
+	tax ; move previous result to x
+	lda #24 ; plastic head
+	ldy #1 ; holder
+	jsr set_obj_attr
 	nop ; rose.initial_description = "ROSE IS HERE CHECKING THE INVENTORY."
+	lda #63 ;"ROSE IS HERE CHECKING THE INVENTORY."
+	tax ; move previous result to x
+	lda #21 ; rose
+	ldy #2 ; initial_description
+	jsr set_obj_attr
 	nop ; add(score,10)
 	pha
 	lda score
@@ -49,6 +69,11 @@ hit_mannequin_with_b
 	pla ; end print
 	jsr printcr
 	nop ; key.holder = player
+	 lda #1 ;player
+	tax ; move previous result to x
+	lda #30 ; key
+	ldy #1 ; holder
+	jsr set_obj_attr
 	pla
 	tax
 	pla

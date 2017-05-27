@@ -18,6 +18,11 @@ kill_player_sub
 	pla ; end print
 	jsr printcr
 	nop ; player.holder=1
+	lda #1
+	tax ; move previous result to x
+	lda #1 ; player
+	ldy #1 ; holder
+	jsr set_obj_attr
 	pla
 	tax
 	pla
