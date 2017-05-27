@@ -50,9 +50,9 @@ _lp		ldy #0	; need to index with 0
 		beq _s
 		jsr print_frm_str_tbl ; print initial desc
 		jmp _l
-_s		ldy #DESC_ID
+_s		ldy #0	; reload id
 		lda ($tableAddr),y
-		jsr print_frm_str_tbl ; print initial desc		
+		jsr list_object
 _l		nop ; list contents
 _c		jsr next_entry
 		jmp _lp
@@ -68,6 +68,22 @@ look_at_sub
 		jsr printcr
 		nop ; does it have contents
 		nop ; if yes, list them
+		rts
+
+list_object
+		pha
+		lda #thereisa%256
+		sta $strAddr
+		lda #thereisa/256
+		sta $strAddr+1	
+		jsr printstr
+		pla
+		jsr print_obj_name
+		lda #here%256
+		sta $strAddr
+		lda #here/256
+		sta $strAddr+1	
+		jsr printstrcr
 		rts
 		
 playerRoom .byte 0	

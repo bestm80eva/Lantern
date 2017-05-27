@@ -118,7 +118,11 @@ get_sub
 		lda $sentence+1
 		ldx #PLAYER_ID
 		ldy #HOLDER_ID
-		jsr set_obj_attr
+		jsr set_obj_attr ; change holder
+		lda $sentence+1
+		ldx #255
+		ldy #INITIAL_DESC_ID
+		jsr set_obj_attr ; unset initial description		
 		lda #taken%256
 		sta strAddr
 		lda #taken/256
