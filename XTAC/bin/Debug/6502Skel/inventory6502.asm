@@ -99,6 +99,7 @@ _lp		ldy #0
 		pha
 		ldy #0				;reload id
 		lda ($tableAddr),y
+		jsr indent
 		jsr print_obj_name
 		pla 
 		sta $tableAddr+1	;restory table (hi)
@@ -110,7 +111,25 @@ _lp		ldy #0
 		cmp #0
 		beq _c
 		jsr print_list_header
-		nop ; recurse
+		lda $tableAddr	;save table (lo)
+		pha
+		lda $tableAddr+1 	;save table (hi)
+		pha		
+		lda parentId 	; save parent id
+		pha
+		ldy #0				;set the new parent id
+		lda ($tableAddr),y
+		sta parentId 
+		inc indentLvl
+		jsr list_items ; recurse
+		dec indentLvl
+		pla		   ; restore parent id
+		sta parentId
+		pla 
+		sta $tableAddr+1	;restore table (hi)
+		pla 
+		sta $tableAddr	;restore table (lo)		
+
 _s		nop	;
 _c		jsr next_entry
 		jmp _lp
@@ -144,6 +163,26 @@ drop_sub
 		sta strAddr+1
 		jsr printstrcr
 		rts
+
+	.module indent
+indent
+		pha
+		lda indentLvl
+_lp		cmp #0
+		beq _x
+		pha
+		lda #space%256
+	    sta strAddr
+		lda #space/256
+	    sta strAddr+1
+		jsr printstr		
+		pla
+		sec
+		sbc #1
+		jmp _lp	
+_x		pla
+		rts
+		
 		
 emptyhanded .text "YOU ARE EMPTY HANDED."
 	.byte 0
@@ -152,6 +191,8 @@ carrying .text "YOU ARE CARRYING:"
 taken .text "TAKEN."
 	.byte 0
 dropped .text "DROPPED."
+	.byte 0
+space .text " "
 	.byte 0
 visibleChild .byte 0
 indentLvl .byte 0	
