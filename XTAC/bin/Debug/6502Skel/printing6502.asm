@@ -234,7 +234,7 @@ print_nogo_msg
 		jsr printixcr	; print
 		rts
 
-print_on_a_is
+print_a_contains
 		pha
 		lda #the%256
 		sta strAddr
@@ -252,7 +252,7 @@ print_on_a_is
 		pla
 		rts		
 		
-print_a_contains
+print_on_a_is
 		pha 
 		lda #onthe%256
 		sta strAddr
