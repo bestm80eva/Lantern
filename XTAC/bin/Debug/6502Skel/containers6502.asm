@@ -2,6 +2,10 @@
 ;(c) Evan Wright, 2017 
 
 put_sub
+		lda $sentence+3
+		ldy #HOLDER_ID
+		ldx $sentence+1
+		jsr set_obj_attr
 		jsr print_done
 		rts
 		
@@ -65,7 +69,7 @@ supporter_or_open_container
 		sta container
 		lda #0
 		sta supporter
-		ldy #PROPERTY_BYTE_2
+		ldy #PROPERTY_BYTE_1
 		lda ($tableAddr),y
 		and #OPEN_MASK
 		cmp #OPEN_MASK

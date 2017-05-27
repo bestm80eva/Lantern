@@ -7,7 +7,7 @@
 	.module printix
 printix:
 			sta $srchIndex ; save index to print
-			pha ; save regs
+			pha ; save rergs
 			txa
 			pha
 			tya
@@ -271,15 +271,27 @@ print_a_contains
 		rts
 
 ;the object to print is stored in objId
+;it's addr should be in tableAddr
 	.module print_list_header
 print_list_header
-		lda supporter
+		pha
+		tya
+		pha	
+		lda container
 		cmp #1
-		beq _x
+		beq _c
+		ldy #0
+		lda ($tableAddr),y
 		jsr print_on_a_is
 		jmp _x
-_c		jsr printstr
-_x		rts
+_c		
+		ldy #0
+		lda ($tableAddr),y
+		jsr print_a_contains
+_x		pla
+		tay
+		pla
+		rts
 		
 contains .text "CONTAINS..."	
 	.byte 0

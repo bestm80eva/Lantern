@@ -100,16 +100,18 @@ _lp		ldy #0
 		ldy #0				;reload id
 		lda ($tableAddr),y
 		jsr print_obj_name
+		pla 
+		sta $tableAddr+1	;restory table (hi)
+		pla 
+		sta $tableAddr	;restory table (lo)		
 		jsr printcr
 		jsr supporter_or_open_container
 		lda showContents
 		cmp #0
-		beq _s
+		beq _c
 		jsr print_list_header
-_s		pla 
-		sta $tableAddr+1	;restory table (hi)
-		pla 
-		sta $tableAddr	;restory table (lo)		
+		nop ; recurse
+_s		nop	;
 _c		jsr next_entry
 		jmp _lp
 _x		rts
