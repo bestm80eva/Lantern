@@ -44,10 +44,12 @@ check_dobj_portable
 		jsr thats_not_something
 _x		rts
 		
-check_iobj_container
+	.module check_iobj_container	
+check_iobj_container	
 		rts
 		
 check_have_dobj 
+		
 		rts
 
 check_dont_have_dobj 
@@ -116,8 +118,21 @@ check_prep_supplied
 check_light
 		rts		
 
+	.module check_not_self_or_child
 check_not_self_or_child
-		rts
+		lda sentence+3
+		sta child
+		lda sentence+1
+		sta parent
+		cmp child
+		beq _fail  ; make sure they're not the same
+		jsr check_ancestor
+		lda #1
+		cmp ancestorFlag
+		beq _fail
+		jmp _x
+_fail	jsr not_possible	
+_x		rts
 
 		
 missing_dobj
@@ -166,10 +181,21 @@ dobj_already_unlocked
 		sta $strAddr+1		
 		rts
 		
+not_possible
+		lda #1
+		sta checkFailed
+ 		
+		lda #impossible%256
+		sta $strAddr
+		lda #impossible/256
+		sta $strAddr+1
+		jsr printstrcr  ; print that's physically possible
+		rts
 
+		
 dobj_already_open
 		lda #1
-		sta encodeFailed
+		sta checkFailed
 		
 		lda #the%256
 		sta $strAddr
@@ -188,7 +214,7 @@ dobj_already_open
 
 dobj_already_closed
 		lda #1
-		sta encodeFailed
+		sta checkFailed
 		
 		lda #the%256
 		sta $strAddr
@@ -204,6 +230,13 @@ dobj_already_closed
 		lda #alreadyOpen/256
 		sta $strAddr+1		
 		rts		
+
+;produces an error message if the
+;do is a child of the io
+
+		
+		
+		
 checkFailed .byte 0		
 missingDobj .text "IT LOOKS LIKE YOU ARE MISSING A NOUN."
 .byte 0		
@@ -218,6 +251,8 @@ alreadyOpen	.text " IS ALREADY OPEN."
 alreadyClosed	.text "IS ALREADY CLOSED."
 .byte 0
 isntLockable	.text "ISN'T LOCKABLE."
+.byte 0
+impossible	.text "THAT'S NOT PHYSICALLY POSSIBLE."
 .byte 0
 period .text "."
 .byte 0		
