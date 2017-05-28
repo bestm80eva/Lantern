@@ -277,6 +277,7 @@ print_list_header
 		pha
 		tya
 		pha	
+		jsr indent
 		lda container
 		cmp #1
 		beq _c
