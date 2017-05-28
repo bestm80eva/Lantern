@@ -46,7 +46,20 @@ _x		rts
 		
 	.module check_iobj_container	
 check_iobj_container	
-		rts
+		lda sentence+3
+		ldy #PROPERTY_BYTE_1
+		jsr get_obj_attr
+		and #SUPPORTER + CONTAINER
+		cmp #0
+		bne _x
+		lda #nosurface%256
+		sta strAddr
+		lda #nosurface/256
+		sta strAddr+1
+		jsr printstrcr
+		lda #1
+		sta checkFailed
+_x		rts
 		
 check_have_dobj 
 		
@@ -120,6 +133,10 @@ check_light
 
 	.module check_not_self_or_child
 check_not_self_or_child
+		lda $tableAddr
+		pha 
+		lda $tableAddr+1
+		pha 
 		lda sentence+3
 		sta child
 		lda sentence+1
@@ -132,7 +149,11 @@ check_not_self_or_child
 		beq _fail
 		jmp _x
 _fail	jsr not_possible	
-_x		rts
+_x		pla
+		sta $tableAddr+1
+		pla
+		sta $tableAddr
+		rts
 
 		
 missing_dobj
@@ -255,4 +276,6 @@ isntLockable	.text "ISN'T LOCKABLE."
 impossible	.text "THAT'S NOT PHYSICALLY POSSIBLE."
 .byte 0
 period .text "."
+.byte 0		
+nosurface .text "YOU FIND NO SUITABLE SURFACE."
 .byte 0		
