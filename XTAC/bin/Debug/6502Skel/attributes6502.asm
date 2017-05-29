@@ -93,7 +93,7 @@ _clr_bit	jsr get_property_byte ; set table position and mask
 			sbc $propMask
 			sta $propMask
 			lda $propByte	;reload the data byte
-			and $propByte   ;clear the bit
+			and $propMask   ;clear the bit
 			ldy $propByteOffset
 			sta ($tableAddr),y  ;write the byte back
 _x			rts
