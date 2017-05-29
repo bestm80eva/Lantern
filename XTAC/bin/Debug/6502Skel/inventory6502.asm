@@ -100,6 +100,13 @@ _lp		ldy #0
 		ldy #0				;reload id
 		lda ($tableAddr),y
 		jsr indent
+		pha
+		lda #leadingA%256
+		sta strAddr
+		lda #leadingA/256
+		sta strAddr+1
+		jsr printstr
+		pla
 		jsr print_obj_name
 		pla 
 		sta $tableAddr+1	;restory table (hi)
@@ -192,6 +199,8 @@ emptyhanded .text "YOU ARE EMPTY HANDED."
 	.byte 0
 carrying .text "YOU ARE CARRYING:"
 	.byte 0
+leadingA .text "A "
+	.byte 0	
 taken .text "TAKEN."
 	.byte 0
 dropped .text "DROPPED."
