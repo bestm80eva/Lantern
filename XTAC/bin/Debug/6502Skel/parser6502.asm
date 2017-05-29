@@ -177,15 +177,15 @@ missing_noun
 		pla
 		rts
 		
-;this is not a function! it must
-;pull all the regs pushed by encode_sentence	
+
 dont_see
+		lda #1
+		sta encodeFailed
 		lda #dontsee%256	 ;print "YOU DON'T SEE THAT."
 		sta $strAddr
 		lda #dontsee/256
 		sta $strAddr+1		
 		jsr printstrcr
-		pla
 		rts
 	
 	
@@ -665,21 +665,20 @@ _x		rts
 
 	.module check_mapping
 check_mapping
-	lda word1
+	lda word2
 	cmp #0
 	beq _x
 	lda #255  ; word1 was entered, was it recognized?
 	cmp sentence+1
 	bne _w3
-	lda #1
-	sta encodeFailed
 	jsr dont_see
 	jmp _x
-_w3	lda #255  ; word1 was entered, was it recognized?
+_w3	lda word4
+	cmp #0
+	beq _x
+	lda #255  ; word1 was entered, was it recognized?
 	cmp sentence+3
 	bne _x
-	lda #1
-	sta encodeFailed
 	jsr dont_see
 _x	rts
 		

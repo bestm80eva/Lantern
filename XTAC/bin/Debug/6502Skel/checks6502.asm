@@ -10,8 +10,8 @@ check_see_dobj
 
 	.module check_dobj_supplied
 check_dobj_supplied
-		lda $sentence+1
-		cmp #255
+		lda $word2
+		cmp #0
 		bne _x
 		lda #missingDobj%256
 		sta $strAddr
@@ -24,14 +24,16 @@ _x		rts
 
 	.module check_iobj_supplied
 check_iobj_supplied
-		lda $sentence+3
-		cmp #255
+		lda $word3
+		cmp #0
 		bne _x
 		lda #missingDobj%256
 		sta $strAddr
 		lda #missingDobj/256
 		sta $strAddr+1
 		jsr printstrcr		
+		lda #1
+		sta checkFailed
 _x		rts
 
 	.module check_dobj_portable
