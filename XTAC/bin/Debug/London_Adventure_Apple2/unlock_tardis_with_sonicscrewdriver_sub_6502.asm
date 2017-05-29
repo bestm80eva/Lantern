@@ -27,18 +27,18 @@ _b 	nop ; stupid thing because 6502 has no lbeq instruction
 	jsr printcr
 	nop ; tardis.open = 1
 	lda #3 ; tardis
-	ldx #1 ; 
-	ldy #32 ; open
+	ldx #6 ; open bit
+	ldy #1 ; new value
 	jsr set_obj_prop
 	nop ; tardis.locked=0
 	lda #3 ; tardis
-	ldx #0 ; 
-	ldy #128 ; locked
+	ldx #8 ; locked bit
+	ldy #0 ; new value
 	jsr set_obj_prop
 	nop ; tardis.lockable=0
 	lda #3 ; tardis
-	ldx #0 ; 
-	ldy #64 ; lockable
+	ldx #7 ; lockable bit
+	ldy #0 ; new value
 	jsr set_obj_prop
 	jmp _c
 _a	nop ; close (tardis.locked==1)

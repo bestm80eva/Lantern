@@ -18,7 +18,10 @@ look_sub
 	tax
 	pla
 	rts
-
+	
+;prints objects in the player's room
+;either inital desc or "there is a ____ here"
+;after that it recurses uses the list_items sub
 	.module list_objects
 list_objects
 		jsr get_player_room	 ; make sure player room is set
@@ -54,6 +57,18 @@ _s		ldy #0	; reload id
 		lda ($tableAddr),y
 		jsr list_object
 _l		nop ; list contents
+		ldy #0	 ; reload parent
+		lda ($tableAddr),y
+		jsr has_visible_child
+		lda visibleChild
+		cmp #0
+		beq _c  ; no objects? continue
+		lda ($tableAddr),y ;reload id
+		sta parentId
+		jsr print_list_header
+		inc indentLvl
+		jsr list_items ; recurse
+		dec indentLvl
 _c		jsr next_entry
 		jmp _lp
 _x
@@ -89,4 +104,4 @@ list_object
 playerRoom .byte 0	
 ambientLight .byte 1 ;	
 thereisa .byte "THERE IS A ",0h
-here .byte " HERE.",0h
+here .byte "HERE.",0h

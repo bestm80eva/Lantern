@@ -29,13 +29,13 @@ _b 	nop ; stupid thing because 6502 has no lbeq instruction
 	jsr printcr
 	nop ; 29.open = 1
 	lda #29 ; 29
-	ldx #1 ; 
-	ldy #32 ; open
+	ldx #6 ; open bit
+	ldy #1 ; new value
 	jsr set_obj_prop
 	nop ; 29.locked = 0
 	lda #29 ; 29
-	ldx #0 ; 
-	ldy #128 ; locked
+	ldx #8 ; locked bit
+	ldy #0 ; new value
 	jsr set_obj_prop
 	jmp _c
 _a	nop ; close (key.holder == player)

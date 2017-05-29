@@ -130,7 +130,6 @@ _lp		ldy #0
 		lda ($tableAddr),y	;get the id
 		cmp #255
 		beq _ntfnd
-		nop ; if it isn't visible, skip it
 		ldy #1
 		lda ($tableAddr),y
 		cmp $objId
@@ -143,12 +142,17 @@ _lp		ldy #0
 		lda ($tableAddr),y
 		cmp $objId
 		beq _found
-		jsr inc_tabl_addr ; skip to next entry
+_c		jsr inc_tabl_addr ; skip to next entry
 		jsr inc_tabl_addr
 		jsr inc_tabl_addr
 		jsr inc_tabl_addr
 		jmp _lp
-_found	ldy #0
+_found	;jsr visible_ancestor ; if it isn't visible, skip it
+		jsr in_player_room
+		lda visibleAncestorFlag
+		cmp #1
+		bne _c   ; go back and try again
+		ldy #0
 		lda ($tableAddr),y	;get the id
 _ntfnd	sta $objId
 		pla

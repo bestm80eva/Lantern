@@ -99,17 +99,49 @@ _lp		ldy #0
 		pha
 		ldy #0				;reload id
 		lda ($tableAddr),y
+		jsr indent
+		pha
+		lda #leadingA%256
+		sta strAddr
+		lda #leadingA/256
+		sta strAddr+1
+		jsr printstr
+		pla
 		jsr print_obj_name
+		pla 
+		sta $tableAddr+1	;restory table (hi)
+		pla 
+		sta $tableAddr	;restory table (lo)		
 		jsr printcr
 		jsr supporter_or_open_container
 		lda showContents
 		cmp #0
-		beq _s
+		beq _c
+		jsr has_visible_child
+		lda visibleChild
+		cmp #0
+		beq _c
 		jsr print_list_header
-_s		pla 
-		sta $tableAddr+1	;restory table (hi)
+		lda $tableAddr	;save table (lo)
+		pha
+		lda $tableAddr+1 	;save table (hi)
+		pha		
+		lda parentId 	; save parent id
+		pha
+		ldy #0				;set the new parent id
+		lda ($tableAddr),y
+		sta parentId 
+		inc indentLvl
+		jsr list_items ; recurse
+		dec indentLvl
+		pla		   ; restore parent id
+		sta parentId
 		pla 
-		sta $tableAddr	;restory table (lo)		
+		sta $tableAddr+1	;restore table (hi)
+		pla 
+		sta $tableAddr	;restore table (lo)		
+
+_s		nop	;
 _c		jsr next_entry
 		jmp _lp
 _x		rts
@@ -142,14 +174,38 @@ drop_sub
 		sta strAddr+1
 		jsr printstrcr
 		rts
+
+	.module indent
+indent
+		pha
+		lda indentLvl
+_lp		cmp #0
+		beq _x
+		pha
+		lda #space%256
+	    sta strAddr
+		lda #space/256
+	    sta strAddr+1
+		jsr printstr		
+		pla
+		sec
+		sbc #1
+		jmp _lp	
+_x		pla
+		rts
+		
 		
 emptyhanded .text "YOU ARE EMPTY HANDED."
 	.byte 0
 carrying .text "YOU ARE CARRYING:"
 	.byte 0
+leadingA .text "A "
+	.byte 0	
 taken .text "TAKEN."
 	.byte 0
 dropped .text "DROPPED."
+	.byte 0
+space .text " "
 	.byte 0
 visibleChild .byte 0
 indentLvl .byte 0	

@@ -93,4 +93,6 @@ check_table
 	.word check_dobj_open
 	.byte 12 ; get
 	.word check_light
+	.byte 26 ; put
+	.word check_iobj_container
 	.byte 255

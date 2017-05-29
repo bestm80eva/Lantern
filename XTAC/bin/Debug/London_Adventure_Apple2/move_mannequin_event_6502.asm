@@ -31,18 +31,18 @@ _d 	nop ; stupid thing because 6502 has no lbeq instruction
 	jsr set_obj_attr
 	nop ; tardis.locked=1
 	lda #3 ; tardis
-	ldx #1 ; 
-	ldy #128 ; locked
+	ldx #8 ; locked bit
+	ldy #1 ; new value
 	jsr set_obj_prop
 	nop ; tardis.open=0
 	lda #3 ; tardis
-	ldx #0 ; 
-	ldy #32 ; open
+	ldx #6 ; open bit
+	ldy #0 ; new value
 	jsr set_obj_prop
 	nop ; tardis.lockable=0
 	lda #3 ; tardis
-	ldx #0 ; 
-	ldy #64 ; lockable
+	ldx #7 ; lockable bit
+	ldy #0 ; new value
 	jsr set_obj_prop
 	nop ; mannequinMoved=1
 	nop ; this code hasn't been tested.
@@ -57,13 +57,13 @@ _d 	nop ; stupid thing because 6502 has no lbeq instruction
 	jsr set_obj_attr
 	nop ; door.locked = 0
 	lda #13 ; door
-	ldx #0 ; 
-	ldy #128 ; locked
+	ldx #8 ; locked bit
+	ldy #0 ; new value
 	jsr set_obj_prop
 	nop ; door.lockable = 0
 	lda #13 ; door
-	ldx #0 ; 
-	ldy #64 ; lockable
+	ldx #7 ; lockable bit
+	ldy #0 ; new value
 	jsr set_obj_prop
 	nop ; mannequin.description = "THE MANNEQUIN IS OBVIOUSLY ALIVE AND VERY DANGEROUS."
 	lda #39 ;"THE MANNEQUIN IS OBVIOUSLY ALIVE AND VERY DANGEROUS."

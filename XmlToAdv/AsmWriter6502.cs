@@ -150,7 +150,10 @@ namespace XMLtoAdv
                 {
                     sw.WriteLine("\ttay ; move previous result to y");
                     sw.WriteLine("\tlda #" + project.GetObjectId(obj) + " ; " + obj);
-                    sw.WriteLine("ldx #" + propBytes[attr] + " ; " + attr);
+                    int bit = (int)Math.Log(Convert.ToDouble(propBytes[attr]), 2) + 1;
+                    sw.WriteLine("\tldx #" + bit + " ; " + attr);
+
+                   // sw.WriteLine("ldx #" + propBytes[attr] + " ; " + attr);
                     sw.WriteLine("jsr set_obj_prop");                     
                 }
                 else
@@ -179,8 +182,13 @@ namespace XMLtoAdv
             }
 
             sw.WriteLine("\tlda #" + objId + " ; " + obj);
-            sw.WriteLine("\tldx #" + val + " ; ");
-            sw.WriteLine("\tldy #" + propBits[propName] + " ; " + propName);
+            
+            int bit = (int)Math.Log(Convert.ToDouble(propBits[propName]), 2) + 1;
+            sw.WriteLine("\tldx #" + bit + " ; " + propName + " bit");
+            //sw.WriteLine("\tldx #" + propBits[propName] + " ; " + propName);
+
+            sw.WriteLine("\tldy #" + val + " ; new value");
+
             sw.WriteLine("\tjsr set_obj_prop");
             
         }

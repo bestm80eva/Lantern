@@ -147,7 +147,8 @@ _c		jsr inc_tabl_addr ; skip to next entry
 		jsr inc_tabl_addr
 		jsr inc_tabl_addr
 		jmp _lp
-_found	jsr visible_ancestor ; if it isn't visible, skip it
+_found	;jsr visible_ancestor ; if it isn't visible, skip it
+		jsr in_player_room
 		lda visibleAncestorFlag
 		cmp #1
 		bne _c   ; go back and try again

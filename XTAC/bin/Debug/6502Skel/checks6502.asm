@@ -62,10 +62,26 @@ check_iobj_container
 		lda #1
 		sta checkFailed
 _x		rts
-		
+
+	.module check_have_dobj
 check_have_dobj 
-		
-		rts
+		lda #PLAYER_ID
+		sta parent
+		lda $sentence+1
+		sta child
+		jsr get_obj_attr ; position table
+		jsr visible_ancestor
+		lda visibleAncestorFlag
+		cmp #0
+		bne _x
+		lda #1
+		sta checkFailed
+		lda #dontHave%256
+		sta $strAddr
+		lda #dontHave/256
+		sta $strAddr+1
+		jsr printstrcr
+_x		rts
 
 check_dont_have_dobj 
 		rts
@@ -308,6 +324,8 @@ alreadyLocked	.text " IS ALREADY LOCKED."
 alreadyUnlocked	.text " IS ALREADY UNLOCKED."
 .byte 0
 alreadyOpen	.text " IS ALREADY OPEN."
+.byte 0
+dontHave	.text "YOU DON'T HAVE THAT."
 .byte 0
 alreadyClosed	.text "IS ALREADY CLOSED."
 .byte 0

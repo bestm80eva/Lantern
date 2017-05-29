@@ -46,23 +46,23 @@ _x		sta ancestorFlag
 
 ;used by the loop which tries to map objects to the 
 ;environment
-; 
+; table addr needs to be 
 	.module visible_ancestor
 visible_ancestor
+		
 		lda $tableAddr ;save table
 		pha
 		lda $tableAddr+1
 		pha
-		jsr get_player_room ; get parent
-		sta parent
+ 
 		ldy #0		; get current object (child)
 		lda ($tableAddr),y
 		sta child
+		
 		ldx #0  ; loop counter
 		lda #0	;clear search flag
 		sta visibleAncestorFlag
-_lp		lda child
-		txa ; restore parent
+_lp		
 		lda child
 		ldy #HOLDER_ID
 		jsr get_obj_attr
@@ -73,7 +73,7 @@ _lp		lda child
 		cmp #0
 		beq _n		
 		sta child
-		txa ; restore
+		txa ; restore parent
 		
 		cmp #PLAYER_ID ; skip over player
 		beq _s
@@ -105,7 +105,39 @@ _x		sta visibleAncestorFlag
 		pla
 		sta $tableAddr
 		rts		
+		
+;called by the parser
+;child is where-ever tableAddr
+;is pointing
+;parent is set to the player room
+in_player_room
+ 
+		jsr get_player_room
+		sta parent
+ 
+		jsr visible_ancestor
 
+		rts
+		
+in_player_inventory
+		lda $tableAddr ;save table
+		pha
+		lda $tableAddr+1
+		pha
+
+		lda #PLAYER_ID
+		sta parent
+		lda $sentence+1
+		sta child
+		jsr get_obj_attr  ; position tableAddr at child
+		jsr visible_ancestor
+
+		pla					;restore table
+		sta $tableAddr+1 
+		pla
+		sta $tableAddr
+
+		rts
 		
 quit_sub
 		rts

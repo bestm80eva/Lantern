@@ -43,6 +43,7 @@
 #define read_verb_id 37
 #define wear_verb_id 38
 #define push_verb_id 39
+#define throw_verb_id 40
 
 
 verb_table
@@ -361,5 +362,9 @@ verb_table
 .byte 39
 .byte 5
 .text "PRESS"
+.byte 0 ; null
+.byte 40
+.byte 5
+.text "THROW"
 .byte 0 ; null
 .byte 255

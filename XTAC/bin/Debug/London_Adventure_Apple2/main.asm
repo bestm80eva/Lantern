@@ -65,6 +65,12 @@ _c 	jsr toascii
 	beq _lp
 	
 	jsr map_nouns
+	
+	jsr check_mapping ; make sure objects were visible
+	lda #1
+	cmp encodeFailed
+	beq _lp
+	
 	jsr process_sentence	
 	
 	jsr do_events
@@ -89,8 +95,6 @@ _x 	jsr printcr
 .include "containers6502.asm"
 .include "doevents6502.asm"
 .include "Events6502.asm"
-;.include "testtables.asm"
-;.include "tests.asm"
 .include "ObjectWordTable6502.asm"
 .include "Dictionary6502.asm"
 .include "StringTable6502.asm"
