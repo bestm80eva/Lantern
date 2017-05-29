@@ -57,7 +57,8 @@ encode_sentence
 	cmp #255
 	beq bad_verb
 	sta $sentence
-	lda $word2 ;					; verify 
+	lda $word2 ;					; verify
+    cmp #0	
 	beq _x
 	lda #word2%256						;verify wrd 2
 	sta $strDest				    ;set string to find
@@ -661,6 +662,26 @@ _io		lda $sentence+3
 		lda $objId
 		sta $sentence+3
 _x		rts
+
+	.module check_mapping
+check_mapping
+	lda word1
+	cmp #0
+	beq _x
+	lda #255  ; word1 was entered, was it recognized?
+	cmp sentence+1
+	bne _w3
+	lda #1
+	sta encodeFailed
+	jsr dont_see
+	jmp _x
+_w3	lda #255  ; word1 was entered, was it recognized?
+	cmp sentence+3
+	bne _x
+	lda #1
+	sta encodeFailed
+	jsr dont_see
+_x	rts
 		
 word1 .block 32
 word2 .block 32
