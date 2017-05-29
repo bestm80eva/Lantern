@@ -9,14 +9,33 @@ put_sub
 		jsr print_done
 		rts
 		
-		
+		.module open_sub
 open_sub
 		lda $sentence+1
+		ldx #LOCKED
+		jsr get_obj_prop
+		cmp #1
+		beq _lkd
 		ldx #OPEN
 		ldy #1
 		jsr set_obj_prop
 		jsr print_done
-		rts
+		jmp _x
+_lkd	lda #the%256
+		sta strAddr
+		lda #the/256
+		sta strAddr+1
+		jsr printstr
+	
+		lda sentence+1
+		jsr print_obj_name
+		
+		lda #isLocked%256
+		sta strAddr
+		lda #isLocked/256
+		sta strAddr+1
+		jsr printstr
+_x		rts
 		
 close_sub
 		lda $sentence+1
@@ -87,7 +106,8 @@ _xc		rts
 			
 done .text "DONE."
 	.byte 0
-	
+isLocked .text "IS LOCKED."
+	.byte 0	
 showContents .byte 0 ; supporter or open container	
 container .byte 0 
 supporter .byte 0
