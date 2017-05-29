@@ -110,6 +110,10 @@ _lp		ldy #0
 		lda showContents
 		cmp #0
 		beq _c
+		jsr has_visible_child
+		lda visibleChild
+		cmp #0
+		beq _c
 		jsr print_list_header
 		lda $tableAddr	;save table (lo)
 		pha
