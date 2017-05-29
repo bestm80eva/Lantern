@@ -72,13 +72,22 @@ check_dont_have_dobj
 		
 	.module check_dobj_opnable
 check_dobj_opnable
+		lda $tableAddr	;save table
+		pha
+		lda $tableAddr+1
+		pha
 		lda $sentence+1
 		ldx #OPENABLE
 		jsr get_obj_prop
 		cmp #0
 		bne _x
 		jsr thats_not_something
-_x		rts
+		jmp _x
+_x		pla		
+		sta $tableAddr+1	;restore table
+		pla
+		sta $tableAddr
+		rts
 
 
 	.module check_dobj_lockable
@@ -90,6 +99,8 @@ check_dobj_lockable
 		bne _x
 		jsr thats_not_something
 _x		rts
+
+
 	.module check_dobj_open
 check_dobj_open		
 		lda $sentence+1
@@ -109,18 +120,26 @@ check_dobj_locked
 		jsr get_obj_prop
 		cmp #0
 		bne _x
-		jsr dobj_already_unlocked
+		jsr dobj_already_locked
 _x		rts
 			
 		.module check_dobj_closed
 check_dobj_closed
+		lda $tableAddr
+		pha
+		lda $tableAddr+1
+		pha		
 		lda $sentence+1
 		ldx #OPEN
 		jsr get_obj_prop
 		cmp #0
-		bne _x
-		jsr dobj_already_closed
-_x		rts
+		beq _x
+		jsr dobj_already_open
+_x		pla
+		sta $tableAddr+1
+		pla
+		sta $tableAddr
+		rts
 
 
  
@@ -185,6 +204,17 @@ thats_not_something
 		jsr printstrcr	; print period	
 		rts
 
+dobj_already_locked
+		lda #1
+		sta checkFailed
+
+ 		lda #alreadyLocked%256
+		sta $strAddr
+		lda #alreadyLocked/256
+		sta $strAddr+1		
+		jsr printstrcr
+		rts		
+		
 dobj_already_unlocked
 		lda #1
 		sta checkFailed
@@ -202,6 +232,7 @@ dobj_already_unlocked
 		sta $strAddr
 		lda #alreadyUnlocked/256
 		sta $strAddr+1		
+		jsr printstrcr
 		rts
 		
 not_possible
@@ -232,7 +263,10 @@ dobj_already_open
 		lda #alreadyOpen%256
 		sta $strAddr
 		lda #alreadyOpen/256
-		sta $strAddr+1		
+		sta $strAddr+1
+
+		jsr printstrcr  ; print that's not ...
+		
 		rts
 
 dobj_already_closed
@@ -252,6 +286,8 @@ dobj_already_closed
 		sta $strAddr
 		lda #alreadyOpen/256
 		sta $strAddr+1		
+		jsr printstrcr
+		
 		rts		
 
 ;produces an error message if the
@@ -267,6 +303,8 @@ thatsNotSomething .text "THAT'S NOT SOMETHING YOU CAN "
 .byte 0		
 notContainer .text "THAT'S NOT SOMETHING YOU CAN "
 .byte 0	
+alreadyLocked	.text " IS ALREADY LOCKED."
+.byte 0
 alreadyUnlocked	.text " IS ALREADY UNLOCKED."
 .byte 0
 alreadyOpen	.text " IS ALREADY OPEN."

@@ -16,6 +16,7 @@ open_sub
 		jsr get_obj_prop
 		cmp #1
 		beq _lkd
+		lda $sentence+1 ;reload noun
 		ldx #OPEN
 		ldy #1
 		jsr set_obj_prop
@@ -34,7 +35,7 @@ _lkd	lda #the%256
 		sta strAddr
 		lda #isLocked/256
 		sta strAddr+1
-		jsr printstr
+		jsr printstrcr
 _x		rts
 		
 close_sub
