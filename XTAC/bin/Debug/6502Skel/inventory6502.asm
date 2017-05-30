@@ -119,7 +119,9 @@ _lp		ldy #0
 		sta $tableAddr+1	;restory table (hi)
 		pla 
 		sta $tableAddr	;restory table (lo)		
+		jsr print_adj
 		jsr printcr
+
 		jsr supporter_or_open_container
 		lda showContents
 		cmp #0

@@ -294,11 +294,31 @@ _x		pla
 		pla
 		rts
 		
+	.module print_adj	
+print_adj
+	ldy #PROPERTY_BYTE_2
+	lda ($tableAddr),y
+	and #LIT_MASK
+	cmp #0
+	beq _x
+	lda #providingLight%256
+	sta strAddr	
+	lda #providingLight/256
+	sta strAddr+1
+	jsr printstr
+_x	 
+	rts
+		
+		
 contains .text "CONTAINS..."	
 	.byte 0
 onthe .text "ON THE "	
 	.byte 0
 is .text "IS..."	
+	.byte 0
+providingLight .text " (PROVIDING LIGHT)"	
+	.byte 0
+beingWorn .text " (BEING WORN)"	
 	.byte 0
 	
 objId .byte 0		
