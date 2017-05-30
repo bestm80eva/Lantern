@@ -21,7 +21,7 @@ _lp		ldy #0
 		
 		ldy #PROPERTY_BYTE_2
 		lda ($tableAddr),y
-		and #LIT
+		and #LIT_MASK
 		cmp #0
 		beq _c
 		
