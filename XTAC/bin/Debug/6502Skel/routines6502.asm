@@ -13,13 +13,30 @@ get_player_room
 	lda playerRoom
 	rts
 	
+	.module enter_sub
 enter_sub
+
+		nop ; is the object enterable?
+		lda $sentence+1
+		ldy #ENTER
+		jsr get_obj_attr
+		
+		cmp #255
+		beq _n
+		
+		tax ; put new room in x and go there
 	    lda #PLAYER_ID
-		ldx $sentence+1
 		ldy #HOLDER_ID
 		jsr set_obj_attr
 		jsr look_sub
-		rts
+		jmp _x
+		
+_n		lda #cantDoThat%256
+		sta strAddr
+		lda #cantDoThat/256
+		sta strAddr+1
+		jsr printstrcr
+_x		rts
 
 ;set the variable ancestorFlag
 ;sets the variable ancestorFlag		
@@ -148,4 +165,5 @@ parent .byte 0
 child  .byte 0
 ancestorFlag .byte 0
 visibleAncestorFlag .byte 0
-	
+cantDoThat .text "YOU CAN'T DO THAT."
+.byte 0	
