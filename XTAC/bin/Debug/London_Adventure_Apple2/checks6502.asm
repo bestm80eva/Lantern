@@ -84,6 +84,22 @@ check_have_dobj
 _x		rts
 
 check_dont_have_dobj 
+		lda #PLAYER_ID
+		sta parent
+		lda $sentence+1
+		sta child
+		jsr get_obj_attr ; position table
+		jsr visible_ancestor
+		lda visibleAncestorFlag
+		cmp #1
+		bne _x
+		lda #1
+		sta checkFailed
+		lda #alreadyHave%256
+		sta $strAddr
+		lda #alreadyHave/256
+		sta $strAddr+1
+		jsr printstrcr
 		rts
 		
 	.module check_dobj_opnable
@@ -326,6 +342,8 @@ alreadyUnlocked	.text " IS ALREADY UNLOCKED."
 alreadyOpen	.text " IS ALREADY OPEN."
 .byte 0
 dontHave	.text "YOU DON'T HAVE THAT."
+.byte 0
+alreadyHave	.text "YOU ALREADY HAVE IT."
 .byte 0
 alreadyClosed	.text "IS ALREADY CLOSED."
 .byte 0
