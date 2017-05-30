@@ -165,7 +165,7 @@ namespace XMLtoAdv
             {
                 GetRHS(sw, rhs);
                 //sw.WriteLine("\tpla");
-                sw.WriteLine("\tsta $" + project.GetVarAddr(lhs));
+                sw.WriteLine("\tsta " + project.GetVarAddr(lhs));
             }
             else
             {

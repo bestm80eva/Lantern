@@ -43,5 +43,5 @@ _y		lda #1
 _n		inc turnsWithoutLight
 _x		rts
 		
-playerCanSee .byte 0
+playerCanSee .byte 1
 turnsWithoutLight .byte 0		
