@@ -75,6 +75,8 @@ _c 	jsr toascii
 	
 	jsr do_events
 	
+	jsr player_can_see
+	
 	jmp _lp
 _x 	jsr printcr
 	rts
@@ -91,6 +93,7 @@ _x 	jsr printcr
 .include "checks6502.asm"
 .include "sentences6502.asm"
 .include "movement6502.asm"
+.include "light6502.asm"
 .include "inventory6502.asm"
 .include "containers6502.asm"
 .include "doevents6502.asm"
@@ -123,4 +126,5 @@ quit .byte "QUIT",0h
 .include "UserVars6502.asm"	
 score .byte 0
 gameOver .byte 0
+temp .byte 0
 .end

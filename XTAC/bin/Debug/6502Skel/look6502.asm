@@ -1,18 +1,28 @@
 ;look6502.asm
 ;Evan Wright, 2017
 
+	.module look_sub
 look_sub
 	pha
 	txa
 	pha
 	tay
 	pha
+	lda playerCanSee
+	cmp #0
+	beq _nl
 	jsr get_player_room
 	jsr print_obj_name
 	jsr printcr
 	jsr print_obj_description
 	jsr list_objects
-	pla
+	jmp _x
+_nl lda #noLight%256
+	sta strAddr
+	lda #noLight/256
+	sta strAddr+1
+	jsr printstrcr
+_x	pla
 	tay
 	pla
 	tax
@@ -105,3 +115,5 @@ playerRoom .byte 0
 ambientLight .byte 1 ;	
 thereisa .byte "THERE IS A ",0h
 here .byte "HERE.",0h
+noLight .text "IT IS PITCH DARK."
+.byte 0

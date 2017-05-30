@@ -46,7 +46,9 @@ _x		sta ancestorFlag
 
 ;used by the loop which tries to map objects to the 
 ;environment
-; table addr needs to be 
+; the parent needs to be set by the caller
+; table addr needs to be set by the caller to 
+; point to the check_ancestor
 	.module visible_ancestor
 visible_ancestor
 		
