@@ -93,6 +93,13 @@ _lp		ldy #0
 		lda ($tableAddr),y
 		cmp $parentId
 		bne _c
+		
+		ldy #PROPERTY_BYTE_1 ;don't list scenery items
+		lda ($tableAddr),y
+		and #SCENERY_MASK
+		cmp #0
+		bne _c
+		
 		lda $tableAddr	;save table (lo)
 		pha
 		lda $tableAddr+1 	;save table (hi)
@@ -161,19 +168,38 @@ get_sub
 		sta strAddr+1
 		jsr printstrcr
 		rts
-
+	.module drop_sub
 drop_sub
-		jsr get_player_room
+		lda $sentence+1
+		ldx #SCENERY_MASK
+		jsr get_obj_prop
+		cmp #1	
+	    beq _s
+		
+		jsr get_player_room ;put obj in player room
+		
 		lda $sentence+1
 		ldx $playerRoom
 		ldy #HOLDER_ID
 		jsr set_obj_attr
 		lda #dropped%256
+		
+		;print done
 		sta strAddr
 		lda #dropped/256
 		sta strAddr+1
 		jsr printstrcr
-		rts
+		
+		jmp _x
+_s	
+		;print error message (can't drop a body part)
+		lda #impossible%256
+		sta strAddr
+		lda #impossible/256
+		sta strAddr+1
+		jsr printstrcr
+	
+_x		rts
 
 	.module indent
 indent
