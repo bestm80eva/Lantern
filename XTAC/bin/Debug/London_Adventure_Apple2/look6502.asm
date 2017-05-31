@@ -25,6 +25,8 @@ look_sub
 	.module list_objects
 list_objects
 		jsr get_player_room	 ; make sure player room is set
+		sta playerRoom
+		
 		lda #obj_table%256
 		sta $tableAddr
 		lda #obj_table/256

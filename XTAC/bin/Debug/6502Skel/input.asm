@@ -16,18 +16,41 @@ readkb
 _kblp	lda $c000 	; kb strobe
 		bpl _kblp   
 		sta $c010; ;clear strobe 
+		cmp #88h  ; backspace?
+		beq _bs
+		cmp #8Dh
+		beq _kbout
 		pha
 		jsr cout1 
 		pla
 		sta $200,y; ;store key 
-		cmp #8Dh
-		beq _kbout
 		jsr undrscr
 		iny
 		jmp _kblp
-_kbout	lda #$0
+_bs		lda #$A0	; space
+		jsr cout1 
+		dec $24		; back up
+		dec $24		; back up
+		lda #$E2
+		jsr cout1 
+		dey
+		lda #0
+		sta $200,y
+		nop ; back up cursor on screen
+		dec $24 ; back up
+		jsr undrscr
+		jmp _kblp
+_kbout	
+		pha ; save cr
+		;dec $24	; back up and rub out the cursor
+		lda #$A0
+		jsr cout1
+		pla ; restore cr
+		jsr cout1
+		lda #$0
 		sta buffer,y;
-		pla
+
+		pla	;restore registers
 		tay ;restore y
 		pla
 		tax ;restore x 
@@ -39,7 +62,7 @@ _kbout	lda #$0
 undrscr
 		pha
 		lda #$5f	;  '_'
-		ora #80h	; turn on don't flash bit 
+	;	ora #80h	; turn on don't flash bit 
 		jsr cout1 
 		lda $hcur
 		sec

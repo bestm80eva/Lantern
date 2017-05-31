@@ -16,7 +16,9 @@
 #define keyin  $FD0C
 #define getlin $FD6A 
 #define cout1 $FDF0
+#define scrWdth $21
 #define hcur $24
+#define vcur $25
 
 ;zero page vars
 #define strAddr $CE
@@ -25,16 +27,19 @@
 #define strSrc 	$EB ; some zero page addr
 #define strDest	$FA ; some zero page addr
 #define kbBufHi $02
-
+#define cls $FC58
 .org $800
 	.module main
 start
+	jsr cls
 	jsr show_intro
  	jsr look_sub
 _lp
  	jsr clr_buffr
 	jsr clr_words
 
+	jsr print_title_bar
+	
 	jsr readkb
 	lda $200
 	cmp #$8D ; cr

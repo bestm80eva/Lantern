@@ -182,8 +182,13 @@ namespace XMLtoAdv
             }
 
             sw.WriteLine("\tlda #" + objId + " ; " + obj);
-            
-            int bit = (int)Math.Log(Convert.ToDouble(propBits[propName]), 2) + 1;
+
+            int bit =  (int)Math.Log(Convert.ToDouble(propBits[propName]), 2) + 1;
+            if (propBytes[propName].Equals("PROPERTY_BYTE_2"))
+            {
+                bit += 8;
+            }
+
             sw.WriteLine("\tldx #" + bit + " ; " + propName + " bit");
             //sw.WriteLine("\tldx #" + propBits[propName] + " ; " + propName);
 
@@ -284,6 +289,10 @@ namespace XMLtoAdv
                 else if (IsProperty(prop))
                 {
                     int bit = (int)Math.Log(Convert.ToDouble(propBits[prop]), 2)+1;
+                    if (propBytes[prop].Equals("PROPERTY_BYTE_2"))
+                    {
+                        bit += 8;
+                    }
                     sw.WriteLine("\tldx #" + bit + " ; " + prop);
                     sw.WriteLine("\tjsr get_obj_prop ; " + obj);
                 }
