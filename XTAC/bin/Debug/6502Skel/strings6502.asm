@@ -34,9 +34,14 @@ tab_addr_to_str_src
 		pla
 		rts
 
+ 
+		
 ;the 0 page variable
 ;strSrc and strDest must be set
 ;x is  preserved
+;the normal cpompare is 6 chars
+;if you want  to compare more chars
+;set cmpLen to a bigger number
 ;result is in 'a'
 	.module streq6
 streq6	
@@ -47,7 +52,7 @@ _lp		lda (strSrc),y
 		cmp #0 ; if equal and null, string are equal
 		beq _y
 		iny 
-		cpy #6	 ; just match first 6 letters
+		cpy cmpLen	 ; just match first 6 letters
 		beq _y 
 		jmp _lp
 _y		lda #1
@@ -75,3 +80,4 @@ _x		pla
 		rts
 		
 streqRes .byte 0
+cmpLen .byte 6  ; how many bytes to compare comparing strings

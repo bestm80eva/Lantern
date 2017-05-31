@@ -42,9 +42,9 @@ find_words
 	.module encode_sentence
 encode_sentence
 	pha
-	lda #0
+	lda #0				; clear flag
 	sta encodeFailed
-	lda #verb_table%256	    ;print "I don't know the verb '"
+	lda #verb_table%256	   ; setup search table
 	sta $tableAddr
 	lda #verb_table/256 	    
 	sta $tableAddr+1    
@@ -52,10 +52,12 @@ encode_sentence
 	sta strDest
 	lda #word1/256
 	sta $strDest+1
-	jsr get_entry_id	; result to
+	lda #10
+	sta cmpLen
+	jsr get_entry_id	; result to word1
 	lda $wrdId
 	cmp #255
-	beq bad_verb
+	beq bad_verb     ;print "I don't know the verb '"
 	sta $sentence
 	lda $word2 ;					; verify
     cmp #0	
