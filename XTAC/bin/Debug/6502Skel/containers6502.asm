@@ -21,6 +21,9 @@ open_sub
 		ldy #1
 		jsr set_obj_prop
 		jsr print_done
+		
+		jsr reveal_items
+		
 		jmp _x
 _lkd	lda #the%256
 		sta strAddr
@@ -104,11 +107,42 @@ _x		pla
 		tay
 		pla
 _xc		rts
+
+	.module reveal_items 
+reveal_items
+		lda sentence+1
+		jsr has_visible_child
+		lda visibleChild
+		cmp #1
+		bne _x
+		lda #openningThe%256
+		sta strAddr
+		lda #openningThe/256
+		sta strAddr+1
+		jsr printstr
+		
+		lda sentence+1
+		jsr print_obj_name
+		
+		lda #reveals%256
+		sta strAddr
+		lda #reveals/256
+		sta strAddr+1
+		jsr printstrcr
+	   	
+		lda sentence+1
+		jsr list_items
+_x		rts
 			
 done .text "DONE."
 	.byte 0
 isLocked .text "IS LOCKED."
 	.byte 0	
+openningThe .text "OPENING THE "
+	.byte 0	
+reveals .text "REVEALS:"
+	.byte 0	
+	
 showContents .byte 0 ; supporter or open container	
 container .byte 0 
 supporter .byte 0
