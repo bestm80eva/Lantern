@@ -1303,12 +1303,23 @@ namespace XTAC
 
         private void sentencesListBox_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button != MouseButtons.Right) return;
+            var index = sentencesListBox.IndexFromPoint(e.Location);
+
+            if (index != ListBox.NoMatches)
+            {
+//                _selectedMenuItem = listBoxCollectionRounds.Items[index].ToString();
+//                collectionRoundMenuStrip.Show(Cursor.Position);
+//                collectionRoundMenuStrip.Visible = true;
+
+                //context menu to confirm delete?
+            }
              
         }
 
         private void sentencesListBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-           
+         
         }
 
         private void sentencesListBox_KeyUp(object sender, KeyEventArgs e)
@@ -1317,10 +1328,13 @@ namespace XTAC
             {
                 if (sentencesListBox.SelectedIndex != -1)
                 {
-                    if (MessageBox.Show("Delete this sentence?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        int sel = sentencesListBox.SelectedIndex;
 
+                    int sel = sentencesListBox.SelectedIndex;
+                    string s = sentencesListBox.Items[sel].ToString();
+
+                    if (MessageBox.Show("Delete the sentence " + s + "?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                    
                         xproject.Project.Sentences.Sentence.RemoveAt(sel);
                         sentencesListBox.Items.RemoveAt(sel);
 
@@ -1409,12 +1423,43 @@ namespace XTAC
             if (fileName != "")
             {
                 XmlToTables converter = XmlToTables.GetInstance();
-                converter.ConvertApple2(fileName);  //"f3xml.xml"
-                MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+                try
+                {
+                    converter.ConvertApple2(fileName);  //"f3xml.xml"
+                    MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Export failed!" + ex.Message + ex.InnerException.Message); 
+                }
             }
             else
             {
                 MessageBox.Show("File name is null.  Please save your project before exporting.");
+            }
+        }
+
+        private void functionsListBox_KeyUp(object sender, KeyEventArgs e)
+        {
+
+            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+            {
+                if (functionsListBox.SelectedIndex != -1)
+                {
+
+                    int sel = functionsListBox.SelectedIndex;
+                    string s = functionsListBox.Items[sel].ToString();
+
+                    if (MessageBox.Show("Delete the function " + s + "?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        xproject.Project.Routines.Routine.RemoveAt(sel);
+                        functionsListBox.Items.RemoveAt(sel);
+
+                        if (sel > 0)
+                            sentencesListBox.SelectedIndex = sel - 1;
+                    }
+
+                }
             }
         }
 

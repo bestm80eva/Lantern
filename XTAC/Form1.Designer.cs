@@ -173,11 +173,12 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.appleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coCoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tRS80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.appleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label53 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -1172,6 +1173,7 @@
             this.functionsListBox.Size = new System.Drawing.Size(204, 277);
             this.functionsListBox.TabIndex = 5;
             this.functionsListBox.SelectedIndexChanged += new System.EventHandler(this.functionsListBox_SelectedIndexChanged);
+            this.functionsListBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.functionsListBox_KeyUp);
             // 
             // label22
             // 
@@ -1212,6 +1214,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.label53);
             this.tabPage5.Controls.Add(this.textBox3);
             this.tabPage5.Controls.Add(this.label36);
             this.tabPage5.Controls.Add(this.sentencesListBox);
@@ -1638,28 +1641,28 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveToolStripMenuItem.Text = "Save As...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1673,17 +1676,24 @@
             this.exportToolStripMenuItem1.Size = new System.Drawing.Size(52, 20);
             this.exportToolStripMenuItem1.Text = "Export";
             // 
+            // appleToolStripMenuItem
+            // 
+            this.appleToolStripMenuItem.Name = "appleToolStripMenuItem";
+            this.appleToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.appleToolStripMenuItem.Text = "Apple ][";
+            this.appleToolStripMenuItem.Click += new System.EventHandler(this.appleToolStripMenuItem_Click);
+            // 
             // coCoToolStripMenuItem
             // 
             this.coCoToolStripMenuItem.Name = "coCoToolStripMenuItem";
-            this.coCoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.coCoToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.coCoToolStripMenuItem.Text = "CoCo";
             this.coCoToolStripMenuItem.Click += new System.EventHandler(this.coCoToolStripMenuItem_Click);
             // 
             // tRS80ToolStripMenuItem
             // 
             this.tRS80ToolStripMenuItem.Name = "tRS80ToolStripMenuItem";
-            this.tRS80ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tRS80ToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.tRS80ToolStripMenuItem.Text = "TRS-80";
             this.tRS80ToolStripMenuItem.Click += new System.EventHandler(this.tRS80ToolStripMenuItem_Click);
             // 
@@ -1702,12 +1712,14 @@
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // appleToolStripMenuItem
+            // label53
             // 
-            this.appleToolStripMenuItem.Name = "appleToolStripMenuItem";
-            this.appleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.appleToolStripMenuItem.Text = "Apple ][";
-            this.appleToolStripMenuItem.Click += new System.EventHandler(this.appleToolStripMenuItem_Click);
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(3, 264);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(224, 13);
+            this.label53.TabIndex = 19;
+            this.label53.Text = "To delete a sentence, select it, and hit \'delete\'";
             // 
             // Form1
             // 
@@ -1898,6 +1910,7 @@
         private System.Windows.Forms.ToolStripMenuItem tRS80ToolStripMenuItem;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.ToolStripMenuItem appleToolStripMenuItem;
+        private System.Windows.Forms.Label label53;
     }
 }
 
