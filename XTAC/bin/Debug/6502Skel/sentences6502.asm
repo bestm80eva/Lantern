@@ -261,7 +261,6 @@ _nxt	nop ; padding - don not remove!
 		sta sentenceRun
 		;restore old sentence
 		
-
 		jmp _x
 _c		pla 
 		sta sentence+3

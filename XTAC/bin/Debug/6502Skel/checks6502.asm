@@ -133,14 +133,15 @@ check_dobj_lockable
 _x		rts
 
 
+;called by 'close'
 	.module check_dobj_open
 check_dobj_open		
 		lda $sentence+1
 		ldx #OPEN
 		jsr get_obj_prop
 		cmp #1
-		bne _x
-		jsr dobj_already_open
+		beq _x
+		jsr dobj_already_closed
 _x		rts
 		
  
@@ -335,11 +336,11 @@ thatsNotSomething .text "THAT'S NOT SOMETHING YOU CAN "
 .byte 0		
 notContainer .text "THAT'S NOT SOMETHING YOU CAN "
 .byte 0	
-alreadyLocked	.text " IS ALREADY LOCKED."
+alreadyLocked	.text "IS ALREADY LOCKED."
 .byte 0
-alreadyUnlocked	.text " IS ALREADY UNLOCKED."
+alreadyUnlocked	.text "IS ALREADY UNLOCKED."
 .byte 0
-alreadyOpen	.text " IS ALREADY OPEN."
+alreadyOpen	.text "IS ALREADY OPEN."
 .byte 0
 dontHave	.text "YOU DON'T HAVE THAT."
 .byte 0

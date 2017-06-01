@@ -36,16 +36,41 @@ has_visible_child
 		pha
 		tya
 		pha
+		
 		lda $tableAddr ;save table
 		pha
 		lda $tableAddr+1
 		pha
+		
+		lda #0		; clear flag
+		sta visibleChild		
+		
+		;if the parent is closed, we can stop now
+		lda parentId
+		ldx #SUPPORTER
+		jsr get_obj_prop
+		cmp #1
+		beq _srch
+		
+		lda parentId
+		ldx #CONTAINER
+		jsr get_obj_prop
+		cmp #1
+		bne _srch
+		
+		lda parentId
+		ldx #OPEN
+		jsr get_obj_prop
+		cmp #0
+		beq _x
+		
+		;otherwise search the table
+_srch	
 		lda #$obj_table%256	; setup object table
 		sta $tableAddr
 		lda #$obj_table/256
 		sta $tableAddr+1
-		lda #0
-		sta visibleChild
+		
 _lp		ldy #0
 		lda ($tableAddr),y
 		cmp #255
