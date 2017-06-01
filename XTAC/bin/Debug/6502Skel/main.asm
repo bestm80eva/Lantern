@@ -37,9 +37,9 @@ start
 _lp
  	jsr clr_buffr
 	jsr clr_words
-
+    jsr printcr
 	jsr print_title_bar
-	
+		
 	jsr readkb
 	lda $200
 	cmp #$8D ; cr

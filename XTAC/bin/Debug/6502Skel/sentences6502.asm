@@ -193,30 +193,95 @@ _c		clc				;add 6 bytes to skip to next entry
 		sta $tableAddr+1
 		jmp _lp
 _x		rts
-		
+
+	.module run_wildcards_sentences	
 run_wildcards_sentences
-		lda $sentence+1
+
+_lp		lda sentence+1;load the old io and do
 		pha
-		lda $sentence+3
+		lda sentence+3
 		pha
 		
-		lda $sentence+1
+		ldy #0
+		lda ($tableAddr),y ;hit end of table?
 		cmp #255
-		beq _skp1
+		beq _x
+		
+		cmp $sentence  ;do verbs match?
+		bne _c   
+
+		iny 
+		lda ($tableAddr),y ;word1
+		cmp #254	; is it a wildcard?
+		bne _prp
+		lda #254	; replace noun with '*"
+		sta sentence+1
+
+_prp	iny
+		lda ($tableAddr),y ;word2
+		cmp $sentence+2  ;do preps match?
+		bne _c   
+		
+_io		iny 
+		lda ($tableAddr),y ;word3
+		cmp #254
+		bne _dn
 		lda #254
-		sta $sentence+1
-_skp1	
-		lda $sentence+3
-		cmp #255
-		beq _skp2
-		lda #254
-		sta $sentence+3
-_skp2
-		jsr run_user_sentences
+		sta sentence+3
+		
+_dn		;sentence should now match wildcarded string
+		;see if it actually does
+		ldy #1
+		lda ($tableAddr),y 
+		cmp $sentence+1
+		bne _c	
+		
+		ldy #3
+		lda ($tableAddr),y 
+		cmp $sentence+3
+		bne _c	
+		;sentences match!  run them
+_run	ldy #4
+		lda ($tableAddr),y	; put jumpAddr in vector
+		sta $jumpVector
+		iny
+		lda ($tableAddr),y
+		sta $jumpVector+1
+		
+		lda #_nxt/256		; put return addr onto stack
+		pha
+		lda #_nxt%256
+		pha
+		
+		jmp ($jumpVector)	; run the sentence
+		
+_nxt	nop ; padding - don not remove!
+		
+		lda #1			; flag that we ran a sentence
+		sta sentenceRun
+		;restore old sentence
+		
+
+		jmp _x
+_c		pla 
+		sta sentence+3
 		pla
-		sta $sentence+3
+		sta sentence+1
+		
+		clc				;add 6 bytes to skip to next entry
+		lda $tableAddr
+		adc #6
+		sta $tableAddr
+		lda $tableAddr+1
+		adc #0
+		sta $tableAddr+1
+		jmp _lp
+		
+_x		;restore old sentence
+		pla 
+		sta sentence+3
 		pla
-		sta $sentence+1
+		sta sentence+1
 		rts
 
 jumpVector .word 0
