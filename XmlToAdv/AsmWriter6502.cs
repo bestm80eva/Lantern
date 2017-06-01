@@ -27,7 +27,16 @@ namespace XMLtoAdv
             code = code.Replace("\r", "");
             code = code.Replace("\n", "");
             code = code.Replace("\t", "");
-            WriteCode(code, sw);
+           
+            try
+            {
+                WriteCode(code, sw);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error writing function : " + name, ex);
+            }
+
             sw.WriteLine("\tpla");
             sw.WriteLine("\ttax");
             sw.WriteLine("\tpla");

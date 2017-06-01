@@ -743,6 +743,11 @@ namespace XTAC
             string curVerb = verbCheckListBox.SelectedItem.ToString();
             List<string> verbChecks = new List<string>();
 
+            if (curVerb.IndexOf(",") != -1)
+            {
+                curVerb = curVerb.Substring(0, curVerb.IndexOf(","));
+            }
+
             var list =
                 from c in xproject.Project.Checks.Check
                 where c.Verb.Equals(curVerb)
