@@ -2,6 +2,9 @@
 ;Evan Wright (c) 2017
 
 show_intro
+		jsr printcr
+		jsr printcr
+		
 		lda #welcome%256
 		sta strAddr
 		lda #welcome/256
