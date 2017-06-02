@@ -179,9 +179,24 @@ _s		nop	;
 _c		jsr next_entry
 		jmp _lp
 _x		rts
-		
+
+	.module get_sub		
 get_sub
 		lda $sentence+1
+		ldy #MASS
+		jsr get_obj_attr
+		sta temp
+		lda invWeight
+		adc temp
+		cmp maxWeight
+		bcc _y
+		lda #tooHeavy%256
+		sta strAddr
+		lda #tooHeavy/256
+		sta strAddr+1
+		jsr printstrcr
+		jmp _x
+_y		lda $sentence+1
 		ldx #PLAYER_ID
 		ldy #HOLDER_ID
 		jsr set_obj_attr ; change holder
@@ -194,7 +209,8 @@ get_sub
 		lda #taken/256
 		sta strAddr+1
 		jsr printstrcr
-		rts
+_x		rts
+		
 	.module drop_sub
 drop_sub
 		lda $sentence+1
@@ -246,8 +262,43 @@ _lp		cmp #0
 		jmp _lp	
 _x		pla
 		rts
+	
+;computes the weight of the player's inventory	
+	.module
+inv_weight
+		lda #0
+		sta invWeight
+		lda #obj_table%256
+		sta $tableAddr
+		lda #obj_table/256
+		sta $tableAddr+1
+_lp		ldy #0
 		
+		lda ($tableAddr),y
+		cmp #255		;end of table?
+		beq _x
 		
+		sta child
+		lda #PLAYER_ID 
+		sta parent
+		jsr check_ancestor
+		
+		lda ancestorFlag
+		cmp #0
+		beq _c
+
+		ldy #MASS
+		clc
+		lda ($tableAddr),y
+		adc invWeight
+		sta invWeight
+		
+_c		jsr next_entry
+		jmp _lp
+_x		rts
+
+invWeight .byte 0
+	.byte
 emptyhanded .text "YOU ARE EMPTY HANDED."
 	.byte 0
 carrying .text "YOU ARE CARRYING:"
@@ -260,6 +311,10 @@ dropped .text "DROPPED."
 	.byte 0
 space .text " "
 	.byte 0
+tooHeavy .text "YOUR LOAD IS TOO HEAVY."	
+	.byte 0
+	
 visibleChild .byte 0
 indentLvl .byte 0	
 parentId .byte 0
+maxWeight .byte 25
