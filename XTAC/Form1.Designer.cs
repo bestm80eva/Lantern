@@ -116,10 +116,7 @@
             this.verbChecksListBox = new System.Windows.Forms.ListBox();
             this.verbCheckListBox = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.label51 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
-            this.label48 = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
             this.label44 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
@@ -181,6 +178,8 @@
             this.tRS80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -1094,10 +1093,9 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.label51);
             this.tabPage4.Controls.Add(this.label50);
-            this.tabPage4.Controls.Add(this.label49);
             this.tabPage4.Controls.Add(this.label48);
+            this.tabPage4.Controls.Add(this.label49);
             this.tabPage4.Controls.Add(this.label47);
             this.tabPage4.Controls.Add(this.label44);
             this.tabPage4.Controls.Add(this.label43);
@@ -1114,50 +1112,24 @@
             this.tabPage4.Text = "Functions";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // label51
-            // 
-            this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(588, 378);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(53, 13);
-            this.label51.TabIndex = 14;
-            this.label51.Text = "Variables:";
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(355, 409);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(62, 13);
-            this.label50.TabIndex = 13;
-            this.label50.Text = "emittinglight";
-            // 
             // label49
             // 
             this.label49.AutoSize = true;
             this.label49.Location = new System.Drawing.Point(355, 387);
             this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(87, 13);
+            this.label49.Size = new System.Drawing.Size(366, 13);
             this.label49.TabIndex = 12;
-            this.label49.Text = "initial_description";
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(273, 409);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(58, 13);
-            this.label48.TabIndex = 11;
-            this.label48.Text = "description";
+            this.label49.Text = "holder, description, initial_desc,n,s,e,w,ne,se,sw,nw,up,down,enter,out,mass";
+            this.label49.Click += new System.EventHandler(this.label49_Click);
             // 
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(273, 387);
+            this.label47.Location = new System.Drawing.Point(279, 409);
             this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(36, 13);
+            this.label47.Size = new System.Drawing.Size(54, 13);
             this.label47.TabIndex = 10;
-            this.label47.Text = "holder";
+            this.label47.Text = "Properties";
             // 
             // label44
             // 
@@ -1743,6 +1715,24 @@
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(355, 409);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(352, 13);
+            this.label48.TabIndex = 13;
+            this.label48.Text = "portable, door, container, supporter,  openable, open, lockable, lit, locked";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(279, 387);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(51, 13);
+            this.label50.TabIndex = 14;
+            this.label50.Text = "Attributes";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1920,11 +1910,8 @@
         private System.Windows.Forms.Label label43;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.ComboBox enterComboBox;
-        private System.Windows.Forms.Label label50;
         private System.Windows.Forms.Label label49;
-        private System.Windows.Forms.Label label48;
         private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.Label label51;
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem1;
@@ -1935,6 +1922,8 @@
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.Label label54;
         private System.Windows.Forms.TextBox massTextBox;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label label48;
     }
 }
 

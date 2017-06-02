@@ -1211,27 +1211,33 @@ namespace XMLtoAdv
         {
             string oldDir = Environment.CurrentDirectory;
 
-            //get the file path 
-            CreateTables(fileName, "_Apple2");
+            try
+            {
             
-            WriteWelcomeMessage("Welcome6502.asm", ".text", "\n.byte 0\n");
-            WriteStringTable6502("StringTable6502.asm", "string_table", descriptionTable);
-            WriteStringTable6502("Dictionary6502.asm", "dictionary", dict);
-            WriteStringTable6502("NogoTable6502.asm", "nogo_table", nogoTable);
-            WriteStringTable6502("PrepTable6502.asm", "prep_table", prepTable);
-            WriteObjectTable6502("ObjectTable6502.asm");
-            WriteObjectWordTable("ObjectWordTable6502.asm", ".byte");
-            WriteVerbTable6502("VerbTable6502.asm");
-            WriteCheckTable("CheckRules6502.asm", ".byte", ".word");
-            WriteSentenceTable("6502", "before", ".byte", ".word");
-            WriteSentenceTable("6502", "instead", ".byte", ".word");
-            WriteSentenceTable("6502", "after", ".byte", ".word");
-            WriteUserVarTable(doc, "6502");           // WriteEvents(doc, "6502", new AsmWriter6809());
+                //get the file path 
+                CreateTables(fileName, "_Apple2");
 
-            WriteBackdropTable(doc, "BackDropTable6502.asm", ".db");
-            WriteEvents(doc, "6502", new AsmWriter6502());
+                WriteWelcomeMessage("Welcome6502.asm", ".text", "\n.byte 0\n");
+                WriteStringTable6502("StringTable6502.asm", "string_table", descriptionTable);
+                WriteStringTable6502("Dictionary6502.asm", "dictionary", dict);
+                WriteStringTable6502("NogoTable6502.asm", "nogo_table", nogoTable);
+                WriteStringTable6502("PrepTable6502.asm", "prep_table", prepTable);
+                WriteObjectTable6502("ObjectTable6502.asm");
+                WriteObjectWordTable("ObjectWordTable6502.asm", ".byte");
+                WriteVerbTable6502("VerbTable6502.asm");
+                WriteCheckTable("CheckRules6502.asm", ".byte", ".word");
+                WriteSentenceTable("6502", "before", ".byte", ".word");
+                WriteSentenceTable("6502", "instead", ".byte", ".word");
+                WriteSentenceTable("6502", "after", ".byte", ".word");
+                WriteUserVarTable(doc, "6502");           // WriteEvents(doc, "6502", new AsmWriter6809());
 
-            Environment.CurrentDirectory = oldDir;
+                WriteBackdropTable(doc, "BackDropTable6502.asm", ".db");
+                WriteEvents(doc, "6502", new AsmWriter6502());
+            }
+            finally
+            {
+                Environment.CurrentDirectory = oldDir;
+            }
 
         }
     }//end class

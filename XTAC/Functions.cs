@@ -66,8 +66,9 @@ namespace XTAC
             CreateDefaultVar("$score", "score", "0");
             CreateDefaultVar("$moves", "moves", "0");
             CreateDefaultVar("$health", "health", "100");
-            CreateDefaultVar("$turnsWithoutLight", "turns_without_light", "100");
+            CreateDefaultVar("$turnsWithoutLight", "turnsWithoutLight", "0");
             CreateDefaultVar("$gameOver", "gameOver", "0");
+            
 
         }
 
@@ -144,41 +145,27 @@ namespace XTAC
         void AddDefaultVerbChecks()
         {
             AddCheck("close", "check_dobj_supplied");
-            AddCheck("close", "check_see_dobj");
             AddCheck("drink", "check_dobj_supplied");
-            AddCheck("drink", "check_see_dobj");
             AddCheck("drink", "check_have_dobj");
             AddCheck("drop", "check_dobj_supplied");
-            AddCheck("drop", "check_see_dobj");
             AddCheck("drop", "check_have_dobj");
             AddCheck("eat", "check_dobj_supplied");
-            AddCheck("eat", "check_see_dobj");
             AddCheck("enter", "check_dobj_supplied");
-            AddCheck("enter", "check_see_dobj");
             AddCheck("examine", "check_dobj_supplied");
-            AddCheck("examine", "check_see_dobj");
             AddCheck("get", "check_dobj_supplied");
-            AddCheck("get", "check_see_dobj");
             AddCheck("get", "check_dont_have_dobj");
             AddCheck("kill", "check_dobj_supplied");
-            AddCheck("kill", "check_see_dobj");
             AddCheck("light", "check_dobj_supplied");
-            AddCheck("light", "check_see_dobj");
             AddCheck("light", "check_have_dobj");
             AddCheck("open", "check_dobj_supplied");
-            AddCheck("open", "check_see_dobj");
             AddCheck("put", "check_dobj_supplied");
-            AddCheck("put", "check_see_dobj");
             AddCheck("put", "check_prep_supplied");
             AddCheck("put", "check_iobj_supplied");
             AddCheck("put", "check_not_self_or_child");
             AddCheck("talk to", "check_dobj_supplied");
-            AddCheck("talk to", "check_see_dobj");
             AddCheck("turn on", "check_dobj_supplied");
-            AddCheck("turn on", "check_see_dobj");
             AddCheck("turn on", "check_have_dobj");
             AddCheck("unlock", "check_dobj_supplied");
-            AddCheck("unlock", "check_see_dobj");
         }
 
         void AddCheck(string verb, string check)

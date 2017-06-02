@@ -1479,6 +1479,16 @@ namespace XTAC
             GetCurObj().Directions.Mass = massTextBox.Text.Trim();
         }
 
+        private void label50_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label49_Click(object sender, EventArgs e)
+        {
+
+        }
+
         
 
     }
