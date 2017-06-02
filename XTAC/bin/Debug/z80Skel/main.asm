@@ -36,7 +36,6 @@ getcommand
 		call validate_words		; make sure verb,io,do are in tables
 		call encode				; try to map words to objects
 		call validate_encode	; make sure it worked
-		call wildcardize
 		call run_sentence
 		call do_events
 		ret

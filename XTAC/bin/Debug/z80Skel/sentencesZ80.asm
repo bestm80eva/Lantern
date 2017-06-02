@@ -38,22 +38,33 @@ $d?		nop;
 ;actions table in ix
 ;post condition: action_run = 1
 ;if a sentence was run
-
+;if an exact match isn't found,
+;an attempt is match to find and run
+;a wildcard match using the same table
 *MOD
 run_actions
 	push ix
 	push iy
 	ld iy,sentence
 	call run_actions_
+	
 	ld a,(action_run)
 	cp 1
 	jp z,$x?
+	
+	pop iy		;reload ix,iy
+	pop ix
+	push ix
+	push iy
+	
 	ld iy,wildcards
-	call run_actions_	
+	call run_wildcards	
 $x?	pop iy
 	pop ix
 	ret
 
+;runs exact match sentences from the
+;table pointed to by ix
 *MOD
 run_actions_
 		push bc
@@ -138,28 +149,98 @@ $x?		pop hl
 		pop bc
 		ret
 
-;replaces io and do with 254 (ANY_OBJECT)
-*MOD		
-wildcardize
-	ld a,(sentence) ; copy verb
-	ld (wildcards),a
-	ld a,(sentence+2) ; copy prep
-	ld (wildcards+2),a
-	ld a,255		;store do
-	ld (wildcards+1),a
-	ld a,(sentence+1)
-	cp 255			;was do blank?
-	jp z,$n?
-	ld a,ANY_OBJECT ;no, store '*'
-	ld (wildcards+1),a
-$n?	nop ; repeat for io
-	ld a,255		;store io
-	ld (wildcards+3),a
-	ld a,(sentence+3)
-	cp 255			;was do blank?
-	jp z,$o?
-	ld a,ANY_OBJECT ;no, store '*'
-	ld (wildcards+3),a
-$o?	ret
+
+;ix contains sentence table addr
+;if a sentence is run, action_run
+;is set to 1
+
+*MOD
+run_wildcards
+	push af
+	push de
+	push hl
+	push iy
+	
+	ld	iy,sentence
+	
+	;save old sentence
+	ld  a,(iy+1)
+	ld (wildcards+1),a 
+	ld  a,(iy+3)
+	ld (wildcards+3),a 
+	
+$lp?	
+		ld a,(ix)
+		cp 255		; hit end of table?
+		jp z,$x?
+		
+		cp (iy) ; verb match?
+		jp nz, $c?
+		
+		ld a,(ix+2)
+		cp (iy+2) ; prep match?
+		jp nz, $c?
+		
+		;does the sentence have a wildcard in the dobj?
+		ld a,(ix+1)
+		cp ANY_OBJECT
+		jp nz,$s?
+		ld a,254		; put the '*' in the do
+		ld (sentence+1),a
+$s?
+		;does the sentence have a wildcard in the iobj?
+		ld a,(ix+3)
+		cp ANY_OBJECT
+		jp nz,$s2?
+		ld a,254		; put the '*' in the io
+		ld (sentence+3),a
+$s2?		
+		;now see if they match
+		ld a,(ix+1)	;compare do
+		cp (iy+1)
+		jp nz, $c?
+		
+		ld a,(ix+3)	; compare io
+		cp (iy+3)
+		jp nz, $c?
+
+		;if here, we have a match	
+		
+		push ix	; ix -> hl
+		pop hl
+		
+		inc hl	; move 4 bytes to sub routine
+		inc hl
+		inc hl
+		inc hl
+		ld e,(hl)
+		inc hl
+		ld d,(hl)
+		push de	; de -> hl
+		pop hl
+     	ld bc,$nxt?      ; push return addr on stack
+		push bc
+		jp (hl)			; return will pop stack
+$nxt?	ld a,1
+		ld (action_run),a
+		jp $x?
+		
+$c?		;restore sentence	
+		ld a,(wildcards+1)
+		ld (sentence+1),a
+		
+		ld a,(wildcards+3)
+		ld (sentence+3),a
+		
+		ld de,6 ; skip and repeat
+		add ix,de 
+		jp $lp?
+		
+$x?		pop iy
+		pop hl
+		pop de
+		pop af
+		ret
+
 	
 wildcards DB 0,0,0,0
