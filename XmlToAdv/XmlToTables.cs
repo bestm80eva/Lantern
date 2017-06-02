@@ -69,7 +69,7 @@ namespace XMLtoAdv
 
         static XmlToTables()
         {
-            skelDirs["_Z80"] = "trs80Skel";
+            skelDirs["_TRS80"] = "z80Skel";
             skelDirs["_6809"] = "6809Skel";
             skelDirs["_6502"] = "6502Skel";
             skelDirs["_Apple2"] = "6502Skel";
@@ -78,8 +78,11 @@ namespace XMLtoAdv
 
         protected void CreateTables(string fileName, string tgtPlatform)
         {
+
+
             doc = new XmlDocument();
             doc.Load(fileName);
+
             CreateOutputDir(tgtPlatform);
             descriptionTable.Clear();
             descriptionTable.AddEntry("YOU NOTICE NOTHING UNEXPECTED.");
@@ -339,12 +342,12 @@ namespace XMLtoAdv
         }
 
 
-        public void ConvertZ80(string fileName)
+        public void ConvertTRS80(string fileName)
         {
             string oldDir = Environment.CurrentDirectory;
 
             //get the file path 
-            CreateTables(fileName, "_Z80");
+            CreateTables(fileName, "_TRS80");
 
             WriteWelcomeMessage("WelcomeZ80.asm", "DB", ",0h");
             WriteStringTableZ80("StringTableZ80.asm", "string_table", descriptionTable);

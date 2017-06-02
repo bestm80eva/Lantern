@@ -25,6 +25,7 @@ open_sub
 	ld hl,done
 	call OUTLIN
 	call printcr ; newline
+	call reveal_items
 	jp $d? ; skip else 
 $c?	nop ; close ($dobj.locked == 0)
 	nop ; println("IT'S LOCKED.")
@@ -136,10 +137,31 @@ $x?		pop ix
 		pop bc
 		pop af
 		ret	
+
+*MOD	
+reveal_items
+	ld a,(sentence+1) 
+	call has_contents ; result to a->
+	cp 0
+	jp z,$x?	
+	ld hl,openingThe
+	call OUTLIN	
+	ld a,(sentence+1) 
+	call print_obj_name
+	ld hl,reveals
+	call OUTLIN
+	call printcr
+	ld a,(sentence+1) 
+	call print_contents
+$x?	ret
+		
 *MOD		
 unlock_sub
+	nop ; TBD
 	ret
 
 notlockable DB "THAT'S NOT LOCKABLE.",0h	
 alreadylocked DB "IT'S ALREADY LOCKED.",0h
+openingThe DB "OPENING THE ", 0h
+reveals DB "REVEALS:", 0h
 ;alreadyopen DB "IT'S ALREADY OPEN.",0h

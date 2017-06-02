@@ -182,7 +182,7 @@ _x		rts
 
 	.module get_sub		
 get_sub
-						 ; is it portable?
+		lda $sentence+1		 ; is it portable?
 		ldx #PORTABLE
 		jsr get_obj_prop
 		cmp #0

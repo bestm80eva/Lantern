@@ -1389,7 +1389,7 @@ namespace XTAC
             if (fileName != "")
             {
                 XmlToTables converter = XmlToTables.GetInstance();
-                converter.ConvertZ80(fileName);  //"f3xml.xml"
+                converter.ConvertTRS80(fileName);  //"f3xml.xml"
                 MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
             }
             else

@@ -66,6 +66,7 @@ print_obj_desc
 	pop af
 	ret
 		
+;called by look_sub		
 ;prints the initial description for object in b
 ;if it has one. Otherwise it defaults to "THERE IS A ____ HERE"
 ;the contents of the object are also printed.
@@ -101,8 +102,9 @@ $n?	ld hl,thereisa
 $x?	ld a,d
     call indent_more
 	call print_contents_header ;  of object in 'a'
-	call print_contents  ; of object in 'a'
-	call indent_less
+	
+	; call print_contents  ; of object in 'a'
+$s?	call indent_less
 	pop iy
 	pop ix
 	pop de
@@ -157,6 +159,7 @@ $x?		pop ix
 		pop bc
 		ret
 
+;doesn't look like this was finished?
 *MOD
 count_visible_objects
 		push af
@@ -240,8 +243,15 @@ $x?		pop iy
 print_contents_header
 	push af
 	push bc
+	push de
 	push hl
-	ld a,(iy)
+	ld d,a  ; save obj
+	
+	ld a,0  		;clr vis objs flag
+	ld (visobjs),a  
+	
+	;ld (hl),a
+	ld a,d ; restore obj
 	call has_contents
 	cp 0
 	jp z,$x?
@@ -252,6 +262,8 @@ print_contents_header
 	ld hl,initis
 	call OUTLIN
 	call printcr
+	ld a,d
+	call print_contents
 	jp $x?
 $s?	bit SUPPORTER_BIT,(iy+PROPERTY_BYTE_1)
 	jp z,$x?
@@ -259,8 +271,14 @@ $s?	bit SUPPORTER_BIT,(iy+PROPERTY_BYTE_1)
 	;call OUTLIN
 	;call printcr	
 	call OUTLINCR
+	ld a,d
+	call print_contents
 	jp $x?
+$n? ld a,1
+	ld hl,visobjs
+	ld (hl),a
 $x? pop hl
+	pop de
 	pop bc
 	pop af
 	ret

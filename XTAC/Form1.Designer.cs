@@ -116,6 +116,8 @@
             this.verbChecksListBox = new System.Windows.Forms.ListBox();
             this.verbCheckListBox = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
             this.label44 = new System.Windows.Forms.Label();
@@ -178,8 +180,6 @@
             this.tRS80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label48 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -1112,6 +1112,25 @@
             this.tabPage4.Text = "Functions";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(279, 387);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(51, 13);
+            this.label50.TabIndex = 14;
+            this.label50.Text = "Attributes";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(355, 409);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(400, 13);
+            this.label48.TabIndex = 13;
+            this.label48.Text = "portable, door, container, supporter,  openable, open, lockable, emittinglight, l" +
+    "ocked";
+            // 
             // label49
             // 
             this.label49.AutoSize = true;
@@ -1714,24 +1733,6 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(355, 409);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(352, 13);
-            this.label48.TabIndex = 13;
-            this.label48.Text = "portable, door, container, supporter,  openable, open, lockable, lit, locked";
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(279, 387);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(51, 13);
-            this.label50.TabIndex = 14;
-            this.label50.Text = "Attributes";
             // 
             // Form1
             // 

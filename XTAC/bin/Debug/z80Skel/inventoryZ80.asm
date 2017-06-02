@@ -66,18 +66,22 @@ has_contents
 		push de
 		push hl
 		push ix
-		ld h,a
+		ld h,a  ; holder to 'h'
 		ld b,0	; found flag
 		ld de,OBJ_ENTRY_SIZE
 		ld ix,obj_table
-$lp?	ld a,(ix)
+		
+$lp?	ld a,(ix)  ; hit end of table?
 		cp 0ffh
 		jp z,$x?
-		ld a,(ix+HOLDER_ID)
+		
+		ld a,(ix+HOLDER_ID) ; holder matches?
 		cp h
 		jp nz,$c?
+		
 		bit SCENERY_BIT,(ix+PROPERTY_BYTE_1)  ; test scenery bit
-		jp nz,$c?
+		jp nz,$c?  ; if bit is not zero, continue
+		
 		ld b,1	; set found flag
 		jp $x?
 $c?		add ix,de
