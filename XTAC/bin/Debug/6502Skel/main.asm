@@ -39,7 +39,7 @@ _lp
 	jsr clr_words
     jsr printcr
 	jsr print_title_bar
-		
+			
 	jsr readkb
 	lda $200
 	cmp #$8D ; cr
@@ -81,7 +81,7 @@ _c 	jsr toascii
 	jsr do_events
 	
 	jsr player_can_see
-	
+	jsr inv_weight
 	jmp _lp
 _x 	jsr printcr
 	rts

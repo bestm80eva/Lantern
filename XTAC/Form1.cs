@@ -310,6 +310,7 @@ namespace XTAC
             upComboBox.SelectedIndex = GetIndex(xproject.Project.Objects.Object[room].Directions.Up);
             downComboBox.SelectedIndex = GetIndex(xproject.Project.Objects.Object[room].Directions.Down);
             parentComboBox.SelectedIndex = GetIndex(xproject.Project.Objects.Object[room].Holder);
+            massTextBox.Text = xproject.Project.Objects.Object[room].Directions.Mass;
 
             //`drinkableCheckBox.Checked = GetCheck(xproject.Project.Objects.Object[room].Flags.);
         }
@@ -1466,6 +1467,16 @@ namespace XTAC
 
                 }
             }
+        }
+
+        private void label54_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {//mass changed
+            GetCurObj().Directions.Mass = massTextBox.Text.Trim();
         }
 
         

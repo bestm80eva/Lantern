@@ -612,7 +612,7 @@ namespace XMLtoAdv
                 //now write any synonyms
                 foreach (GameObject o in objects)
                 {
-                    if (o.synonyms.Count > 0)
+                    if (o.synonyms.Count > 0 && o.synonyms[0] != "")
                     {
                         sw.Write("\t" + byteDirective + " " + o.id);
                         int blanks = 3 - o.synonyms.Count;
@@ -635,7 +635,7 @@ namespace XMLtoAdv
                 }
 
                 sw.WriteLine("\t" + byteDirective + " 255");
-                sw.WriteLine("obj_table_size\t" + byteDirective + " " + objects.Count);
+//                sw.WriteLine("obj_table_size\t" + byteDirective + " " + objects.Count);
             }
         }
 

@@ -58,6 +58,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.outComboBox = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label54 = new System.Windows.Forms.Label();
+            this.massTextBox = new System.Windows.Forms.TextBox();
             this.label34 = new System.Windows.Forms.Label();
             this.backdropTextBox = new System.Windows.Forms.TextBox();
             this.backdropCheckBox = new System.Windows.Forms.CheckBox();
@@ -128,6 +130,7 @@
             this.codeTextBox = new System.Windows.Forms.TextBox();
             this.newFuncButton = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.label53 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label36 = new System.Windows.Forms.Label();
             this.sentencesListBox = new System.Windows.Forms.ListBox();
@@ -178,7 +181,6 @@
             this.tRS80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label53 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -505,6 +507,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label54);
+            this.groupBox2.Controls.Add(this.massTextBox);
             this.groupBox2.Controls.Add(this.label34);
             this.groupBox2.Controls.Add(this.backdropTextBox);
             this.groupBox2.Controls.Add(this.backdropCheckBox);
@@ -522,10 +526,28 @@
             this.groupBox2.Controls.Add(this.portableCheckBox);
             this.groupBox2.Location = new System.Drawing.Point(857, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(210, 365);
+            this.groupBox2.Size = new System.Drawing.Size(210, 410);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Object Properties";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(46, 371);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(32, 13);
+            this.label54.TabIndex = 17;
+            this.label54.Text = "Mass";
+            this.label54.Click += new System.EventHandler(this.label54_Click);
+            // 
+            // massTextBox
+            // 
+            this.massTextBox.Location = new System.Drawing.Point(95, 368);
+            this.massTextBox.Name = "massTextBox";
+            this.massTextBox.Size = new System.Drawing.Size(100, 20);
+            this.massTextBox.TabIndex = 16;
+            this.massTextBox.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
             // label34
             // 
@@ -1239,6 +1261,15 @@
             this.tabPage5.Text = "Sentences";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(3, 264);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(224, 13);
+            this.label53.TabIndex = 19;
+            this.label53.Text = "To delete a sentence, select it, and hit \'delete\'";
+            // 
             // textBox3
             // 
             this.textBox3.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -1679,22 +1710,22 @@
             // appleToolStripMenuItem
             // 
             this.appleToolStripMenuItem.Name = "appleToolStripMenuItem";
-            this.appleToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.appleToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.appleToolStripMenuItem.Text = "Apple ][";
             this.appleToolStripMenuItem.Click += new System.EventHandler(this.appleToolStripMenuItem_Click);
             // 
             // coCoToolStripMenuItem
             // 
             this.coCoToolStripMenuItem.Name = "coCoToolStripMenuItem";
-            this.coCoToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.coCoToolStripMenuItem.Text = "CoCo";
+            this.coCoToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.coCoToolStripMenuItem.Text = "TRS-80  CoCo 2/3";
             this.coCoToolStripMenuItem.Click += new System.EventHandler(this.coCoToolStripMenuItem_Click);
             // 
             // tRS80ToolStripMenuItem
             // 
             this.tRS80ToolStripMenuItem.Name = "tRS80ToolStripMenuItem";
-            this.tRS80ToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.tRS80ToolStripMenuItem.Text = "TRS-80";
+            this.tRS80ToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.tRS80ToolStripMenuItem.Text = "TRS-80 Model I, III, IV";
             this.tRS80ToolStripMenuItem.Click += new System.EventHandler(this.tRS80ToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
@@ -1712,15 +1743,6 @@
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // label53
-            // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(3, 264);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(224, 13);
-            this.label53.TabIndex = 19;
-            this.label53.Text = "To delete a sentence, select it, and hit \'delete\'";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1730,7 +1752,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "XTAC";
+            this.Text = "Lantern";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -1911,6 +1933,8 @@
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.ToolStripMenuItem appleToolStripMenuItem;
         private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.TextBox massTextBox;
     }
 }
 

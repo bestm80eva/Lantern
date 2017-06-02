@@ -182,7 +182,14 @@ _x		rts
 
 	.module get_sub		
 get_sub
-		lda $sentence+1
+						 ; is it portable?
+		ldx #PORTABLE
+		jsr get_obj_prop
+		cmp #0
+		bne _c
+		jsr thats_not_something
+		jmp _x
+_c		lda $sentence+1  ; check mass
 		ldy #MASS
 		jsr get_obj_attr
 		sta temp
@@ -264,7 +271,7 @@ _x		pla
 		rts
 	
 ;computes the weight of the player's inventory	
-	.module
+	.module inv_weight
 inv_weight
 		lda #0
 		sta invWeight
@@ -272,22 +279,41 @@ inv_weight
 		sta $tableAddr
 		lda #obj_table/256
 		sta $tableAddr+1
-_lp		ldy #0
-		
+
+		lda #PLAYER_ID ; set parent
+		sta parent
+
+_lp		ldy #0		
 		lda ($tableAddr),y
+
+		cmp #0			;offscreen?
+		beq _c
+		cmp #PLAYER_ID	;player?
+		beq _c
 		cmp #255		;end of table?
 		beq _x
 		
-		sta child
-		lda #PLAYER_ID 
-		sta parent
-		jsr check_ancestor
-		
-		lda ancestorFlag
-		cmp #0
-		beq _c
+		lda $tableAddr  ; save table
+		pha
+		lda $tableAddr+1
+		pha
 
-		ldy #MASS
+		ldy #0		
+		lda ($tableAddr),y
+		sta child
+		jsr check_ancestor  ; does player have it?
+
+		pla					; restore table
+		sta $tableAddr+1
+		pla
+		sta $tableAddr
+ 		
+		lda ancestorFlag  
+		
+		cmp #0		
+		beq _c		; no
+
+		ldy #MASS	; add it's mass to total weight
 		clc
 		lda ($tableAddr),y
 		adc invWeight
