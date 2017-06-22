@@ -5,44 +5,65 @@
 *INCLUDE objdefsZ80.asm
 
 ; BASIC STARTS AT 5CCB for Spectrum
-	org 25000 ; 5CCBh ; 23755
+	org 25000 ; 5CCBh  
 start
 
-
- 
 ;main program goes here
 main
-	
-		call CLS
+		;set screen as output channel
+		call 0DAFh  ; CLS
+		;call cls1
+		
+		ld bc,0
+		call locate
+		
 		ld hl,welcome ; print welcome,author,version
-		call OUTLIN
-		call printcr
+		call OUTLINCR
+ 
 		ld hl,author
-		call OUTLIN
-		call printcr
+		call OUTLINCR
+ 
 		ld hl,version
-		call OUTLIN
-		call printcr
+		call OUTLINCR
+ 
 		call printcr
 		call look_sub
 		
-$inp?	call getcommand
+$inp?	 
+		push ix
+		push iy
+		
+		call getcommand
+ 
+		ei
+		
+		pop iy
+		pop ix
+ 
 		jp $inp?
 	
 	ret
 
 getcommand
 		;call QINPUT
+		ei
 		call getlin
-		call parse				; get the words
-		ld a,(sentence)
-		cp 0
-		jp z,$inp?
-		call validate_words		; make sure verb,io,do are in tables
+		di	
+ 		call parse				; get the words
+;		ld a,(sentence)
+;		cp 0
+;		jp z,$inp?  ;; HIGHLY SUSPICIOUS
+;		jp nz,$go?
+;		inc sp
+;		inc sp
+;		inc sp
+;		jp print_ret_pardon	
+$go?	call validate_words		; make sure verb,io,do are in tables
 		call encode				; try to map words to objects
 		call validate_encode	; make sure it worked
 		call run_sentence
 		call do_events
+		 
 		ret
 
 do_events
@@ -91,6 +112,7 @@ $x?	ret
 *INCLUDE CheckRulesZ80.asm
 *INCLUDE sentence_tableZ80.asm
 *INCLUDE WelcomeZ80.asm
+*INCLUDE sinclair.asm
 *INCLUDE UserVarsZ80.asm
 
 score DB 0

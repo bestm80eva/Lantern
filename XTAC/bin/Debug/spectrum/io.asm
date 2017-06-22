@@ -9,24 +9,32 @@ getlin
 		call clrbuf
 		
 		;output the prompt
-		ld a,PROMPT
-		rst 16
+		ld hl,curstr
+		call zx_printstr
+		;ld a,PROMPT
+		;rst 16
 		
 		;loop until enter key is pressed
 $lp2?	call readkb
-		cp 13	; newline 
-		jp z,$out?
-
+		
 		;convert to ASCII
 		call zx_to_ascii
 		
+		cp 0Ch ; delete?
+		jp nz,$s?
+		call back_up
+		jp $lp2?
+		
+$s?		cp 13	; newline 
+		jp z,$out?
+
 		;echo the char
-		cp 13
-		jp z,$ne?
-		push af	;rst overwrites char
-		rst 16
+	
+		push af
+		call print1_zx
 		pop af
-$ne?		
+		
+ 
 		;store the char in the input buffer
 		push af
 		ld hl,INBUF  ;add buffIx to start of buffer
@@ -45,10 +53,10 @@ $ne?
 				
 		jp $lp2?
 		
-$out?	;ld a,13
+$out?	;ld a,13 ; echo a newline
 		;rst 16
-		call newline
-		ret
+		call zx_newline
+$x?		ret
 
 
 ;prints the string in (hl) followed
@@ -62,9 +70,12 @@ OUTLINCR
 		push ix
 		push iy
 		call OUTLIN ; print (hl)
-;		ld	a,13  ; new line char
-; 		rst 16  ; print char
-		call newline
+		call zx_newline  ; move cursor
+		;ld	a,13  ; new line char
+ 		;ei
+		;rst 16  ; print char
+		;di
+		;call newline
 		pop iy
 		pop ix
 		pop hl
@@ -78,16 +89,15 @@ OUTLINCR
 *MOD
 clrbuf
 
-		;clear buffer
-		ld a,255
-		ld (hl),a
-		ld hl,INBUF
 		
 		;set index to 0
 		ld a,0
 		ld (bufIx),a
 		
+		;clear buffer
+ 
 		ld b,0
+		ld hl,INBUF
 		
 $lp?	ld (hl),b
 		inc hl
@@ -113,8 +123,11 @@ $sc?
 		sub 165 ; convert to ascii
 $x?		
 		ret
-		
+
+
+	  DB 0  ; padding - do not remove
 bufIx DB 0
 INBUF DS 256		
 ;INBUF DB 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
 	

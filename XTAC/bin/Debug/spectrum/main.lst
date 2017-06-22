@@ -1,0 +1,880 @@
+                00001 ;main.asm
+                00002 ;main routine for ZX Spectrum
+                00003 ;(c) Evan Wright, 2017
+                00004 
+                00005 *INCLUDE objdefsZ80.asm
+main.asm(5): unable to include file
+                00006 
+                00007 ; BASIC STARTS AT 5CCB for Spectrum
+                00008         org 25000 ; 5CCBh  
+                00009 start
+                00010 
+                00011 ;main program goes here
+                00012 main
+                00013                 ;set screen as output channel
+61A8  CDAF0D    00014                 call 0DAFh  ; CLS
+                00015                 ;call cls1
+                00016                 
+61AB  010000    00017                 ld bc,0
+61AE  CDC663    00018                 call locate
+                00019                 
+61B1  210000    00020                 ld hl,welcome ; print welcome,author,version
+main.asm(20): undefined symbol
+61B4  CD4862    00021                 call OUTLINCR
+                00022  
+61B7  210000    00023                 ld hl,author
+main.asm(23): undefined symbol
+61BA  CD4862    00024                 call OUTLINCR
+                00025  
+61BD  210000    00026                 ld hl,version
+main.asm(26): undefined symbol
+61C0  CD4862    00027                 call OUTLINCR
+                00028  
+61C3  CD0000    00029                 call printcr
+main.asm(29): undefined symbol
+61C6  CD0000    00030                 call look_sub
+main.asm(30): undefined symbol
+                00031                 
+                00032 $inp?    
+61C9  DDE5      00033                 push ix
+61CB  FDE5      00034                 push iy
+                00035                 
+61CD  CDD961    00036                 call getcommand
+                00037  
+61D0  FB        00038                 ei
+                00039                 
+61D1  FDE1      00040                 pop iy
+61D3  DDE1      00041                 pop ix
+                00042  
+61D5  C3C961    00043                 jp $inp?
+                00044         
+61D8  C9        00045         ret
+                00046 
+                00047 getcommand
+                00048                 ;call QINPUT
+61D9  FB        00049                 ei
+61DA  CD0962    00050                 call getlin
+61DD  F3        00051                 di      
+61DE  CD0000    00052                 call parse                              ; get the words
+main.asm(52): undefined symbol
+                00053 ;               ld a,(sentence)
+                00054 ;               cp 0
+                00055 ;               jp z,$inp?  ;; HIGHLY SUSPICIOUS
+                00056 ;               jp nz,$go?
+                00057 ;               inc sp
+                00058 ;               inc sp
+                00059 ;               inc sp
+                00060 ;               jp print_ret_pardon     
+61E1  CD0000    00061 $go?    call validate_words             ; make sure verb,io,do are in tables
+main.asm(61): undefined symbol
+61E4  CD0000    00062                 call encode                             ; try to map words to objects
+main.asm(62): undefined symbol
+61E7  CD0000    00063                 call validate_encode    ; make sure it worked
+main.asm(63): undefined symbol
+61EA  CD0000    00064                 call run_sentence
+main.asm(64): undefined symbol
+61ED  CDF161    00065                 call do_events
+                00066                  
+61F0  C9        00067                 ret
+                00068 
+                00069 do_events
+                00070 *INCLUDE event_jumps_Z80.asm
+main.asm(70): unable to include file
+61F1  CD0000    00071         call player_has_light
+main.asm(71): undefined symbol
+61F4  FE01      00072         cp 1
+61F6  CA0362    00073         jp z,$y?
+61F9  3AC465    00074         ld a,(turns_without_light)
+61FC  3C        00075         inc a
+61FD  32C465    00076         ld (turns_without_light),a
+6200  C30862    00077         jp $x?
+6203  3E00      00078 $y?     ld a,0
+6205  32C465    00079         ld (turns_without_light),a
+6208  C9        00080 $x?     ret
+                00081                 
+                00082 *INCLUDE io.asm 
+    = 0030      00083 BUFSIZE EQU 48
+    = 000C      00084 DELETE EQU 12 
+    = 003E      00085 PROMPT EQU 62
+    = 5CD1      00086 CURMODE EQU 23761 ; K,
+                00087 
+                00088 *MOD
+                00089 getlin
+                00090                 ;clear buffer
+6209  CD5F62    00091                 call clrbuf
+                00092                 
+                00093                 ;output the prompt
+620C  21BF65    00094                 ld hl,curstr
+620F  CD3664    00095                 call zx_printstr
+                00096                 ;ld a,PROMPT
+                00097                 ;rst 16
+                00098                 
+                00099                 ;loop until enter key is pressed
+6212  CD8663    00100 $lp2A   call readkb
+                00101                 
+                00102                 ;convert to ASCII
+6215  CD7262    00103                 call zx_to_ascii
+                00104                 
+6218  FE0C      00105                 cp 0Ch ; delete?
+621A  C22362    00106                 jp nz,$sA
+621D  CD6665    00107                 call back_up
+6220  C31262    00108                 jp $lp2A
+                00109                 
+6223  FE0D      00110 $sA             cp 13   ; newline 
+6225  CA4462    00111                 jp z,$outA
+                00112 
+                00113                 ;echo the char
+                00114         
+6228  F5        00115                 push af
+6229  CDF363    00116                 call print1_zx
+622C  F1        00117                 pop af
+                00118                 
+                00119  
+                00120                 ;store the char in the input buffer
+622D  F5        00121                 push af
+622E  218662    00122                 ld hl,INBUF  ;add buffIx to start of buffer
+6231  1600      00123                 ld d,0
+6233  3A8562    00124                 ld a,(bufIx)
+6236  5F        00125                 ld e,a
+6237  19        00126                 add hl,de
+6238  F1        00127                 pop af
+                00128                 
+6239  77        00129                 ld (hl),a ; now store the char
+                00130                 
+                00131                 ;increment the buffer index
+623A  3A8562    00132                 ld a,(bufIx) 
+623D  3C        00133                 inc a
+623E  328562    00134                 ld (bufIx),a
+                00135                                 
+6241  C31262    00136                 jp $lp2A
+                00137                 
+                00138 $outA   ;ld a,13 ; echo a newline
+                00139                 ;rst 16
+6244  CD7164    00140                 call zx_newline
+6247  C9        00141 $xA             ret
+                00142 
+                00143 
+                00144 ;prints the string in (hl) followed
+                00145 ;by a newline           
+                00146 *MOD
+                00147 OUTLINCR
+6248  F5        00148                 push af
+6249  C5        00149                 push bc
+624A  D5        00150                 push de
+624B  E5        00151                 push hl
+624C  DDE5      00152                 push ix
+624E  FDE5      00153                 push iy
+6250  CD9563    00154                 call OUTLIN ; print (hl)
+6253  CD7164    00155                 call zx_newline  ; move cursor
+                00156                 ;ld     a,13  ; new line char
+                00157                 ;ei
+                00158                 ;rst 16  ; print char
+                00159                 ;di
+                00160                 ;call newline
+6256  FDE1      00161                 pop iy
+6258  DDE1      00162                 pop ix
+625A  E1        00163                 pop hl
+625B  D1        00164                 pop de
+625C  C1        00165                 pop bc
+625D  F1        00166                 pop af
+625E  C9        00167                 ret
+                00168 
+                00169                 
+                00170                 
+                00171 *MOD
+                00172 clrbuf
+                00173 
+                00174                 
+                00175                 ;set index to 0
+625F  3E00      00176                 ld a,0
+6261  328562    00177                 ld (bufIx),a
+                00178                 
+                00179                 ;clear buffer
+                00180  
+6264  0600      00181                 ld b,0
+6266  218662    00182                 ld hl,INBUF
+                00183                 
+6269  70        00184 $lpC    ld (hl),b
+626A  23        00185                 inc hl
+626B  3D        00186                 dec a
+626C  FE00      00187                 cp 0
+626E  C26962    00188                 jp nz,$lpC
+                00189                         
+6271  C9        00190                 ret
+                00191 
+                00192                 
+                00193 ;converts the character in 'a' to 
+                00194 ;an uppercase ascii char.               
+                00195 *MOD
+                00196 zx_to_ascii
+6272  FE61      00197                 cp 97  ; bail if < lowercase a
+6274  DA8362    00198                 jp c,$xD        
+6277  FE7A      00199                 cp 122 ; if greater than lowercase z, detokenize?
+6279  D28162    00200                 jp nc,$scD
+627C  D620      00201                 sub 32          ;make it uppercase      
+627E  C38362    00202                 jp $xD
+                00203 
+                00204 $scD            
+6281  D6A5      00205                 sub 165 ; convert to ascii
+                00206 $xD             
+6283  C9        00207                 ret
+                00208 
+                00209 
+6284  00        00210           DB 0  ; padding - do not remove
+6285  00        00211 bufIx DB 0
+6286            00212 INBUF DS 256            
+                00213 ;INBUF DB 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+                00214 
+                00215         
+                00216 *INCLUDE input.asm
+                00217 ;input routines for ZX Spectrum
+                00218 ;(c) Evan Wright, 2017
+                00219 
+                00220 ;reads a single char and stores it in the
+                00221 ;keyboard input buffer
+                00222 readkb
+6386  21085C    00223        ld hl,23560         ; LAST K system variable.
+6389  3600      00224        ld (hl),0           ; put null value there.
+638B  7E        00225 loop   ld a,(hl)           ; new value of LAST K.          
+638C  FE00      00226        cp 0                ; is it still zero
+638E  28FB      00227        jr z,loop           ; yes, so no key pressed.
+6390  C9        00228            ret
+                00229                 
+                00230                 
+                00231 *INCLUDE printing.asm
+                00232 ;printing.asm
+                00233 ;print routines for ZX spectrum
+                00234 ;(c) Evan Wright, 2017
+                00235 
+    = 4000      00236 SCREEN equ 16384 ; 4000 hex
+    = 02BE      00237 SCRSIZE equ 702 ; 32*22 line
+    = 5C8D      00238 SCRCOLOR equ 23693
+                00239 
+                00240 ;output a char
+                00241 CRTBYTE
+6391  CDF363    00242                 call print1_zx
+6394  C9        00243                 ret
+                00244  
+                00245 *MOD 
+                00246 ;prints string in HL 
+                00247 OUTLIN
+6395  F5        00248                 push af
+6396  CD3664    00249                 call zx_printstr
+6399  F1        00250                 pop af
+639A  C9        00251                 ret
+                00252 
+                00253 
+                00254 *MOD
+                00255 CLS
+639B  CDAF0D    00256                 call 3503
+                00257                 
+                00258                 ;move cursor to top
+639E  3E00      00259 $xF             ld a,0
+63A0  32AA63    00260                 ld      (xcoord),a
+63A3  32AB63    00261                 ld  (ycoord),a
+63A6  C9        00262                 ret
+                00263  
+                00264 ;moves every line up, but leaves the top
+                00265 ;line (with the room name), intact
+                00266 *MOD
+                00267 scroll
+                00268         
+63A7  C9        00269                 ret
+                00270          
+63A8  0040      00271 cursorPos DW SCREEN             
+63AA  00        00272 xcoord defb 0
+63AB  0F        00273 ycoord defb 15
+                00274  
+                00275 *INCLUDE parser.asm
+main.asm(85): unable to include file
+                00276 *INCLUDE look.asm
+main.asm(86): unable to include file
+                00277 *INCLUDE tables.asm
+main.asm(87): unable to include file
+                00278 *INCLUDE strings.asm
+main.asm(88): unable to include file
+                00279 *INCLUDE checksZ80.asm
+main.asm(89): unable to include file
+                00280 *INCLUDE sentencesZ80.asm
+main.asm(90): unable to include file
+                00281 *INCLUDE movementZ80.asm
+main.asm(91): unable to include file
+                00282 *INCLUDE containersZ80.asm
+main.asm(92): unable to include file
+                00283 *INCLUDE routinesZ80.asm
+main.asm(93): unable to include file
+                00284 *INCLUDE inventoryZ80.asm
+main.asm(94): unable to include file
+                00285 *INCLUDE open_close.asm
+main.asm(95): unable to include file
+                00286 *INCLUDE put.asm
+main.asm(96): unable to include file
+                00287 *INCLUDE miscZ80.asm
+main.asm(97): unable to include file
+                00288 *INCLUDE print_rets.asm
+main.asm(98): unable to include file
+                00289 *INCLUDE EventsZ80.asm
+main.asm(99): unable to include file
+                00290 *INCLUDE articlesZ80.asm
+main.asm(100): unable to include file
+                00291 *INCLUDE PrepTableZ80.asm
+main.asm(101): unable to include file
+                00292 *INCLUDE StringTableZ80.asm
+main.asm(102): unable to include file
+                00293 *INCLUDE DictionaryZ80.asm
+main.asm(103): unable to include file
+                00294 *INCLUDE VerbTableZ80.asm
+main.asm(104): unable to include file
+                00295 *INCLUDE ObjectTableZ80.asm
+main.asm(105): unable to include file
+                00296 *INCLUDE ObjectWordTableZ80.asm
+main.asm(106): unable to include file
+                00297 *INCLUDE NogoTableZ80.asm
+main.asm(107): unable to include file
+                00298 *INCLUDE BackDropTableZ80.asm
+main.asm(108): unable to include file
+                00299 *INCLUDE before_table_Z80.asm
+main.asm(109): unable to include file
+                00300 *INCLUDE instead_table_Z80.asm
+main.asm(110): unable to include file
+                00301 *INCLUDE after_table_Z80.asm
+main.asm(111): unable to include file
+                00302 *INCLUDE CheckRulesZ80.asm
+main.asm(112): unable to include file
+                00303 *INCLUDE sentence_tableZ80.asm
+main.asm(113): unable to include file
+                00304 *INCLUDE WelcomeZ80.asm
+main.asm(114): unable to include file
+                00305 *INCLUDE sinclair.asm
+                00306 ;sinclair
+                00307 
+                00308 ;BASE equ  3C00H ; address of charset
+    = 5800      00309 ATTRS equ 22528  ; address of attr
+    = 4000      00310 REGION1 equ 16384
+    = 4800      00311 REGION2 equ 18432
+    = 5000      00312 REGION3 equ 20480
+                00313 
+    = 3C00      00314 ROMCHARS equ 3C00H
+    = 5C88      00315 S_POS equ 23688
+                00316 
+                00317 ;ENTRY :        B=LINE,C=COLUMN 
+                00318 ;PRESERVED : BC,DE 
+                00319 ;EXIT: HL=ADDRESS IN DISPLAY FILE, A=L 
+                00320 
+63AC  78        00321 df_loc  ld      a,b 
+63AD  E6F8      00322                 and     0f8h 
+63AF  C640      00323                 add     a,40h 
+63B1  67        00324                 ld      h,a 
+63B2  78        00325                 ld      a,b 
+63B3  E607      00326                 and     7 
+63B5  0F        00327                 rrca 
+63B6  0F        00328                 rrca 
+63B7  0F        00329                 rrca 
+63B8  81        00330                 add a,c
+63B9  6F        00331                 ld l,a
+63BA  C9        00332                 ret
+                00333                 
+                00334 ;FINDS ATTR FOR A BYTE IN THE DISP FILE
+                00335 ;ENTRY: HL=D.F. ADDRESS 
+                00336 ;PRESERVED: HL,BC 
+                00337 ;EXIT: DE =ATTR. ADDRESS, A=D 
+                00338 df_att 
+63BB  7C        00339                 ld      a,h     
+63BC  0F        00340                 rrca
+63BD  0F        00341                 rrca
+63BE  0F        00342                 rrca
+63BF  E603      00343                 and 3
+63C1  F658      00344                 or 58h
+63C3  57        00345                 ld      d,a 
+63C4  5D        00346                 ld      e,l
+63C5  C9        00347                 ret                     
+                00348                 
+                00349 ;ENTRY: B=LINE, C=COLUMN 
+                00350 ;PRESERVED: BC 
+                00351 ;EXIT: HL=D.F. ADDRESS
+                00352 ; DE=ATTR. ADDRESS
+                00353 ; A=ATTR(B,C) 
+                00354 ;DFCC IS ALTERED stores address to print at in d_file
+                00355 locate
+63C6  78        00356                 ld a,b
+63C7  E618      00357                 and 18h
+63C9  67        00358                 ld h,a
+63CA  CBF4      00359                 set 6,h
+63CC  0F        00360                 rrca
+63CD  0F        00361                 rrca
+63CE  0F        00362                 rrca
+63CF  F658      00363                 or 58h
+63D1  57        00364                 ld d,a
+63D2  78        00365                 ld a,b
+63D3  E607      00366                 and 7
+63D5  0F        00367                 rrca
+63D6  0F        00368                 rrca
+63D7  0F        00369                 rrca
+63D8  81        00370                 add a,c
+63D9  6F        00371                 ld l,a
+63DA  5F        00372                 ld e,a
+63DB  1A        00373                 ld a,(de)
+63DC  22B665    00374                 ld (DFCC),hl
+63DF  C9        00375                 ret
+                00376                 
+                00377 ;clears screen and attrs
+                00378 ;PRESERVED: A ;EXIT: BC-0, DE =5B0H, HL=5AFFH
+                00379 cls1 
+63E0  210040    00380                 ld hl,4000h
+63E3  010018    00381                 ld bc,1800h
+63E6  75        00382                 ld (hl),l
+63E7  54        00383                 ld d,h
+63E8  1E01      00384                 ld e,1
+63EA  EDB0      00385                 ldir 
+63EC  77        00386                 ld (hl),a
+63ED  01FF02    00387                 ld bc,02ffh
+63F0  EDB0      00388                 ldir 
+63F2  C9        00389                 ret             
+                00390 
+                00391 ;A - CHAR               
+                00392 ;prints char in 'a' to          
+                00393 *MOD
+                00394 print1_zx
+63F3  F5        00395                         push af
+63F4  C5        00396                         push bc
+63F5  D5        00397                         push de
+63F6  E5        00398                         push hl
+                00399         
+63F7  F5        00400                         push af
+63F8  CD0F65    00401                         call upd_crs
+63FB  F1        00402                         pop af
+                00403                         
+63FC  6F        00404                         ld l,a
+63FD  2600      00405                         ld h,0
+63FF  29        00406                         add hl,hl
+6400  29        00407                         add hl,hl
+6401  29        00408                         add hl,hl
+6402  ED5BB865  00409                         ld de,(BASE)
+6406  19        00410                         add hl,de
+                00411                         
+                00412                         ;take D_FILE address
+6407  ED5BB665  00413                         ld de,(DFCC)
+640B  0608      00414                         ld b,8
+                00415                         
+                00416                         ;print char row by row
+640D  7E        00417 $nxtRowH        ld a,(hl)
+640E  12        00418                         ld (de),a
+640F  23        00419                         inc hl
+6410  14        00420                         inc d
+6411  10FA      00421                         djnz $nxtRowH
+                00422 
+                00423                         ;construct attr address
+6413  7A        00424                         ld a,d
+6414  0F        00425                         rrca
+6415  0F        00426                         rrca
+6416  0F        00427                         rrca
+6417  3D        00428                         dec a
+6418  E603      00429                         and 3
+641A  F658      00430                         or 58h
+641C  57        00431                         ld d,a
+641D  2AB465    00432                         ld hl,(ATT)
+                00433                         ;take old attr
+6420  1A        00434                         ld a,(de)
+                00435                         
+                00436                         ;construct new one
+6421  AD        00437                         xor l
+6422  A4        00438                         and h
+6423  AD        00439                         xor l
+                00440                         
+                00441                         ;replace attr
+6424  12        00442                         ld (de),a
+                00443                         
+                00444                         ;finally set DFCC to next print pos
+6425  21B665    00445                         ld hl,DFCC
+6428  34        00446                         inc (hl)
+6429  C23164    00447                         jp nz,$xH
+642C  23        00448                         inc hl
+642D  7E        00449                         ld a,(hl)
+642E  C608      00450                         add a,8
+6430  77        00451                         ld (hl),a
+                00452                         
+                00453                         ;update the cursor pos
+                00454 $xH             ;       call upd_crs
+6431  E1        00455                         pop hl
+6432  D1        00456                         pop de
+6433  C1        00457                         pop bc
+6434  F1        00458                         pop af
+6435  C9        00459                         ret
+                00460 
+                00461 ;prints str in HL                       
+                00462 ;calls print1
+                00463 *MOD
+                00464 zx_printstr
+6436  F5        00465                 push af
+6437  C5        00466                 push bc
+6438  D5        00467                 push de
+6439  E5        00468                 push hl
+                00469 
+                00470                 ;set the print location based
+                00471                 ;on cursor position
+643A  CD2765    00472                 call repos_cursor
+                00473 
+                00474                 ;set src for char data
+643D  21003C    00475                 ld hl,3C00h
+6440  22B865    00476                 ld (BASE),hl
+                00477                 
+6443  E1        00478                 pop hl
+                00479 
+                00480                 
+6444  7E        00481 $lpI    ld a,(hl)
+6445  FE00      00482                 cp 0
+6447  CA6D64    00483                 jp z,$xI
+                00484                 
+                00485                 ;will the word fit on the line?
+644A  FE20      00486                 cp 32 ; space?
+644C  C26464    00487                 jp nz, $goI
+                00488                 
+644F  CD9C65    00489                 call word_len ; word_len -> b
+6452  3ABB65    00490                 ld a,(CRSRX)
+6455  80        00491                 add a,b
+6456  FE1F      00492                 cp 31
+6458  FA6264    00493                 jp m,$spI
+                00494                 
+                00495                 ;replace the space with a newline
+645B  CD7164    00496                 call zx_newline
+645E  23        00497                 inc hl  ; skip space
+645F  C34464    00498                 jp $lpI
+                00499                 
+                00500                 
+6462  3E20      00501 $spI    ld a,32 ; reload space
+                00502 
+6464  E5        00503 $goI    push hl
+6465  CDF363    00504                 call print1_zx ; 
+6468  E1        00505                 pop hl
+6469  23        00506                 inc hl
+646A  C34464    00507                 jp $lpI
+                00508                 
+                00509 $xI              
+646D  D1        00510                 pop de
+646E  C1        00511                 pop bc
+646F  F1        00512                 pop af
+6470  C9        00513                 ret
+                00514 
+                00515 
+                00516 *MOD
+                00517 zx_newline
+6471  E5        00518                 push hl
+6472  3E00      00519                 ld a,0                  ;back to left
+6474  32BB65    00520                 ld (CRSRX),a
+6477  3ABA65    00521                 ld a,(CRSRY)    ;down (if room)
+647A  FE17      00522                 cp 23
+647C  CA8664    00523                 jp z,$sclJ
+647F  3C        00524                 inc a
+6480  32BA65    00525                 ld (CRSRY),a                            
+6483  C38964    00526                 jp $xJ
+6486  CD8E64    00527 $sclJ   call zx_scroll
+6489  CD2765    00528 $xJ     call repos_cursor
+648C  E1        00529                 pop hl
+648D  C9        00530                 ret
+                00531 
+                00532 ;scrolls lines up, but leaves the top line
+                00533 ;with the room and the score intact
+                00534 ;notes, screen is in three chunks
+                00535 ;
+                00536 *MOD
+                00537 zx_scroll
+                00538                 
+648E  110040    00539                 ld de,REGION1
+6491  CDAF64    00540                 call scroll_rgn
+                00541 
+6494  110048    00542                 ld de,REGION2
+6497  CDAF64    00543                 call scroll_rgn
+                00544                 
+649A  110050    00545                 ld de,REGION3
+649D  CDAF64    00546                 call scroll_rgn
+                00547  
+64A0  01C002    00548                 ld bc,704 ; scroll attrs
+64A3  214058    00549                 ld hl,ATTRS+64
+64A6  112058    00550                 ld de,ATTRS+32
+64A9  EDB0      00551                 ldir ; hl->de repeating         
+                00552                 
+64AB  CD3265    00553                 call clr_btm_line
+                00554 
+64AE  C9        00555                 ret 
+                00556 
+                00557 *MOD
+                00558 ;de =start addr of bank
+                00559 ;scrolls a region of the screen, up one 
+                00560 ;line of chars
+                00561 scroll_rgn
+                00562 
+64AF  ED53BC65  00563                 ld (SCROLLTEMP),de
+                00564                                 
+64B3  3ABC65    00565                 ld a,(SCROLLTEMP) ;don't copy 1st 
+64B6  FE40      00566                 cp 40h                    ;bank down - 1st
+64B8  CAE164    00567                 jp z,$cpyL      ;starts at 4000h
+                00568                   
+                00569                 ;copy eight lines (for 1st row) into
+                00570                 ;the last lines in the previous bank
+                00571                 ;the byte difference will be
+                00572                 ; 2k -(7x32) = 1824 bytes
+                00573 
+64BB  2ABC65    00574                 ld hl,(SCROLLTEMP)
+64BE  3E08      00575                 ld a,8 ; rows to copy
+                00576                 
+64C0  112007    00577                 ld de,1824
+64C3  A7        00578                 and a ; clr carry
+64C4  ED52      00579                 sbc hl,de
+64C6  E5        00580                 push hl ; hl->de
+64C7  D1        00581                 pop de 
+                00582                 
+64C8  2ABC65    00583                 ld hl,(SCROLLTEMP) ; src
+64CB  012000    00584 $lpL    ld bc,32 ; bytes per row
+64CE  EDB0      00585                 ldir ; hl->de
+                00586                 
+                00587                 ;add 224 to de and hl
+                00588                 ;to get to the next line 
+                00589                 ;of pixels to copy
+64D0  E5        00590                 push hl  ; save hl
+                00591                 
+64D1  01E000    00592                 ld bc,224
+64D4  D5        00593                 push de ; de->hl
+64D5  E1        00594                 pop hl
+64D6  09        00595                 add hl,bc       
+64D7  E5        00596                 push hl ; hl->de
+64D8  D1        00597                 pop de
+                00598                 
+64D9  E1        00599                 pop hl ; restore hl
+                00600                 
+64DA  09        00601                 add hl,bc
+                00602                 
+                00603                 ;loop
+64DB  3D        00604                 dec a
+64DC  FE00      00605                 cp 0
+64DE  C2CB64    00606                 jp nz,$lpL
+                00607                                 
+                00608                 ;copy 7 rows of 32 chars
+64E1  3E07      00609 $cpyL   ld a,7
+                00610 $lp2L   
+64E3  2ABC65    00611                 ld hl,(SCROLLTEMP)
+64E6  ED5BBC65  00612                 ld de,(SCROLLTEMP)
+64EA  012000    00613                 ld bc,32
+64ED  09        00614             add hl,bc ; copy from 3rd row
+                00615                 
+64EE  E5        00616                 push hl ; hl is set up, save it
+                00617                 
+64EF  2ABC65    00618                 ld hl,(SCROLLTEMP)
+64F2  010000    00619                 ld bc,0
+64F5  09        00620                 add hl,bc ; ...to 2nd row
+                00621                 
+64F6  E5        00622                 push hl ; hl->de
+64F7  D1        00623                 pop de
+                00624                 
+64F8  E1        00625                 pop hl ; restore hl
+                00626                 
+64F9  01E000    00627                 ld bc,224 ; times to loop
+64FC  EDB0      00628                 ldir ; hl->de
+                00629                 
+                00630                 ;advance scroll temp to next 
+                00631                 ;block of bytes
+64FE  2ABC65    00632                 ld hl,(SCROLLTEMP)
+6501  010001    00633                 ld bc,256
+6504  09        00634                 add hl,bc
+6505  22BC65    00635                 ld (SCROLLTEMP),hl
+                00636                 
+                00637                 ;loop
+6508  3D        00638                 dec a
+6509  FE00      00639                 cp 0
+650B  C2E364    00640                 jp nz,$lp2L
+                00641                 
+650E  C9        00642                 ret
+                00643                 
+                00644 ;moves the cursor position       
+                00645 ;this should be called by print1
+                00646 
+                00647 *MOD
+                00648 upd_crs
+650F  3ABB65    00649         ld a,(CRSRX)
+6512  3C        00650         inc a
+6513  32BB65    00651         ld (CRSRX),a
+6516  FE20      00652         cp 32d
+6518  C22665    00653         jp nz,$xM
+                00654         
+651B  3ABE65    00655         ld a,(NOSCROLL)
+651E  FE01      00656         cp 1
+6520  CA2665    00657         jp z,$xM
+6523  CD7164    00658         call zx_newline
+                00659          
+6526  C9        00660 $xM ret         
+                00661                         
+                00662 
+                00663 ;reset the 'print at' position          
+                00664 repos_cursor
+6527  ED4BBA65  00665         ld bc,(CRSRY) ; grabs x,y
+652B  78        00666         ld a,b
+652C  41        00667         ld b,c
+652D  4F        00668         ld c,a
+652E  CDC663    00669         call locate             
+6531  C9        00670         ret
+                00671 
+                00672 *MOD    
+                00673 clr_btm_line
+                00674 
+6532  3E01      00675                 ld a,1
+6534  32BE65    00676                 ld (NOSCROLL),a
+                00677                 
+6537  3E00      00678                 ld a,0
+6539  32BB65    00679                 ld (CRSRX),a
+653C  3E17      00680                 ld a,23
+653E  32BA65    00681                 ld (CRSRY),a
+6541  CD2765    00682                 call repos_cursor
+                00683                 
+6544  3E20      00684                 ld a,32  ; 32 spaces
+                00685                 
+6546  F5        00686 $lpN    push af
+6547  3E20      00687                 ld a,32  ; ascii space
+6549  CDF363    00688                 call print1_zx
+654C  F1        00689                 pop af
+654D  3D        00690                 dec a
+654E  FE00      00691                 cp 0
+6550  C24665    00692                 jp nz,$lpN
+                00693                 
+6553  3E00      00694                 ld a,0
+6555  32BB65    00695                 ld (CRSRX),a
+6558  3E17      00696                 ld a,23
+655A  32BA65    00697                 ld (CRSRY),a
+655D  CD2765    00698                 call repos_cursor
+                00699 
+6560  3E00      00700                 ld a,0
+6562  32BE65    00701                 ld (NOSCROLL),a
+                00702                 
+6565  C9        00703                 ret
+                00704 
+                00705 ;This is the 'delete' key function
+                00706 *MOD            
+                00707 back_up
+                00708         ;are we all the way left?
+6566  3ABB65    00709         ld a,(CRSRX)
+6569  FE01      00710         cp 1
+656B  CA9B65    00711         jp z,$xO
+                00712         
+                00713         ;back up
+656E  3ABB65    00714         ld a,(CRSRX)
+6571  3D        00715         dec a
+6572  32BB65    00716         ld (CRSRX),a
+6575  CD2765    00717         call repos_cursor
+                00718 
+                00719         ;back up buffer index
+6578  3A8562    00720         ld a,(BUFIX)
+657B  3D        00721         dec a
+657C  328562    00722         ld (BUFIX),a
+                00723         
+                00724         ;overwrite character
+657F  1600      00725         ld d,0
+6581  3A8562    00726         ld a,(BufIx)
+6584  5F        00727         ld e,a
+6585  218662    00728         ld hl,InBuf
+6588  19        00729         add hl,de
+6589  3E00      00730         ld a,0
+658B  77        00731         ld (hl),a
+                00732         
+                00733         
+                00734                 
+                00735         ;print a space
+658C  3E20      00736         ld a,32 
+658E  CDF363    00737         call print1_zx
+                00738         
+                00739         ;back up again
+6591  3ABB65    00740         ld a,(CRSRX)
+6594  3D        00741         dec a
+6595  32BB65    00742         ld (CRSRX),a
+6598  CD2765    00743         call repos_cursor
+                00744         
+659B  C9        00745 $xO     ret
+                00746 
+                00747 *MOD
+                00748 ;returns the length of the word indexed 
+                00749 ;by hl in register b
+                00750 ;other registers are preserved.
+                00751 ;assumes (hl) points to a space
+                00752 *MOD
+                00753 word_len
+659C  F5        00754         push af
+659D  E5        00755         push hl
+                00756         
+659E  23        00757         inc hl  
+659F  0601      00758         ld b,1
+                00759 $lpQ
+65A1  7E        00760         ld a,(hl)
+                00761         
+65A2  FE00      00762     cp 0  ; null
+65A4  CAB165    00763         jp z,$xQ
+                00764 
+65A7  FE20      00765     cp 32  ; space
+65A9  CAB165    00766         jp z,$xQ         
+                00767 
+65AC  04        00768         inc b
+65AD  23        00769         inc hl
+65AE  C3A165    00770         jp $lpQ
+                00771 
+65B1  E1        00772 $xQ     pop hl
+65B2  F1        00773         pop af
+65B3  C9        00774         ret
+                00775 
+                00776                 
+65B4  38        00777 ATT DB 38h ; 
+65B5  00        00778 MASK DB 0 ; Attribute mask for printing 
+65B6  A00F      00779 DFCC DW 4000 ; DF Address of cell x,y (set by locate sub)
+65B8  003C      00780 BASE DW 3C00h
+65BA  00        00781 CRSRY DB 0
+65BB  00        00782 CRSRX DB 0
+65BC  0000      00783 SCROLLTEMP DW 0
+65BE  00        00784 NOSCROLL DB 0
+65BF  3E        00785 curstr DB ">"
+65C0  00        00786         DB 0
+                00787 
+                00788 *INCLUDE UserVarsZ80.asm
+main.asm(116): unable to include file
+                00789 
+65C1  00        00790 score DB 0
+65C2  00        00791 gameOver DB 0
+65C3  00        00792 moves DB 0
+65C4  00        00793 turns_without_light DB 0
+65C5  64        00794 health DB 100
+                00795 
+65C6  54484953  00796 msg db "THIS IS A MESSAGE",0h           
+      20 49 53 20 41 20 4D 45
+      53 53 41 47 45 00      
+                00797         
+                00798         end start
+
+
+$CPYL           64E1  $GO?            61E1  $GOI            6464  
+$INP?           61C9  $LP2A           6212  $LP2L           64E3  
+$LPC            6269  $LPI            6444  $LPL            64CB  
+$LPN            6546  $LPQ            65A1  $NXTROWH        640D  
+$OUTA           6244  $SA             6223  $SCD            6281  
+$SCLJ           6486  $SPI            6462  $X?             6208  
+$XA             6247  $XD             6283  $XF             639E  
+$XH             6431  $XI             646D  $XJ             6489  
+$XM             6526  $XO             659B  $XQ             65B1  
+$Y?             6203  ATT             65B4  ATTRS           5800  
+AUTHOR          0000  BACK_UP         6566  BASE            65B8  
+BUFIX           6285  BUFSIZE         0030  CLRBUF          625F  
+CLR_BTM_LINE    6532  CLS             639B  CLS1            63E0  
+CRSRX           65BB  CRSRY           65BA  CRTBYTE         6391  
+CURMODE         5CD1  CURSORPOS       63A8  CURSTR          65BF  
+DELETE          000C  DFCC            65B6  DF_ATT          63BB  
+DF_LOC          63AC  DO_EVENTS       61F1  ENCODE          0000  
+GAMEOVER        65C2  GETCOMMAND      61D9  GETLIN          6209  
+HEALTH          65C5  INBUF           6286  LOCATE          63C6  
+LOOK_SUB        0000  LOOP            638B  MAIN            61A8  
+MASK            65B5  MOVES           65C3  MSG             65C6  
+NOSCROLL        65BE  OUTLIN          6395  OUTLINCR        6248  
+PARSE           0000  PLAYER_HAS_LIGH 0000  PRINT1_ZX       63F3  
+PRINTCR         0000  PROMPT          003E  READKB          6386  
+REGION1         4000  REGION2         4800  REGION3         5000  
+REPOS_CURSOR    6527  ROMCHARS        3C00  RUN_SENTENCE    0000  
+SCORE           65C1  SCRCOLOR        5C8D  SCREEN          4000  
+SCROLL          63A7  SCROLLTEMP      65BC  SCROLL_RGN      64AF  
+SCRSIZE         02BE  START           61A8  S_POS           5C88  
+TURNS_WITHOUT_L 65C4  UPD_CRS         650F  VALIDATE_ENCODE 0000  
+VALIDATE_WORDS  0000  VERSION         0000  WELCOME         0000  
+WORD_LEN        659C  XCOORD          63AA  YCOORD          63AB  
+ZX_NEWLINE      6471  ZX_PRINTSTR     6436  ZX_SCROLL       648E  
+ZX_TO_ASCII     6272  

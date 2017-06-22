@@ -22,7 +22,8 @@ namespace XMLtoAdv
         protected List<String> routineNames = new List<String>();
         protected Dictionary<string, string> varTable = new Dictionary<string, string>(); //variables
         protected List<UserVar> userVars = new List<UserVar>();
-        static protected Dictionary<string,string> skelDirs = new Dictionary<string,string>();
+        static protected Dictionary<string,string> skelDirs = new Dictionary<string,string>(); //generic files (i.e. 6502)
+        static protected Dictionary<string, string> pltfDirs = new Dictionary<string, string>(); //platform specific files (ie. Apple2)
 
         const string Trs80SkelDir = "trs80Skel";
         public string buildDir;
@@ -73,6 +74,10 @@ namespace XMLtoAdv
             skelDirs["_6809"] = "6809Skel";
             skelDirs["_6502"] = "6502Skel";
             skelDirs["_Apple2"] = "6502Skel";
+            skelDirs["_Spectrum"] = "z80Skel";
+
+            pltfDirs["_Spectrum"] = "spectrum";
+            pltfDirs["_TRS80"] = "trs80";
         }
 
 
@@ -349,6 +354,27 @@ namespace XMLtoAdv
             //get the file path 
             CreateTables(fileName, "_TRS80");
 
+            WriteZ80Common();
+
+            Environment.CurrentDirectory = oldDir;
+        }
+
+
+
+        public void ConvertSpectrum(string fileName)
+        {
+            string oldDir = Environment.CurrentDirectory;
+
+            //get the file path 
+            CreateTables(fileName, "_Spectrum");
+
+            WriteZ80Common();
+
+            Environment.CurrentDirectory = oldDir;
+        }
+      
+        void WriteZ80Common()
+        {
             WriteWelcomeMessage("WelcomeZ80.asm", "DB", ",0h");
             WriteStringTableZ80("StringTableZ80.asm", "string_table", descriptionTable);
             WriteStringTableZ80("DictionaryZ80.asm", "dictionary", dict);
@@ -365,11 +391,7 @@ namespace XMLtoAdv
             WriteUserVarTable(doc, "Z80");
             WriteBackdropTable(doc, "BackDropTableZ80.asm", "DB");
 
-            Environment.CurrentDirectory = oldDir;
         }
-
-      
-        
 
         private void WriteStringTable6809(string fileName, string header, Table t)
         {
@@ -914,31 +936,6 @@ namespace XMLtoAdv
             return -1;               
         }
 
-        /*
-        private void WriteNogoTable(string fileName)
-        {
-            using (StreamWriter sw = File.CreateText(fileName))
-            {
-                sw.WriteLine(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-                sw.WriteLine("; NO GO TABLE");
-                sw.WriteLine(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-                sw.WriteLine("");
-                sw.WriteLine("nogo_table");
-
-                for (int i=0; i < nogoTable.GetNumEntries(); i++)
-                {
-                    sw.WriteLine("\t.db " + nogoTable.GetEntry(i).Length);
-                    sw.WriteLine("\t.strz \"" + nogoTable.GetEntry(i) + "\"");
-                }
-                sw.WriteLine("\t.db 255");
-            }
-        }
-        */
-        /*
-        private void GameObjectTo6809(GameObject gobj, StreamWriter sw)
-        {
-
-        }*/
 
         /*type should be "before" "instead" or "after"
          */
@@ -1205,6 +1202,14 @@ namespace XMLtoAdv
             //MessageBox.Show(output);
 
             p.WaitForExit();
+
+            if (tgtPlatform.Equals("_Spectrum") || tgtPlatform.Equals("_TRS80"))
+            {
+                //copy platform specific files into working dir
+                string pltfDir = pltfDirs[tgtPlatform];
+                cmd = "COPY /Y ..\\" + pltfDir + "\\*.*  .";
+                p = Process.Start("cmd", "/c " + cmd);
+            }
 
             //run the build
         }

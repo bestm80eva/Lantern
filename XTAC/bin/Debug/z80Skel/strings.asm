@@ -69,6 +69,8 @@ $x?	pop iy
 	pop bc
 	ret 
 
+	
+	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Converts a to upper case
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -80,3 +82,5 @@ atoupper
 	jp p,$x?
 	sub 32
 $x?	ret
+
+

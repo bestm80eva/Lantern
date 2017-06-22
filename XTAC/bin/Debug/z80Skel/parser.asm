@@ -219,6 +219,7 @@ $x?		push ix	;copy ix to iy
 ;start of the word
 ;uses iy
 ;if null is hit, hit_end is set to 1
+*MOD
 move_to_end
 			push af
 $_lp?		ld a,(iy)	; get char

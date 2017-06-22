@@ -4,54 +4,55 @@
 
 SCREEN equ 16384 ; 4000 hex
 SCRSIZE equ 702 ; 32*22 line
+SCRCOLOR equ 23693
+
 ;output a char
 CRTBYTE
-		rst 16	
+		call print1_zx
 		ret
  
+*MOD 
 ;prints string in HL 
-*MOD
 OUTLIN
-$lp?
-		ld a,(hl)
-		cp 0
-		jp z,$x?
-		rst 16 ; output it
-		inc hl
-		jp $lp?
-$x?		ret
+		push af
+		call zx_printstr
+		pop af
+		ret
 
-
-
-setxy  ld a,22         ; ASCII control code for AT.
-       rst 16          ; print it.
-       ld a,(xcoord)   ; vertical position.
-       rst 16          ; print it.
-       ld a,(ycoord)   ; y coordinate.
-       rst 16          ; print it.
-       ret
+;prints a space (registers are preserved)
+printcr
+	push af
+	push bc
+	push de
+	push iy
+	;ld a,0dh ; carriage return
+	;call CRTBYTE
+	call zx_newline
+	call repos_cursor
+	pop iy
+	pop de
+	pop bc
+	pop af
+	ret	
 
 *MOD
 CLS
-		;ld hl,17052; SCREEN+32*22
-		;push hl
-		;pop bc
-		ld bc,SCRSIZE
-		ld hl,SCREEN
+		call 3503
 		
-$lp?	ld (hl),a
-		inc hl
-		dec bc
-		ld a,b
-	    jp nz,$lp?
-		ld a,c
-	    jp nz,$lp?		
-		 
 		;move cursor to top
 $x?		ld a,0
 		ld	(xcoord),a
 		ld  (ycoord),a
 		ret
-	   
+ 
+;moves every line up, but leaves the top
+;line (with the room name), intact
+*MOD
+scroll
+	
+		ret
+	 
+cursorPos DW SCREEN		
 xcoord defb 0
 ycoord defb 15
+ 

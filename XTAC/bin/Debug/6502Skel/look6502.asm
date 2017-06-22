@@ -74,6 +74,7 @@ _l		nop ; list contents
 		cmp #0
 		beq _c  ; no objects? continue
 		lda ($tableAddr),y ;reload id
+		
 		sta parentId
 		jsr print_list_header
 		inc indentLvl

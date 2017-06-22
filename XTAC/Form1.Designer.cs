@@ -178,6 +178,7 @@
             this.appleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coCoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tRS80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zXSpectrumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
@@ -1663,28 +1664,28 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveToolStripMenuItem.Text = "Save As...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1693,7 +1694,8 @@
             this.exportToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.appleToolStripMenuItem,
             this.coCoToolStripMenuItem,
-            this.tRS80ToolStripMenuItem});
+            this.tRS80ToolStripMenuItem,
+            this.zXSpectrumToolStripMenuItem});
             this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
             this.exportToolStripMenuItem1.Size = new System.Drawing.Size(52, 20);
             this.exportToolStripMenuItem1.Text = "Export";
@@ -1718,6 +1720,13 @@
             this.tRS80ToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.tRS80ToolStripMenuItem.Text = "TRS-80 Model I, III, IV";
             this.tRS80ToolStripMenuItem.Click += new System.EventHandler(this.tRS80ToolStripMenuItem_Click);
+            // 
+            // zXSpectrumToolStripMenuItem
+            // 
+            this.zXSpectrumToolStripMenuItem.Name = "zXSpectrumToolStripMenuItem";
+            this.zXSpectrumToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.zXSpectrumToolStripMenuItem.Text = "ZX Spectrum";
+            this.zXSpectrumToolStripMenuItem.Click += new System.EventHandler(this.zXSpectrumToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -1925,6 +1934,7 @@
         private System.Windows.Forms.TextBox massTextBox;
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.ToolStripMenuItem zXSpectrumToolStripMenuItem;
     }
 }
 
