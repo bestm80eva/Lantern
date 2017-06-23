@@ -63,7 +63,7 @@ $go?	call validate_words		; make sure verb,io,do are in tables
 		call validate_encode	; make sure it worked
 		call run_sentence
 		call do_events
-		 
+		call draw_top_bar
 		ret
 
 do_events
@@ -71,12 +71,12 @@ do_events
 	call player_has_light
 	cp 1
 	jp z,$y?
-	ld a,(turns_without_light)
+	ld a,(turnsWithoutLight)
 	inc a
-	ld (turns_without_light),a
+	ld (turnsWithoutLight),a
 	jp $x?
 $y?	ld a,0
-	ld (turns_without_light),a
+	ld (turnsWithoutLight),a
 $x?	ret
 		
 *INCLUDE io.asm	
@@ -113,12 +113,13 @@ $x?	ret
 *INCLUDE sentence_tableZ80.asm
 *INCLUDE WelcomeZ80.asm
 *INCLUDE sinclair.asm
+*INCLUDE math.asm
 *INCLUDE UserVarsZ80.asm
 
 score DB 0
 gameOver DB 0
 moves DB 0
-turns_without_light DB 0
+turnsWithoutLight DB 0
 health DB 100
 
 msg db "THIS IS A MESSAGE",0h		

@@ -35,24 +35,131 @@ printcr
 	pop af
 	ret	
 
+;*MOD
+;CLS
+;		call 3503
+;		
+;		;move cursor to top
+;$x?		ld a,0
+;		ld	(xcoord),a
+;		ld  (ycoord),a
+;		ret
+
+;draws the bar at the top with the room and the score
 *MOD
-CLS
-		call 3503
+draw_top_bar
+		push af
+		push de
 		
-		;move cursor to top
-$x?		ld a,0
-		ld	(xcoord),a
-		ld  (ycoord),a
+		;save crsr x and y
+		ld de,(CRSRY)
+		push de
+
+		ld bc,0
+		ld(CRSRY),bc
+		call repos_cursor
+		
+		;draw 32 inverse spaces
+		
+		ld a,31
+$lp?	push af
+		ld a,0 ; BLACK SQUARE
+		call print1_zx
+		pop af
+		dec a
+		cp 0
+		jp nz,$lp?
+		
+		;draw room name
+		ld b,2
+		ld c,0
+		ld (CRSRY),bc
+		call repos_cursor
+		call get_player_room
+		call print_obj_name
+		
+		;draw score
+		ld b,26
+		ld c,0
+		ld (CRSRY),bc
+		call repos_cursor
+		ld hl,hundred
+		call zx_printstr
+		
+		call print_score ; print actual number
+		
+		;restore cursor
+		pop de
+		ld (CRSRY),de
+		call repos_cursor
+		
+		pop de
+		pop af
+		
 		ret
- 
-;moves every line up, but leaves the top
-;line (with the room name), intact
+		
+;prints the number to the top bar
 *MOD
-scroll
-	
+print_score
+		push af
+		push bc
+		push de
+		
+		;
+		ld b,25
+		ld c,0
+		ld (CRSRY),bc
+		call repos_cursor
+		
+		;print 1st char
+		ld a,(SCORE)
+		ld b,10
+		call mod ; a mod b
+		add a,48
+		call print1_zx
+				
+		call backup_2
+		
+		ld a,(SCORE)
+		ld d,a
+		
+$lp?	ld a,d
+		ld b,10
+		call div ; a div b
+		ld d,a ; save score		
+
+		cp 0
+		jp z,$x?
+
+		call mod ; a mod b
+		ld d,a  ; save score
+		add a,48
+		call print1_zx
+		call backup_2
+		
+		jp z,$x?
+		
+$x?		pop de
+		pop bc
+		pop af
 		ret
-	 
-cursorPos DW SCREEN		
-xcoord defb 0
-ycoord defb 15
+
+;backs the cursor up 2
+;use to print the score
+backup_2
+	push af
+	push bc
+	and a ; clr flag
+	ld a,(CRSRX)
+	sbc a,2
+	ld (CRSRX),a
+	call repos_cursor
+	pop bc
+	pop af
+	ret
+	
+hundred DB "/100",0h 	 
+;cursorPos DW SCREEN		
+;xcoord defb 0
+;ycoord defb 15
  

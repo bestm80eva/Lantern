@@ -32,8 +32,16 @@ check_see_dobj
 check_see_iobj
 	ret
 
+*MOD
 check_dobj_supplied
-	ret
+	ld a,(sentence+1)
+	cp 255
+	jp nz,$x?
+	ld hl,missingnoun
+	call OUTLINCR
+	inc sp
+	inc sp
+$x?	ret
 
 check_iobj_supplied
 	ret
@@ -222,7 +230,8 @@ check_iobj_container
 		inc sp
 		inc sp
 $x?		ret
-	
+
+missingnoun	DB "IT LOOKS LIKE YOU'RE MISSING A NOUN.",0h
 notlocked DB "YOU DON'T SEE THAT.",0h	
 nosee DB "YOU DON'T SEE THAT.",0h
 	

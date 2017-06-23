@@ -180,7 +180,23 @@ $x?		push ix ; ld bc,ix
 		pop de
 		pop af
 		ret
-	
+
+;updates turns without light var
+;registers are preserved
+*MOD
+update_light
+	push af
+	call player_has_light	
+	cp 1
+	jp z,$y?
+	ld a,(TurnsWithoutLight) ; put 0 
+	inc a
+	jp $x?	
+$y? ld a,0
+$x?	ld (TurnsWithoutLight),a ; put 0 
+	pop af
+	ret
+		
 ;table of mask bytes for looking up
 ;properties of objects		
 mask_table

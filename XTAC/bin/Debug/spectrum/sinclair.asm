@@ -3,6 +3,7 @@
 ;BASE equ  3C00H ; address of charset
 ATTRS equ 22528  ; address of attr
 REGION1 equ 16384
+ROW2 equ 16384+256
 REGION2 equ 18432
 REGION3 equ 20480
 
@@ -231,12 +232,18 @@ $x? 	call repos_cursor
 *MOD
 zx_scroll
  		
-		ld de,REGION1
+		ld a,6
+		ld (SCROLL_LPS),a
+		ld de,ROW2; 
 		call scroll_rgn
 
+		ld a,7
+		ld (SCROLL_LPS),a
 		ld de,REGION2
 		call scroll_rgn
 		
+		ld a,7
+		ld (SCROLL_LPS),a
 		ld de,REGION3
 		call scroll_rgn
  
@@ -301,7 +308,7 @@ $lp?	ld bc,32 ; bytes per row
 		jp nz,$lp?
 				
 		;copy 7 rows of 32 chars
-$cpy? 	ld a,7
+$cpy? 	ld a,(SCROLL_LPS)
 $lp2?  	
 		ld hl,(SCROLLTEMP)
 		ld de,(SCROLLTEMP)
@@ -477,5 +484,6 @@ CRSRY DB 0
 CRSRX DB 0
 SCROLLTEMP DW 0
 NOSCROLL DB 0
+SCROLL_LPS DB 7 ; how many rows to move
 curstr DB ">"
 	DB 0

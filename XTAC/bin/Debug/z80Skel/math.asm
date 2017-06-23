@@ -2,7 +2,7 @@
 
 LEFT_BIT equ 16
 RIGHT_BIT equ 4
-RAND_MASK LEFT_BIT + RIGHT_BIT
+RAND_MASK equ LEFT_BIT + RIGHT_BIT
 
 srand
 	ret
@@ -22,10 +22,25 @@ rmod
 ;mods a by b		
 *MOD	
 mod 		cp b
-			jp le,$x?
+			jp m,$x?
 			sub b
 			jp mod
 $x?			ret
+
+;div a by b		
+*MOD	
+div 		
+			push de
+			ld d,0
+$dvlp?		cp b
+			jp m,$x?
+			sub b
+			inc d
+			jp $dvlp?
+$x?			ld a,d
+			pop de
+			ret
+
 		
 *MOD
 rand
@@ -40,7 +55,7 @@ rand
 		jp $x?
 $po?	ld a,(random)
 		srl a	;	pad with a 1
-		add 128 ; stick a 1 on the left 
+		add a,128 ; stick a 1 on the left 
 $x?		ld (random),a
 		dec a
 		ld (urand),a

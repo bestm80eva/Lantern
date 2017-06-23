@@ -280,7 +280,7 @@ namespace XMLtoAdv
                         objId = project.GetObjectId(obj);
                         if (objId == -1 && !IsVar(obj))
                         {
-                            throw new Exception("unknown object: " + obj);
+                            throw new Exception("unknown object: " + obj + " near : " + statement);
                         }
                         
 

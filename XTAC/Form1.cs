@@ -411,8 +411,15 @@ namespace XTAC
         {
             if (GetCurObj() != null)
             {
-                NoGoMessages ngm = new NoGoMessages(objectsComboBox.SelectedIndex);
-                ngm.ShowDialog();
+                if (!GetCurObj().Id.Equals("1"))
+                {
+                    NoGoMessages ngm = new NoGoMessages(objectsComboBox.SelectedIndex);
+                    ngm.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Player doesn't have 'You can't go that way' messages.");
+                }
             }
             else
             {
