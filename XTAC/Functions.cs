@@ -166,6 +166,7 @@ namespace XTAC
             AddCheck("turn on", "check_dobj_supplied");
             AddCheck("turn on", "check_have_dobj");
             AddCheck("unlock", "check_dobj_supplied");
+            AddCheck("look in", "check_dobj_supplied");
         }
 
         void AddCheck(string verb, string check)
@@ -189,7 +190,7 @@ namespace XTAC
 
             string[] defaultVerbs = new string[] { 
                 "n,go north,north","s,go south,south","e,go east,east","w,go west,west","ne,go northeast,northeast","se,go southeast,southeast","sw,go southwest,southwest","nw,go northwest,northwest",
-"up,go up,u","down,go down,d","enter,go in,go into,go inside","out","get,take,grab,pick up","inventory,i","kill","drop","light","look,l","examine,x,look at","look in,inspect,search","open","lock","unlock","close,shut","eat","drink","put,place","quit","smell,sniff","listen","wait","climb",
+"up,go up,u","down,go down,d","enter,go in,go into,go inside","out","get,take,grab,pick up","inventory,i","kill","drop","light","look,l","examine,x,look at,inspect","look in,search","open","lock","unlock","close,shut","eat","drink","put,place","quit","smell,sniff","listen","wait","climb",
 "yell,scream,shout", "jump", "talk to", "turn on"
             };
 
