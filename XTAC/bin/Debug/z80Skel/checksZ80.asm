@@ -221,7 +221,7 @@ check_iobj_container
 		ld a,(sentence+3)
 		ld b,a	
 		ld c,PROPERTY_BYTE_1
-		call get_obj_prop
+		call get_obj_attr
 		and CONTAINER_MASK + SUPPORTER_MASK
 		jp nz,$x?
 		ld hl,notcontainer
@@ -231,8 +231,24 @@ check_iobj_container
 		inc sp
 $x?		ret
 
+*MOD
+check_dobj_wearable
+		ld a,(sentence+1)
+		ld b,a	
+		ld c,PROPERTY_BYTE_2
+		call get_obj_attr
+		and WEARABLE_MASK
+		cp 0
+		jp nz,$x?
+		ld hl,notwearable
+		call OUTLIN
+		call printcr
+		inc sp
+		inc sp
+$x?		ret
+
 missingnoun	DB "IT LOOKS LIKE YOU'RE MISSING A NOUN.",0h
 notlocked DB "YOU DON'T SEE THAT.",0h	
 nosee DB "YOU DON'T SEE THAT.",0h
-	
+notwearable DB "THAT'S NOT WEARABLE.",0h	
 	

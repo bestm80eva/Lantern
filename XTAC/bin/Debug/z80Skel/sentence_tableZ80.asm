@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;sentence jump table
-;this is not machine generated
+;this is NOT machine generated
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 sentence_table 
 	DB look_verb_id
@@ -53,5 +53,9 @@ sentence_table
 	DW lock_sub
 	DB unlock_verb_id
 	DW unlock_sub
+	DB look_in_verb_id
+	DW look_in_sub
+	DB wear_verb_id
+	DW wear_sub
 	DB 255
 	

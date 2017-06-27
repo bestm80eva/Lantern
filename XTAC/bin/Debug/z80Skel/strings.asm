@@ -82,5 +82,3 @@ atoupper
 	jp p,$x?
 	sub 32
 $x?	ret
-
-

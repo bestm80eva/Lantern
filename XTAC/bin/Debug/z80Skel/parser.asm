@@ -7,7 +7,7 @@ parse
 		ld (copydest),hl	; set copy dest
 		ld a,(INBUF)		; get 1st char?	
 		cp 0		
-		jp z,print_ret_pardon
+		jp z,$print_pardon?
 		call clear_buffers
 		ld ix,INBUF		   ; set ix to input buffer
 		ld iy,INBUF		   ; set iy to input buffer
@@ -42,7 +42,11 @@ parse
 		ld (copydest),hl
 		call store_word
 $_x?	ret
-
+$print_pardon?
+		inc sp
+		inc sp
+		jp print_ret_pardon
+		
 ;skip_article
 ;moves to the next word, if that word is an article
 ;if it's not the last word

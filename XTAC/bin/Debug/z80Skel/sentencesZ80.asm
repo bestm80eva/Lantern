@@ -184,10 +184,10 @@ $lp?
 		;does the sentence have a wildcard in the dobj?
 		ld a,(ix+1)
 		cp ANY_OBJECT
-		jp nz,$s?
+		jp nz,$sk?
 		ld a,254		; put the '*' in the do
 		ld (sentence+1),a
-$s?
+$sk?
 		;does the sentence have a wildcard in the iobj?
 		ld a,(ix+3)
 		cp ANY_OBJECT
@@ -218,6 +218,14 @@ $s2?
 		ld d,(hl)
 		push de	; de -> hl
 		pop hl
+		
+		;replace the wildcards with 
+		;the actual objects
+		ld a,(wildcards+1)
+		ld (sentence+1),a
+		ld a,(wildcards+3)
+		ld (sentence+3),a
+		
      	ld bc,$nxt?      ; push return addr on stack
 		push bc
 		jp (hl)			; return will pop stack

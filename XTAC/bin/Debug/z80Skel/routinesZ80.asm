@@ -74,34 +74,77 @@ $x?		pop de
 
 ;sets property c of object b to val in register 'a'
 ;the property should be 0-15 inclusive
+;*MOD
+;set_obj_prop2
+;		push bc
+;		push de
+;		push hl
+;		ld l,a ; save val
+;		ld d,PROPERTY_BYTE_1
+;		ld a,c ; get the correct byte
+;		ld e,c ; save the prop to get (we need it later) 
+;		cp 8
+;		jp m,$s? ;jump on minus
+;		inc d	; property is in the next byte
+;$s?		ld c,d  ; move byte to get to c
+;		call get_obj_attr ; put attr byte 'c' in 'a'
+;		ld h,b	; save 'b' (the object)
+;		ld b,e	; put prop to test in 'b'
+;		call make_prop_mask ; puts mask from pop 'b' in 'b'
+;		or b ; test the bit in the mask (and leave result in 'a')
+;		ld b,h 		; put obj in 'b'
+;		ld a,b		; now set it back (val->a)
+;		ld a,1		;NOT SURE THIS WORKS
+;	;		ld c,d		;the byte to store
+;		call set_obj_attr ;  put a
+;$x?		pop hl
+;		pop de
+;		pop bc
+;		ret
+
+;sets property c of object b to val in register 'a'
+;the property should be 0-15 inclusive
 *MOD
 set_obj_prop
 		push bc
 		push de
 		push hl
-		ld l,a ; save val
-		ld d,PROPERTY_BYTE_1
-		ld a,c ; get the correct byte
-		ld e,c ; save the prop to get (we need it later) 
+		ld (propVal),a
+		ld e,c ; save prop #
+		ld c,OBJ_ENTRY_SIZE
+		call bmulc  ; calc offset 
+		ld hl,obj_table
+		add hl,bc
+		ld bc,PROPERTY_BYTE_1
+		add hl,bc ; get offset of prop byte 1
+		
+		ld a,e ; check prop #
 		cp 8
 		jp m,$s? ;jump on minus
-		inc d	; property is in the next byte
-$s?		ld c,d  ; move byte to get to c
-		call get_obj_attr ; put attr byte 'c' in 'a'
-		ld h,b	; save 'b' (the object)
-		ld b,e	; put prop to test in 'b'
+		inc hl	; property is in the next byte
+$s?		
+		ld b,e
 		call make_prop_mask ; puts mask from pop 'b' in 'b'
+		ld a,(propVal)
+		cp 0
+		jp z,$clr?
+		ld a,(hl) ; get the byte 
 		or b ; test the bit in the mask (and leave result in 'a')
-		ld b,h 		; put obj in 'b'
-		;ld a,b		; now set it back (val->a)
-		ld a,1
-		ld c,d		;the byte to store
-		call set_obj_attr ;  put a
+		jp $sav?
+$clr?   ld a,b
+		cpl	; flip mask
+		ld b,(hl)
+		and b
+$sav?	ld (hl),a
 $x?		pop hl
 		pop de
 		pop bc
 		ret
-		
+
+clr_obj_prop
+		call make_prop_mask ; puts mask from pop 'b' in 'b'
+		ld (hl),a
+		ret
 		
 ;looks up the mask for the property number in b
 ;mask is returned in 'b'
@@ -180,23 +223,7 @@ $x?		push ix ; ld bc,ix
 		pop de
 		pop af
 		ret
-
-;updates turns without light var
-;registers are preserved
-*MOD
-update_light
-	push af
-	call player_has_light	
-	cp 1
-	jp z,$y?
-	ld a,(TurnsWithoutLight) ; put 0 
-	inc a
-	jp $x?	
-$y? ld a,0
-$x?	ld (TurnsWithoutLight),a ; put 0 
-	pop af
-	ret
-		
+	
 ;table of mask bytes for looking up
 ;properties of objects		
 mask_table
@@ -217,4 +244,5 @@ mask_table
 	DB DOOR_MASK ;equ 64
 	DB UNUSED_MASK ;equ 128
 
+propVal DB 0	
 		

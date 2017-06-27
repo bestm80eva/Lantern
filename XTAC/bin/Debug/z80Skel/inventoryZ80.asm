@@ -162,6 +162,11 @@ $y?		ld a,(sentence+1)
 		ld c,HOLDER_ID
 		call get_player_room
 		call set_obj_attr
+		ld a,(sentence+1)
+		ld b,a
+		ld c,WORN
+		ld a,0
+		call set_obj_prop
 		ld hl,dropped
 		call OUTLIN
 		call printcr
@@ -246,10 +251,12 @@ indent_less
 
 
 printa
+		push bc
 		push hl
 		ld hl,leadinga
 		call OUTLIN
 		pop hl
+		pop bc
 		ret
 
 ;prints adjectives for object in 'a'
@@ -263,9 +270,14 @@ append_adj
 		ld ix,obj_table
 		add ix,bc
 		bit LIT_BIT,(ix+PROPERTY_BYTE_2)
-		jp z,$x?
+		jp z,$lit?
 		ld hl,providingLight
 		call OUTLIN
+		jp $x?
+$lit?	bit WORN_BIT,(ix+PROPERTY_BYTE_2)
+		jp z,$x?
+		ld hl,beingWorn
+		call OUTLIN		
 $x?		pop ix
 		pop bc
 		ret

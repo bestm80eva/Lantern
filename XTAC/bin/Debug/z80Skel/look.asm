@@ -282,7 +282,44 @@ $x? pop hl
 	pop bc
 	pop af
 	ret
-		
+
+
+*MOD
+look_in_sub
+		ld a,(sentence+1)
+		ld b,a
+		ld c,CONTAINER
+		call get_obj_prop
+		cp 0
+		jp z,$notc?
+		ld a,(sentence+1)
+		ld b,a
+		ld c,OPEN
+		call get_obj_prop
+		cp 1
+		jp nz,$clsd?
+		ld a,(sentence+1)
+		call has_contents
+		cp 0
+		jp z,$ncnt?
+		ld a,(sentence+1)
+		call print_container_contents
+		call print_contents
+		jp $x?
+$ncnt?	ld hl,nothing
+		call outlincr
+		jp $x?	
+$clsd?  ld hl,closed
+		call outlincr
+		jp $x?
+$notc? 	ld hl,cantlook		
+		call outlincr
+$x?	
+		ret
+
+the DB "THE ",0h
+cantlook DB "YOU CAN'T SEE INSIDE THAT.",0h
+nothing DB "YOU FIND NOTHING.",0h		
 visobjs DB 0		
 thereisa DB  "THERE IS A ",0h
 here DB "HERE.",0h		
