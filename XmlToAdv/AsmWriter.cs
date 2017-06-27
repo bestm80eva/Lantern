@@ -81,7 +81,8 @@ namespace XMLtoAdv
             */
             propBytes.Add("portable", "PROPERTY_BYTE_2");
             propBytes.Add("backdrop", "PROPERTY_BYTE_2");
-            propBytes.Add("flammable", "PROPERTY_BYTE_2");
+            propBytes.Add("wearable", "PROPERTY_BYTE_2");
+            propBytes.Add("beingworn", "PROPERTY_BYTE_2");
             propBytes.Add("lightable", "PROPERTY_BYTE_2");
             propBytes.Add("lit", "PROPERTY_BYTE_2");
             propBytes.Add("door", "PROPERTY_BYTE_2");
@@ -120,8 +121,8 @@ namespace XMLtoAdv
              */
             propBits.Add("portable", "1");
             propBits.Add("edible", "2");
-            propBits.Add("drinkable", "4");
-            propBits.Add("flammable", "8");
+            propBits.Add("wearable", "4");
+            propBits.Add("beingworn", "8");
             propBits.Add("lightable", "16");
             propBits.Add("lit", "32");
             propBits.Add("door", "64");
