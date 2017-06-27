@@ -97,6 +97,7 @@ $x?	ret
 *INCLUDE routinesZ80.asm
 *INCLUDE inventoryZ80.asm
 *INCLUDE open_close.asm
+*INCLUDE wear_sub.asm
 *INCLUDE put.asm
 *INCLUDE miscZ80.asm
 *INCLUDE print_rets.asm

@@ -30,7 +30,7 @@ namespace XMLtoAdv
 
         public static string[] xmlFlagNames = { "scenery", "supporter", "container", "transparent",
                                "openable", "open", "lockable", "locked",
-                               "portable", "backdrop", "drinkable", "flammable",
+                               "portable", "backdrop", "wearable", "beingworn",
                                "lightable", "emittinglight", "door", "unused"};
         
         public string name {

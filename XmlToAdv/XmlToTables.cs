@@ -34,7 +34,7 @@ namespace XMLtoAdv
 
         protected static string[] asmFlagNames =   { "SCENERY_MASK", "SUPPORTER_MASK", "CONTAINER_MASK", "TRANSPARENT_MASK",
                                "OPENABLE_MASK","OPEN_MASK", "LOCKABLE_MASK", "LOCKED_MASK", 
-                               "PORTABLE_MASK", "BACKDROP_MASK", "DRINKABLE_MASK", "FLAMMABLE_MASK", 
+                               "PORTABLE_MASK", "BACKDROP_MASK", "WEARABLE_MASK", "BEINGWORN_MASK", 
                                "LIGHTABLE_MASK", "EMITTING_LIGHT_MASK","DOOR_MASK", "UNUSED_MASK" 
                            };
 

@@ -7,6 +7,7 @@
 check_see_dobj
 	rts
 
+	
 
 	.module check_dobj_supplied
 check_dobj_supplied
@@ -45,8 +46,21 @@ check_dobj_portable
 		bne _x
 		jsr thats_not_something
 _x		rts
+
+
+;produces an error message if the
+;do is a child of the io
+.module check_dobj_wearable
+check_dobj_wearable
+		lda $sentence+1
+		ldx #WEARABLE
+		jsr get_obj_prop
+		cmp #0
+		bne _x
+		jsr not_wearable
+_x		rts
 		
-	.module check_iobj_container	
+.module check_iobj_container	
 check_iobj_container	
 		lda sentence+3
 		ldy #PROPERTY_BYTE_1
@@ -267,7 +281,8 @@ dobj_already_unlocked
 		sta $strAddr+1		
 		jsr printstrcr
 		rts
-		
+
+;print message, sets flag				
 not_possible
 		lda #1
 		sta checkFailed
@@ -279,6 +294,17 @@ not_possible
 		jsr printstrcr  ; print that's physically possible
 		rts
 
+;print message, sets flag		
+not_possible
+		lda #1
+		sta checkFailed
+ 		
+		lda #notwearble%256
+		sta $strAddr
+		lda #notwearble/256
+		sta $strAddr+1
+		jsr printstrcr  ; print msg
+		rts
 		
 dobj_already_open
 		lda #1
@@ -323,9 +349,6 @@ dobj_already_closed
 		
 		rts		
 
-;produces an error message if the
-;do is a child of the io
-
 		
 		
 		
@@ -351,6 +374,8 @@ alreadyClosed	.text "IS ALREADY CLOSED."
 isntLockable	.text "ISN'T LOCKABLE."
 .byte 0
 impossible	.text "THAT'S NOT PHYSICALLY POSSIBLE."
+.byte 0
+notwearable	.text "THAT'S NOT WEARABLE."
 .byte 0
 period .text "."
 .byte 0		

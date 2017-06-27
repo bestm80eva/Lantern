@@ -91,16 +91,16 @@
             public string Open { get; set; }
             [XmlAttribute(AttributeName = "backdrop")]
             public string Backdrop { get; set; }
-            [XmlAttribute(AttributeName = "drinkable")]
-            public string Drinkable { get; set; }
+            [XmlAttribute(AttributeName = "wearable")]
+            public string Wearable { get; set; }
             [XmlAttribute(AttributeName = "emittinglight")]
             public string Emittinglight { get; set; }
             [XmlAttribute(AttributeName = "locked")]
             public string Locked { get; set; }
             [XmlAttribute(AttributeName = "lockable")]
             public string Lockable { get; set; }
-            [XmlAttribute(AttributeName = "flammable")]
-            public string Flammable { get; set; }
+            [XmlAttribute(AttributeName = "beingworn")]
+            public string BeingWorn { get; set; }
             [XmlAttribute(AttributeName = "lightable")]
             public string Lightable { get; set; }
             [XmlAttribute(AttributeName = "door")]

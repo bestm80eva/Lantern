@@ -63,9 +63,9 @@
             this.label34 = new System.Windows.Forms.Label();
             this.backdropTextBox = new System.Windows.Forms.TextBox();
             this.backdropCheckBox = new System.Windows.Forms.CheckBox();
-            this.flammableCheckBox = new System.Windows.Forms.CheckBox();
+            this.beingwornCheckBox = new System.Windows.Forms.CheckBox();
             this.openableCheckBox = new System.Windows.Forms.CheckBox();
-            this.drinkableCheckBox = new System.Windows.Forms.CheckBox();
+            this.wearableCheckBox = new System.Windows.Forms.CheckBox();
             this.doorCheckBox = new System.Windows.Forms.CheckBox();
             this.emittingLightCheckBox = new System.Windows.Forms.CheckBox();
             this.lockedCheckBox = new System.Windows.Forms.CheckBox();
@@ -512,9 +512,9 @@
             this.groupBox2.Controls.Add(this.label34);
             this.groupBox2.Controls.Add(this.backdropTextBox);
             this.groupBox2.Controls.Add(this.backdropCheckBox);
-            this.groupBox2.Controls.Add(this.flammableCheckBox);
+            this.groupBox2.Controls.Add(this.beingwornCheckBox);
             this.groupBox2.Controls.Add(this.openableCheckBox);
-            this.groupBox2.Controls.Add(this.drinkableCheckBox);
+            this.groupBox2.Controls.Add(this.wearableCheckBox);
             this.groupBox2.Controls.Add(this.doorCheckBox);
             this.groupBox2.Controls.Add(this.emittingLightCheckBox);
             this.groupBox2.Controls.Add(this.lockedCheckBox);
@@ -577,16 +577,16 @@
             this.backdropCheckBox.UseVisualStyleBackColor = true;
             this.backdropCheckBox.CheckedChanged += new System.EventHandler(this.backdropCheckBox_CheckedChanged);
             // 
-            // flammableCheckBox
+            // beingwornCheckBox
             // 
-            this.flammableCheckBox.AutoSize = true;
-            this.flammableCheckBox.Location = new System.Drawing.Point(29, 345);
-            this.flammableCheckBox.Name = "flammableCheckBox";
-            this.flammableCheckBox.Size = new System.Drawing.Size(76, 17);
-            this.flammableCheckBox.TabIndex = 12;
-            this.flammableCheckBox.Text = "Flammable";
-            this.flammableCheckBox.UseVisualStyleBackColor = true;
-            this.flammableCheckBox.CheckedChanged += new System.EventHandler(this.flammableCheckBox_CheckedChanged);
+            this.beingwornCheckBox.AutoSize = true;
+            this.beingwornCheckBox.Location = new System.Drawing.Point(29, 345);
+            this.beingwornCheckBox.Name = "beingwornCheckBox";
+            this.beingwornCheckBox.Size = new System.Drawing.Size(79, 17);
+            this.beingwornCheckBox.TabIndex = 12;
+            this.beingwornCheckBox.Text = "BeingWorn";
+            this.beingwornCheckBox.UseVisualStyleBackColor = true;
+            this.beingwornCheckBox.CheckedChanged += new System.EventHandler(this.flammableCheckBox_CheckedChanged);
             // 
             // openableCheckBox
             // 
@@ -599,16 +599,16 @@
             this.openableCheckBox.UseVisualStyleBackColor = true;
             this.openableCheckBox.CheckedChanged += new System.EventHandler(this.openableCheckBox_CheckedChanged);
             // 
-            // drinkableCheckBox
+            // wearableCheckBox
             // 
-            this.drinkableCheckBox.AutoSize = true;
-            this.drinkableCheckBox.Location = new System.Drawing.Point(29, 326);
-            this.drinkableCheckBox.Name = "drinkableCheckBox";
-            this.drinkableCheckBox.Size = new System.Drawing.Size(71, 17);
-            this.drinkableCheckBox.TabIndex = 10;
-            this.drinkableCheckBox.Text = "Drinkable";
-            this.drinkableCheckBox.UseVisualStyleBackColor = true;
-            this.drinkableCheckBox.CheckedChanged += new System.EventHandler(this.drinkableCheckBox_CheckedChanged);
+            this.wearableCheckBox.AutoSize = true;
+            this.wearableCheckBox.Location = new System.Drawing.Point(29, 326);
+            this.wearableCheckBox.Name = "wearableCheckBox";
+            this.wearableCheckBox.Size = new System.Drawing.Size(72, 17);
+            this.wearableCheckBox.TabIndex = 10;
+            this.wearableCheckBox.Text = "Wearable";
+            this.wearableCheckBox.UseVisualStyleBackColor = true;
+            this.wearableCheckBox.CheckedChanged += new System.EventHandler(this.drinkableCheckBox_CheckedChanged);
             // 
             // doorCheckBox
             // 
@@ -1840,7 +1840,7 @@
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox welcomeTextBox;
-        private System.Windows.Forms.CheckBox drinkableCheckBox;
+        private System.Windows.Forms.CheckBox wearableCheckBox;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button newVerbButton;
         private System.Windows.Forms.TextBox newVerbTextBox;
@@ -1859,7 +1859,7 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.ComboBox parentComboBox;
         private System.Windows.Forms.CheckBox openableCheckBox;
-        private System.Windows.Forms.CheckBox flammableCheckBox;
+        private System.Windows.Forms.CheckBox beingwornCheckBox;
         private System.Windows.Forms.CheckBox backdropCheckBox;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.Button addRuleButton;

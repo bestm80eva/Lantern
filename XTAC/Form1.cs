@@ -351,8 +351,8 @@ namespace XTAC
             }
 
             doorCheckBox.Checked = GetCheck(xproject.Project.Objects.Object[room].Flags.Door);
-            drinkableCheckBox.Checked = GetCheck(xproject.Project.Objects.Object[room].Flags.Drinkable);
-            flammableCheckBox.Checked = GetCheck(xproject.Project.Objects.Object[room].Flags.Flammable);
+            wearableCheckBox.Checked = GetCheck(xproject.Project.Objects.Object[room].Flags.Wearable);
+            beingwornCheckBox.Checked = GetCheck(xproject.Project.Objects.Object[room].Flags.BeingWorn);
             containerCheckBox.Checked = GetCheck(xproject.Project.Objects.Object[room].Flags.Container);
             supporterCheckBox.Checked = GetCheck(xproject.Project.Objects.Object[room].Flags.Supporter);
         }
@@ -951,12 +951,12 @@ namespace XTAC
             o.Flags.Locked = "0";
             o.Flags.Lockable = "0";
             o.Flags.Emittinglight = "0";
-            o.Flags.Drinkable = "0";
+            o.Flags.Wearable = "0";
             o.Flags.Lightable = "0";
             o.Flags.Container = "0";
             o.Flags.Supporter = "0";
             o.Flags.Door = "0";
-            o.Flags.Flammable = "0";
+            o.Flags.BeingWorn = "0";
             o.Flags.Transparent = "0";
             o.Flags.Unused = "0";
             return o;
