@@ -232,10 +232,7 @@ $x? 	call repos_cursor
 *MOD
 zx_scroll
  		
-		ld a,6
-		ld (SCROLL_LPS),a
-		ld de,ROW2; 
-		call scroll_rgn
+		call scroll_rgn1
 
 		ld a,7
 		ld (SCROLL_LPS),a
@@ -445,6 +442,35 @@ back_up
 	call repos_cursor
 	
 $x?	ret
+*MOD
+scroll_rgn1
+
+		ld a,8
+
+		ld de,REGION1 + 32
+		ld hl,REGION1 + 64
+$lp?	
+		ld bc,192
+		ldir ; hl->de repeating
+		
+		;add 64 to hl and de
+		ld bc,64
+		add hl,bc
+		push hl ; save it
+		
+		;add 64 to de 
+		push de
+		pop hl
+		add hl,bc
+		ex de,hl
+		
+		pop hl  ; restore it
+		
+		dec a
+		cp 0
+		jp nz,$lp?
+		ret
+		
 
 *MOD
 ;returns the length of the word indexed 

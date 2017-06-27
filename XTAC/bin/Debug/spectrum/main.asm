@@ -17,6 +17,9 @@ main
 		ld bc,0
 		call locate
 		
+		call printcr
+		
+		
 		ld hl,welcome ; print welcome,author,version
 		call OUTLINCR
  
@@ -33,6 +36,7 @@ $inp?
 		push ix
 		push iy
 		
+		call draw_top_bar
 		call getcommand
  
 		ei
