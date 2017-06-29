@@ -10,6 +10,8 @@ start
 
 ;main program goes here
 main
+		ld (stackSav),sp
+
 		;set screen as output channel
 		call 0DAFh  ; CLS
 		;call cls1
@@ -68,21 +70,9 @@ $go?	call validate_words		; make sure verb,io,do are in tables
 		call run_sentence
 		call do_events
 		call draw_top_bar
-		ret
+quit	ret
 
-do_events
-*INCLUDE event_jumps_Z80.asm
-	call player_has_light
-	cp 1
-	jp z,$y?
-	ld a,(turnsWithoutLight)
-	inc a
-	ld (turnsWithoutLight),a
-	jp $x?
-$y?	ld a,0
-	ld (turnsWithoutLight),a
-$x?	ret
-		
+*INCLUDE doeventsZ80.asm		
 *INCLUDE io.asm	
 *INCLUDE input.asm
 *INCLUDE printing.asm
@@ -121,12 +111,12 @@ $x?	ret
 *INCLUDE math.asm
 *INCLUDE UserVarsZ80.asm
 
-score DB 0
+score DB 100
 gameOver DB 0
 moves DB 0
 turnsWithoutLight DB 0
 health DB 100
-
+stacksav DW 0
 msg db "THIS IS A MESSAGE",0h		
 	
 	end start

@@ -1,5 +1,7 @@
-
+;
 
 		
 quit_sub
-		ret
+	ei
+	ld sp,(stackSav)
+	ret

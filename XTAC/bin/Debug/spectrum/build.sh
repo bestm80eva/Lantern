@@ -12,7 +12,18 @@ fi
 	echo "main.cmd has been built"
 
 mv main.com data 
-cp loader.tap game.tap
+
+if [ -e "loading.scr" ]
+then
+	echo "attaching load screen"
+	cp sloader.tap game.tap
+	cp loading.scr loading
+	./mctrd add loading game.tap
+else
+	cp loader.tap game.tap
+fi
+
+
 ./mctrd add data game.tap 
 
 echo "game.tap is ready."

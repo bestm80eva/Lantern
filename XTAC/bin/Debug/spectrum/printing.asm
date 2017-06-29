@@ -113,33 +113,35 @@ print_score
 		
 		;print 1st char
 		ld a,(SCORE)
-		ld b,10
-		call mod ; a mod b
-		add a,48
-		call print1_zx
-				
-		call backup_2
-		
-		ld a,(SCORE)
 		ld d,a
-		
+
 $lp?	ld a,d
 		ld b,10
+		call mod ; a mod b
+		ld c,a ;save char
+		
+		ld a,d
+		ld b,10
 		call div ; a div b
-		ld d,a ; save score		
+		ld d,a ; save temp score		
 
 		cp 0
 		jp z,$x?
-
-		call mod ; a mod b
-		ld d,a  ; save score
-		add a,48
-		call print1_zx
+		
+		ld a,c
+		add a,48 ; to ascii
+		call print1_zx	
 		call backup_2
-		
-		jp z,$x?
-		
-$x?		pop de
+
+		jp $lp?
+	
+$x?	
+		ld a,c
+		add a,48 ; to ascii
+		call print1_zx	
+		call backup_2
+
+		pop de
 		pop bc
 		pop af
 		ret
@@ -149,11 +151,13 @@ $x?		pop de
 backup_2
 	push af
 	push bc
+	push de
 	and a ; clr flag
 	ld a,(CRSRX)
 	sbc a,2
 	ld (CRSRX),a
 	call repos_cursor
+	pop de
 	pop bc
 	pop af
 	ret
