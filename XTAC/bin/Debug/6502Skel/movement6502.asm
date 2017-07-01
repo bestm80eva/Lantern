@@ -27,7 +27,7 @@ _go		lda #PLAYER_ID
 		ldx $newRoom; new room
 		ldy #HOLDER_ID
 		jsr set_obj_attr
-		jsr player_can_see
+		;jsr player_can_see (done in main)
 		jsr look_sub
 		jmp _x
 _ng		jsr print_nogo_msg

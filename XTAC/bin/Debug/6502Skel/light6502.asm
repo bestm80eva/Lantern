@@ -17,7 +17,7 @@ player_can_see
 _lp		ldy #0
 		lda ($tableAddr),y
 		cmp #255		
-		beq _x
+		beq _n
 		
 		ldy #PROPERTY_BYTE_2
 		lda ($tableAddr),y

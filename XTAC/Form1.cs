@@ -1285,7 +1285,7 @@ namespace XTAC
         private void objDescTextBox_Leave(object sender, EventArgs e)
         {
             string temp = objDescTextBox.Text.ToUpper().Trim();
-            temp = temp.Replace('\"', '\'');
+            temp = temp.Replace('\"', '\''); 
             GetCurObj().Description = temp;
         }
 
