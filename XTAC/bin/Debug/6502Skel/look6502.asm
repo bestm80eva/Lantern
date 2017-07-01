@@ -8,6 +8,7 @@ look_sub
 	pha
 	tay
 	pha
+	jsr player_can_see
 	lda playerCanSee
 	cmp #0
 	beq _nl

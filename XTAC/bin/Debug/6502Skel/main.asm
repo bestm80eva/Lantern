@@ -80,10 +80,10 @@ _c 	jsr toascii
 	beq _lp
 	
 	jsr process_sentence	
+	jsr player_can_see
 	
 	jsr do_events
 	
-	jsr player_can_see
 	jsr inv_weight
 	jmp _lp
 _x 	jsr printcr
