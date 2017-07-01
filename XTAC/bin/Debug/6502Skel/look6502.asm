@@ -12,8 +12,10 @@ look_sub
 	cmp #0
 	beq _nl
 	jsr get_player_room
+	pha
 	jsr print_obj_name
 	jsr printcr
+	pla
 	jsr print_obj_description
 	jsr list_objects
 	jmp _x

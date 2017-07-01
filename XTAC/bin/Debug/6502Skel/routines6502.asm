@@ -157,8 +157,11 @@ in_player_inventory
 		sta $tableAddr
 
 		rts
-		
+
+;restore stack and return		
 quit_sub
+		ldx stack
+		txs
 		rts
 		
 parent .byte 0

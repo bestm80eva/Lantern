@@ -10,8 +10,8 @@
 #define PORTABLE_MASK  1
 #define EDIBLE_MASK  2
 #define BACKDROP_MASK  2
-#define DRINKABLE_MASK  4
-#define FLAMMABLE_MASK  8
+#define WEARABLE_MASK  4
+#define BEINGWORN_MASK  8
 #define LIGHTABLE_MASK  16
 #define LIT_MASK  32	
 #define EMITTING_LIGHT_MASK  32
@@ -20,8 +20,8 @@
 
 #define PORTABLE_BIT  0
 #define EDIBLE_BIT  1
-#define DRINKABLE_BIT  2
-#define FLAMMABLE_BIT  3
+#define WEARABLE_BIT  2
+#define WORN_BIT  3
 #define LIGHTABLE_BIT  4
 #define LIT_BIT	  5
 #define DOOR_BIT  6
@@ -82,8 +82,8 @@
 #define LOCKED  8
 #define PORTABLE  9
 #define BACKDROP  10
-#define DRINKABLE  11
-#define FLAMMABLE  12
+#define WEARABLE  11
+#define BEINGWORN  12
 #define LIGHTABLE  13
 #define LIT  14
 #define EMITTING_LIGHT  14

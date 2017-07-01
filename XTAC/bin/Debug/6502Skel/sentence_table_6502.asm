@@ -53,5 +53,7 @@ sentence_table
 	.word lock_sub
 	.byte unlock_verb_id
 	.word unlock_sub
+	.byte wear_verb_id
+	.word wear_sub
 	.byte 255
 	

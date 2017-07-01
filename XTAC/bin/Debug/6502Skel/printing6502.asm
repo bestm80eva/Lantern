@@ -313,10 +313,20 @@ print_adj
 	lda ($tableAddr),y
 	and #LIT_MASK
 	cmp #0
-	beq _x
+	beq _bw
 	lda #providingLight%256
 	sta strAddr	
 	lda #providingLight/256
+	sta strAddr+1
+	jsr printstr
+	jmp _x
+_bw	lda ($tableAddr),y
+	and #BEINGWORN_MASK
+	cmp #0
+	beq _x
+	lda #beingWorn%256
+	sta strAddr	
+	lda #beingWorn/256
 	sta strAddr+1
 	jsr printstr
 _x	 

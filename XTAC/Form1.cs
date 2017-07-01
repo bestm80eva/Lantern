@@ -1284,8 +1284,9 @@ namespace XTAC
 
         private void objDescTextBox_Leave(object sender, EventArgs e)
         {
-            objDescTextBox.Text = objDescTextBox.Text.ToUpper().Trim();
-            GetCurObj().Description = objDescTextBox.Text;
+            string temp = objDescTextBox.Text.ToUpper().Trim();
+            temp = temp.Replace('\"', '\'');
+            GetCurObj().Description = temp;
         }
 
         private void sentenceTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)

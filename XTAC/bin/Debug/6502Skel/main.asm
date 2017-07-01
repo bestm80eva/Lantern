@@ -31,6 +31,9 @@
 .org $800
 	.module main
 start
+	tsx			 ;save stack
+	stx stack
+	
 	jsr cls
 	jsr show_intro
  	jsr look_sub
@@ -50,15 +53,15 @@ _c 	jsr toascii
 	lda #0
 	sta strSrc
 	
-	lda #kbBufHi ; did the user type quit
-	sta strSrc+1
-	lda #quit%256
-	sta strDest
-	lda #quit/256	
-	sta strDest+1
-	jsr streq6
-	cmp #1
-	beq _x
+;	lda #kbBufHi ; did the user type quit
+;	sta strSrc+1
+;	lda #quit%256
+;	sta strDest
+;	lda #quit/256	
+;	sta strDest+1
+;	jsr streq6
+;	cmp #1
+;	beq _x
 
 	jsr remove_articles
 	jsr get_verb
@@ -102,6 +105,7 @@ _x 	jsr printcr
 .include "inventory6502.asm"
 .include "containers6502.asm"
 .include "doevents6502.asm"
+.include "wear_sub.asm"
 .include "Events6502.asm"
 .include "ObjectWordTable6502.asm"
 .include "Dictionary6502.asm"
@@ -126,7 +130,8 @@ goodbye .text "BYE"
 prompt 	.text ">"
 	.byte 0
 
-quit .byte "QUIT",0h
+;quit .byte "QUIT",0h
+stack .byte 0
 
 .include "UserVars6502.asm"	
 score .byte 0

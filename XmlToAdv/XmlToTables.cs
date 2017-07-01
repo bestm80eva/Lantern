@@ -391,7 +391,7 @@ namespace XMLtoAdv
             WriteUserVarTable(doc, "Z80");
             WriteBackdropTable(doc, "BackDropTableZ80.asm", "DB");
 
-        }
+         }
 
         private void WriteStringTable6809(string fileName, string header, Table t)
         {

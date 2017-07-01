@@ -295,13 +295,25 @@ not_possible
 		rts
 
 ;print message, sets flag		
-not_possible
+;not_possible
+;		lda #1
+;		sta checkFailed
+ ;		
+	;	lda #impossible%256
+	;	sta $strAddr
+	;	lda #impossible/256
+	;	sta $strAddr+1
+	;	jsr printstrcr  ; print msg
+	;	rts
+
+;print message, sets flag		
+not_wearable
 		lda #1
 		sta checkFailed
  		
-		lda #notwearble%256
+		lda #notwearable%256
 		sta $strAddr
-		lda #notwearble/256
+		lda #notwearable/256
 		sta $strAddr+1
 		jsr printstrcr  ; print msg
 		rts
