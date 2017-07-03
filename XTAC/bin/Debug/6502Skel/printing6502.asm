@@ -381,7 +381,7 @@ _lp
 		jmp _lp
 _out	lda #0
 		sta vcur
-		jsr $fc22
+		jsr $fc22 ; recompute cur offset
 		lda #3
 		sta hcur		
 		jsr get_player_room
@@ -391,7 +391,70 @@ _out	lda #0
 		pla
 		sta hcur
 		jsr $fc22 ; reset cursor pos
+		
+		jsr print_score
 		rts
+	
+	.module print_score
+print_score
+		
+		;save old cursor position
+		lda hcur
+		pha
+		lda vcur
+		pha
+		
+		;move cursor to bar
+		
+		lda #0
+		sta vcur
+		lda #29
+		sta hcur
+		jsr $fc22 ; recompute cur offset
+		
+		;now print right to left
+		lda score
+		pha ; save
+
+_lp		pla
+		ldy #10
+		jsr div ; a mod b
+		pha ; save right-shifted score
+		lda divResult
+		cmp #0  ; done?
+		beq _x
+	
+		lda remainder
+		clc
+		adc #48 ; to ascii
+		jsr cout1	
+		jsr backup_2
+
+		jmp _lp
+_x		pla	
+		;print last char
+		lda remainder
+		clc
+		adc #48 ; to ascii
+		jsr cout1
+		jsr backup_2
+
+		;restore old cursor
+		pla
+		sta vcur
+		pla 
+		sta hcur
+		jsr $fc22
+		rts
+
+;the sub is used by print score		
+backup_2
+	lda hcur
+	sec
+	sbc #2
+	sta hcur
+	jsr $fc22 ; recompute cur offset
+	rts	
 	
 contains .text "CONTAINS..."	
 	.byte 0

@@ -166,8 +166,8 @@ _ntfnd	sta $objId
 ;the string table stored in 
 ;tableAddr
 next_string
-		pha
-		tya
+		pha	; save a
+		tya ; save y
 		pha
 		ldy #0
 		clc 
@@ -178,9 +178,9 @@ next_string
 		lda #0
 		adc $tableAddr+1 ; add carry to hi byte
 		sta $tableAddr+1 ; store hi byte 
-		pla 
+		pla 	;restor y
 		tay
-		pla
+		pla	;restor a
 		rts
 
 strIndex .byte 0		

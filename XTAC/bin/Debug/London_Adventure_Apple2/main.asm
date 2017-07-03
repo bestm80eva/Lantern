@@ -94,6 +94,7 @@ _x 	jsr printcr
 .include "inventory6502.asm"
 .include "containers6502.asm"
 .include "doevents6502.asm"
+.include "math6502.asm"
 .include "Events6502.asm"
 .include "ObjectWordTable6502.asm"
 .include "Dictionary6502.asm"

@@ -111,7 +111,6 @@ print_score
 		ld (CRSRY),bc
 		call repos_cursor
 		
-		;print 1st char
 		ld a,(SCORE)
 		ld d,a
 

@@ -294,8 +294,41 @@ _x		pla
 		pla
 		rts
 
+	.module
+print_score
+		;move cursor to bar
+		lda SCORE
+		psha
 
-		
+_lp		pla
+		ldy #10
+		call a_div_y ; a mod b
+		pha ; save right-shifted score
+		cmp #0  ; done?
+		beq _x
+	
+		lda (divRemainder)
+		clc
+		adc #48 ; to ascii
+		jsr cout1	
+		jsr backup_2
+
+		jmp _lp
+_x	
+		;print last char
+		ld a,c
+		add a,48 ; to ascii
+		call print1_zx	
+		call backup_2
+
+		pop de
+		pop bc
+		pop af
+		ret 
+		rts
+
+back_up_2
+		rts
 contains .text "CONTAINS..."	
 	.byte 0
 onthe .text "ON THE "	

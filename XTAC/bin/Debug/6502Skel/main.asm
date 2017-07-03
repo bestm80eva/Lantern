@@ -104,6 +104,7 @@ _x 	jsr printcr
 .include "light6502.asm"
 .include "inventory6502.asm"
 .include "containers6502.asm"
+.include "math6502.asm"
 .include "doevents6502.asm"
 .include "wear_sub.asm"
 .include "Events6502.asm"
