@@ -306,6 +306,7 @@ _x		pla
 		tay
 		pla
 		rts
+
 		
 	.module print_adj	
 print_adj
@@ -404,29 +405,43 @@ print_score
 		lda vcur
 		pha
 		
-		;move cursor to bar
+		;move cursor to bar		
+		lda #0
+		sta vcur
+		lda #30
+		sta hcur
+		jsr $fc22 ; recompute cur offset
+
+		;print the string  /100
+		lda #hundred%256
+		sta strAddr
+		lda #hundred/256
+		sta strAddr+1
+		jsr printstr
 		
+		;move cursor to bar		
 		lda #0
 		sta vcur
 		lda #29
 		sta hcur
 		jsr $fc22 ; recompute cur offset
-		
+
 		;now print right to left
 		lda score
 		pha ; save
 
 _lp		pla
 		ldy #10
-		jsr div ; a mod b
+		jsr div ; a mod y
 		pha ; save right-shifted score
 		lda divResult
-		cmp #0  ; done?
+		cmp #0 ; done?
 		beq _x
 	
 		lda remainder
 		clc
 		adc #48 ; to ascii
+		ora #80h	; turn on don't flash bit
 		jsr cout1	
 		jsr backup_2
 
@@ -436,6 +451,7 @@ _x		pla
 		lda remainder
 		clc
 		adc #48 ; to ascii
+		ora #80h	; turn on don't flash bit
 		jsr cout1
 		jsr backup_2
 
@@ -447,6 +463,7 @@ _x		pla
 		jsr $fc22
 		rts
 
+ 		
 ;the sub is used by print score		
 backup_2
 	lda hcur
@@ -466,7 +483,10 @@ providingLight .text " (PROVIDING LIGHT)"
 	.byte 0
 beingWorn .text " (BEING WORN)"	
 	.byte 0
-	
+scoreText .text "SCORE "
+	.byte 0
+hundred .text "/100"
+	.byte 0
 objId .byte 0		
 srchIndex .byte  0
 wrdLen .byte 0
