@@ -1,15 +1,33 @@
 ;sentences6502.asm
 ;(c) Evan Wright, 2017
 
+;if any sentences are run
+;sentenceRun is set to true
 	.module process_sentence
 process_sentence
+		lda #0 ; clear handled flag
+		sta handled
+		
 		jsr run_checks ; do checks
 		lda checkFailed
 		cmp #1
 		beq _x
+
 		jsr run_preactions ; run preactions
 		jsr run_actions ;
 		jsr run_postactions ;
+		
+		lda handled
+		cmp #1
+		beq _x
+
+		;not handled
+		lda #confused%256	
+		sta strAddr
+		lda #confused/256	
+		sta strAddr+1
+		jsr printstrcr
+		
 _x		rts
 		
 run_preactions
@@ -79,7 +97,9 @@ _lp		lda ($tableAddr),y
 		bne _skp
 		jsr inc_tabl_addr
 		lda #1
-	 
+		;missing store defaultHandled?
+		sta defaultHandled
+		sta handled
 		ldx ($tableAddr)  ; set up the indirect jump
 		ldy ($tableAddr+1)
 		stx $tableAddr
@@ -164,7 +184,10 @@ _lp		ldy #0
 		lda ($tableAddr),y ;word4
 		cmp $sentence+3
 		bne _c	
-_run	ldy #4
+_run	lda #1	
+		sta handled
+		
+		ldy #4
 		lda ($tableAddr),y	; put jumpAddr in vector
 		sta $jumpVector
 		iny
@@ -241,7 +264,10 @@ _dn		;sentence should now match wildcarded string
 		cmp $sentence+3
 		bne _c	
 		;sentences match!  run them
-_run	ldy #4
+_run	lda #1
+		sta handled
+
+		ldy #4
 		lda ($tableAddr),y	; put jumpAddr in vector
 		sta $jumpVector
 		iny
@@ -285,6 +311,7 @@ _x		;restore old sentence
 
 jumpVector .word 0
 defaultHandled .byte 0
-sentenceRun .byte 0
+sentenceRun .byte 0  ;flag used for wildcards
+handled .byte 0 ; action taken or not
 oldDobj .byte 0
 oldIObj .byte 0

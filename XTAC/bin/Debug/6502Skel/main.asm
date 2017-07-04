@@ -80,12 +80,14 @@ _c 	jsr toascii
 	beq _lp
 	
 	jsr process_sentence	
-	jsr player_can_see
 	
 	jsr do_events
-	
+	jsr player_can_see	
+	jsr do_events
 	jsr inv_weight
+ 		
 	jmp _lp
+
 _x 	jsr printcr
 	rts
 
@@ -130,7 +132,8 @@ goodbye .text "BYE"
 	.byte 0
 prompt 	.text ">"
 	.byte 0
-
+confused .text "I DON'T FOLLOW YOU."
+	.byte 0
 ;quit .byte "QUIT",0h
 stack .byte 0
 

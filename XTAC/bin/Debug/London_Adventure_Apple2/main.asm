@@ -73,9 +73,17 @@ _c 	jsr toascii
 	
 	jsr process_sentence	
 	
+	lda handled
+	cmp #0
+	jmp _nh
 	jsr do_events
-	
-	jmp _lp
+	jmp _c
+_nh lda #confused%256	
+	sta strAddr
+	lda #confused/256	
+	sta strAddr+1
+	jsr printstrctr
+_c	jmp _lp
 _x 	jsr printcr
 	rts
 
@@ -120,6 +128,8 @@ prompt 	.text ">"
 	.byte 0
 
 quit .byte "QUIT",0h
+confused .text "I DON'T FOLLOW YOU."
+	.byte 0
 
 .include "UserVars6502.asm"	
 score .byte 0
