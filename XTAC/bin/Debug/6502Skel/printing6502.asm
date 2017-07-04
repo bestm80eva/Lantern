@@ -428,12 +428,11 @@ print_score
 
 		;now print right to left
 		lda score
-		pha ; save
+		sta divResult
 
-_lp		pla
+_lp		lda divResult
 		ldy #10
 		jsr div ; a mod y
-		pha ; save right-shifted score
 		lda divResult
 		cmp #0 ; done?
 		beq _x
@@ -446,7 +445,7 @@ _lp		pla
 		jsr backup_2
 
 		jmp _lp
-_x		pla	
+_x	
 		;print last char
 		lda remainder
 		clc
