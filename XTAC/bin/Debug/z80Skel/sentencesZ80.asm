@@ -1,6 +1,9 @@
 ;sentences running routines
 *MOD
 run_sentence
+		;clear the handled flag
+		ld a,0
+		ld (handled),a
 		;run checks (these return if not met)		
 		ld ix,check_table
 $lp?	ld a,(ix)
@@ -11,6 +14,8 @@ $lp?	ld a,(ix)
 		jp nz,$c?
 		inc ix
 		ld hl,$nxt?
+		ld a,1			;flag handled
+		ld (handled),a
 		push hl  ; "call" to check rountine
 		ld l,(ix)
 		ld h,(ix+1)
@@ -33,7 +38,14 @@ $d?		nop;
 		;run 'after' actions
 		ld ix,postactions_table
 		call run_actions
-		ret
+		
+		;was it handled?
+		ld a,(handled)
+		cp 1
+		jp z,$x?
+		ld hl,confused
+		call OUTLINCR
+$x?		ret
 
 ;actions table in ix
 ;post condition: action_run = 1
@@ -90,6 +102,8 @@ run_actions_
 		ld a,(ix+3)
 		cp (iy+3)		
 		jp nz,$c?			; i.o. 's don't match
+		ld a,1
+		ld (handled),a
 		push ix	; ix -> hl
 		pop hl
 		inc hl	; move 4 bytes to sub routine
@@ -130,6 +144,8 @@ $lp?	ld de,3		; reload de
 		ld hl,sentence
 		cp (hl)		; equal to verb?
 		jp nz,$c?
+		ld a,1
+		ld (handled),a
 		push ix	; ix -> hl
 		pop hl
 		inc hl		;skip 1 byte to function address
@@ -242,6 +258,7 @@ $c?		;restore sentence
 		
 		ld de,6 ; skip and repeat
 		add ix,de 
+		add ix,de 
 		jp $lp?
 		
 $x?		pop iy
@@ -250,5 +267,6 @@ $x?		pop iy
 		pop af
 		ret
 
-	
+confused DB "I DON'T QUITE FOLLOW YOU.",0h
 wildcards DB 0,0,0,0
+handled DB 0  ; whether default or user sentence was run
