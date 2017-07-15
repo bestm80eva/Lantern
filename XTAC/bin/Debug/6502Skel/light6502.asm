@@ -7,6 +7,12 @@
 ;is it a visible child of the player's room
 	.module player_can_see
 player_can_see
+		;save table addr
+		lda $tableAddr
+		pha
+		lda $tableAddr+1
+		pha
+		
 		lda #0
 		sta playerCanSee
 		jsr get_player_room
@@ -14,6 +20,13 @@ player_can_see
 		jsr get_obj_prop
 		cmp #1
 		beq _y
+		
+		;go to start of obj_table
+		lda #obj_table%256
+		sta $tableAddr
+		lda #obj_table/256
+		sta $tableAddr+1
+		
 _lp		ldy #0
 		lda ($tableAddr),y
 		cmp #255		
@@ -41,7 +54,11 @@ _y		lda #1
 		sta turnsWithoutLight
 		jmp _x		
 _n		inc turnsWithoutLight
-_x		rts
+_x		pla
+		sta $tableAddr+1
+		pla
+		sta $tableAddr
+		rts
 		
 playerCanSee .byte 1
 turnsWithoutLight .byte 0		
