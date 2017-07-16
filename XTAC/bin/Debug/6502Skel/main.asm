@@ -81,7 +81,7 @@ _c 	jsr toascii
 	
 	jsr process_sentence	
 	
-	jsr do_events
+;	jsr do_events
 	jsr player_can_see	
 	jsr do_events
 	jsr inv_weight

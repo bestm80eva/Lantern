@@ -46,12 +46,36 @@ look_in_sub
 	jsr printstrcr
 	jmp _x
 _lk	
-	jsr print_list_header
+	lda $sentence+1
+	ldx #OPEN
+	jsr get_obj_prop ; sets table addr
+	cmp #0
+	beq _cl 
+	;does it have anything?
+	lda $sentence+1
+	jsr has_visible_child
+	lda visibleChild
+	cmp #0
+	bne _sh
+	lda #itsEmpty%256
+	sta $strAddr
+	lda #itsEmpty/256
+	sta $strAddr+1	
+	jsr printstrcr
+	jmp _x
+_sh	jsr print_list_header
 	lda $sentence+1
 	sta parentId
 	inc indentLvl
 	jsr list_items
 	dec indentLvl
+	jmp _x
+_cl
+	lda #itsClosed%256
+	sta $strAddr
+	lda #itsClosed/256
+	sta $strAddr+1	
+	jsr printstrcr
 _x	rts
 	
 ;prints objects in the player's room
@@ -145,4 +169,8 @@ here .byte "HERE.",0h
 noLight .text "IT IS PITCH DARK."
 .byte 0
 noPeek .text "YOU CAN'T SEE INSIDE THAT."
+.byte 0
+itsClosed .text "IT'S CLOSED."
+.byte 0
+itsEmpty .text "IT'S EMPTY."
 .byte 0
