@@ -8,9 +8,11 @@ next_rand
 ;mod a by y	
 .module	div
 div	
+	pha 
 	lda #0
 	sta divResult
 	sty divisor
+	pla
 _lp	cmp divisor
 	bmi _x
 	sec
