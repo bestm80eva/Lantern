@@ -1,10 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;sentence jump table
-;this is not machine generated
+;this is NOT machine generated
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 sentence_table 
 	.byte look_verb_id
 	.word look_sub
+	.byte look_in_verb_id
+	.word look_in_sub
 	.byte inventory_verb_id
 	.word inventory_sub
 	.byte n_verb_id

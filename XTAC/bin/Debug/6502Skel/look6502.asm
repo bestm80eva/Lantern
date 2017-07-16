@@ -31,6 +31,28 @@ _x	pla
 	tax
 	pla
 	rts
+
+.module look_in_sub
+look_in_sub
+	lda $sentence+1
+	ldx #CONTAINER
+	jsr get_obj_prop ; sets table addr
+	cmp #1
+	beq _lk
+	lda #noPeek%256
+	sta $strAddr
+	lda #noPeek/256
+	sta $strAddr+1	
+	jsr printstrcr
+	jmp _x
+_lk	
+	jsr print_list_header
+	lda $sentence+1
+	sta parentId
+	inc indentLvl
+	jsr list_items
+	dec indentLvl
+_x	rts
 	
 ;prints objects in the player's room
 ;either inital desc or "there is a ____ here"
@@ -79,6 +101,7 @@ _l		nop ; list contents
 		lda ($tableAddr),y ;reload id
 		
 		sta parentId
+		jsr supporter_or_open_container
 		jsr print_list_header
 		inc indentLvl
 		jsr list_items ; recurse
@@ -120,4 +143,6 @@ ambientLight .byte 1 ;
 thereisa .byte "THERE IS A ",0h
 here .byte "HERE.",0h
 noLight .text "IT IS PITCH DARK."
+.byte 0
+noPeek .text "YOU CAN'T SEE INSIDE THAT."
 .byte 0
