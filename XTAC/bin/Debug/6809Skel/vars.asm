@@ -57,4 +57,4 @@ addtovar
 moves .dw 0
 health .dw 100
 prev_room .dw 0
-turns_without_light .db 0 
+turnsWithoutLight .db 0 

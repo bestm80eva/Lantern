@@ -9,15 +9,12 @@ do_events
 	pulu a
 	cmpa #0
 	bne @l
-	lda turns_without_light
+	lda turnsWithoutLight
 	inca 
-	sta turns_without_light
-	cmpa #5
-	cmpa #5
-	lbeq no_light_death  ; will return
-	bra @d
+	sta turnsWithoutLight
+ 	bra @d
 @l  lda #0						;set turns w/o light back to 0
-	sta turns_without_light
+	sta turnsWithoutLight
 @d  nop ; end else	
 
 ;	jsr disolve_salt_sub
@@ -28,12 +25,3 @@ do_events
 
 	
 	
-no_light_death
-	ldx #nld
-	jsr PRINT
-	jsr PRINTCR
-	jsr kill_player_sub
-	puls y,d,x
-	rts
-	
-nld .strz "AS YOU FUMBLE AROUND IN THE DARKNESS, THE UNSTABLE CANVERN COLLAPSES, KILLING YOU INSTANTLY.  OF LITTLE SOLACE IS THE THOUGHT THAT YOUR INVENTORY MIGHT BE OF USE TO FUTURE ADVENTURES EXPLORING THE CAVERNS."	

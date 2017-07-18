@@ -374,7 +374,7 @@ check_dobj_locked
 	jsr get_object_attribute
 	pulu a 	
 	anda #LOCKED_MASK
-	cmpa #1
+	cmpa #LOCKED_MASK
 	beq @y
 	ldx #notlocked
 	jsr PRINT
@@ -411,6 +411,44 @@ check_dobj_unlocked
 @x	pshu a
 	puls y,x,d
 	rts
+
+check_dobj_wearable
+	pshs d,x,y
+	lda sentence+1
+	pshu a
+	lda #PROPERTY_BYTE_2
+	pshu a
+	jsr get_object_attribute
+	pulu a 	
+	anda #WEARABLE_MASK
+	cmpa #WEARABLE_MASK
+	beq @y
+ 	ldx #notWearable
+	jsr PRINT
+	jsr PRINTCR	
+	lda #0
+	bra @x
+@y	lda #1
+@x	pshu a
+    puls y,x,d
+	rts
+
+check_light
+	pshs d,x,y
+	cmpa playerCanSee
+	cmpa #1
+ 	beq @x
+ 	ldx #tooDark
+	jsr PRINT
+	jsr PRINTCR	
+	lda #0
+@x	pshu a
+    puls y,x,d
+	rts	
 	
 notlocked  .strz "IT'S NOT LOCKED."	
-impossible .strz "THAT'S PHYSICALLY IMPOSSIBLE."	
+impossible .strz "THAT'S PHYSICALLY IMPOSSIBLE."
+alreadyWorn .strz "YOU'RE ALREADY WEARING THAT."
+notWearable .strz "YOU CAN'T WEAR THAT."
+tooDark .strz "IT'S TOO DARK TO SEE."
+	

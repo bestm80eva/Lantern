@@ -55,4 +55,6 @@ sentence_table
 	.dw enter_sub
 	.db quit_verb_id
 	.dw quit_sub
+	.db wear_verb_id
+	.dw wear_sub
 	.db 255
