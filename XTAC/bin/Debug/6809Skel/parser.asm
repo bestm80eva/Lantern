@@ -515,7 +515,7 @@ encode_sentence
 	pulu a
 	cmpa #1 ; if handled skip default handling
 	beq @s
-	jsr run_sentence ; run the sentence
+	jsr run_sentence ; run default sentence
 @s	nop ; run 'after' rules
 	ldx #postactions_table
 	jsr run_actions	;

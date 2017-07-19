@@ -20,6 +20,8 @@ do_events
 ;	jsr disolve_salt_sub
 	include event_jumps_6809.asm
 
+	jsr unwear_all
+	
 	puls y,d,x
 	rts
 
