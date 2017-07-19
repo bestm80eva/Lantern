@@ -11,8 +11,6 @@
 run_actions
 	stx table ; save table
 	pshs d,x,y 
-	lda #0	; push a 0 onto the stack
-	sta handled ; assume not handled
 	pshu a
 	pshu a  ; push a return code
 	jsr try_exact
@@ -56,6 +54,7 @@ try_exact
 	nop ; if got here sentence matches
 	jsr [4,x]
 	lda #1		;put a 1 on return stack
+	sta handled
 	sta ,u
 	bra @x
 @c  leax 6,x	; entries are 6 bytes
@@ -98,6 +97,7 @@ try_wildcards
 	nop ; if got here sentence matches
 	jsr [4,x]
 	lda #1		;put a 1 on return stack
+	sta handled
 	sta ,u
 	bra @x
 @c3 leax 6,x	; entries are 6 bytes

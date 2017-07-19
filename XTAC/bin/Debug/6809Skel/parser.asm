@@ -430,6 +430,8 @@ set_word_addr
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 encode_sentence	
 	pshs d,x,y
+	lda #0
+	sta handled
 	lda word1
 	cmpa #0
 	lbeq print_ret_pardon
@@ -508,8 +510,9 @@ encode_sentence
 	nop ; run 'before' rules
 @bf	ldx #preactions_table
  	jsr run_actions
-	pulu a
-	nop ; check the return code?
+	pulu a ;clr return code
+	lda #0
+	sta handled
 	ldx #actions_table
 	jsr run_actions
 	pulu a
@@ -519,8 +522,15 @@ encode_sentence
 @s	nop ; run 'after' rules
 	ldx #postactions_table
 	jsr run_actions	;
-	pulu a
+	pulu a ; clear return code	
+	lda handled
+	cmpa #0
+	beq @nh
 	jsr do_events
+	bra @x
+@nh ldx #dontFollow
+	jsr PRINT
+	jsr PRINTCR
 @x	puls y,x,d
 	rts	
 
@@ -607,7 +617,6 @@ get_object_property
 ;player typed in.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
 run_sentence
-	nop	;	try the custom actions
 	nop	;	try the default actions
 	ldx #sentence_table
 @lp	lda ,x
@@ -616,6 +625,8 @@ run_sentence
 	cmpa sentence
 	bne @sk
 	jsr [1,x]
+	lda #1
+	sta handled
 	bra @x
 @sk	leax 3,x	; skip to next handler
 	bne @lp
@@ -627,3 +638,5 @@ prep_index .db 0
 prep_id .db 0
 sentence_type .db 0	
 sentence .db 255,255,255,255
+
+dontFollow .strz "I DON'T FOLLOW YOU."
