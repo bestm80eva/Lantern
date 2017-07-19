@@ -27,6 +27,7 @@ open_sub
 	ldx #done
 	jsr PRINT
 	jsr PRINTCR
+	jsr reveal_contents
 	puls y,x,d
 	rts
 	
@@ -57,6 +58,32 @@ close_sub
 	puls y,x,d
 	rts
 
+;if an object has contents, they are 
+;listed
+reveal_contents
+	pshs d,x,y
+	lda sentence+1
+	pshu a
+	jsr count_visible_items
+	pulu a
+	cmpa #0
+	bne @si 	;show items
+	bra @x
+@si	nop	 	;list items`
+	ldx #reveal1
+	jsr PRINT
+	lda sentence+1
+	pshu a
+	jsr print_obj_name
+	ldx #reveal2
+	jsr PRINT
+	jsr PRINTCR
+	lda sentence+1
+	pshu a
+	jsr print_obj_contents
+@x	puls y,x,d
+	rts
+	
 	
 get_player_room
 	pshs d,x,y
@@ -70,4 +97,5 @@ get_player_room
 	puls y,x,d
 	rts	
 	
-	
+reveal1 .strz "OPENING THE "	
+reveal2 .strz "REVEALS:"	
