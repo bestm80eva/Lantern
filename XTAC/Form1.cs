@@ -1519,6 +1519,28 @@ namespace XTAC
             }
         }
 
+        private void commodore64ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fileName != "")
+            {
+                XmlToTables converter = XmlToTables.GetInstance();
+                try
+                {
+                    converter.ConvertC64(fileName);  //"f3xml.xml"
+                    MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Export failed!" + ex.Message + ex.InnerException.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("File name is null.  Please save your project before exporting.");
+            }
+
+        }
+
         
 
     }

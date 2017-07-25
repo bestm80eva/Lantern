@@ -181,6 +181,7 @@
             this.zXSpectrumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commodore64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -1694,6 +1695,7 @@
             // 
             this.exportToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.appleToolStripMenuItem,
+            this.commodore64ToolStripMenuItem,
             this.coCoToolStripMenuItem,
             this.tRS80ToolStripMenuItem,
             this.zXSpectrumToolStripMenuItem});
@@ -1744,6 +1746,13 @@
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
+            // commodore64ToolStripMenuItem
+            // 
+            this.commodore64ToolStripMenuItem.Name = "commodore64ToolStripMenuItem";
+            this.commodore64ToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.commodore64ToolStripMenuItem.Text = "Commodore 64";
+            this.commodore64ToolStripMenuItem.Click += new System.EventHandler(this.commodore64ToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1753,7 +1762,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Lantern";
+            this.Text = " ";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -1936,6 +1945,7 @@
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.ToolStripMenuItem zXSpectrumToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem commodore64ToolStripMenuItem;
     }
 }
 

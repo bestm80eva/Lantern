@@ -76,37 +76,7 @@ print_description
 	jsr printix
 	rts
 
- 	
-;prints the string whose addr is stored in strAddr
-	.module printstr
-printstr
-			pha
-			tya
-			pha
-			ldy #0
-_lp1		lda ($strAddr),y
-			cmp #0
-			beq _x
-			cmp #32 ; space;
-			bne _s
-			jsr get_wrd_len  ; get and store length of next word
-			tax
-			sec
-			lda $21 ; line len
-			sbc hcur
-			cmp wrdLen
-			bcs _s1	; room left
-			lda #$8D		; output a cr instead
-			jmp _c
-_s1			txa			; restore char and output		
-_s			ora #80h	; turn on don't flash bit
-_c			jsr $cout1
-			iny
-			jmp _lp1
-_x			pla
-			tay
-			pla	
-			rts
+
 			
 ;prints the name of the object supplied in 'a'
 ;each entry is 4 four bytes
@@ -463,14 +433,7 @@ _x
 		rts
 
  		
-;the sub is used by print score		
-backup_2
-	lda hcur
-	sec
-	sbc #2
-	sta hcur
-	jsr $fc22 ; recompute cur offset
-	rts	
+
 	
 contains .text "CONTAINS..."	
 	.byte 0

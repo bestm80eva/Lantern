@@ -72,12 +72,15 @@ namespace XMLtoAdv
         {
             skelDirs["_TRS80"] = "z80Skel";
             skelDirs["_6809"] = "6809Skel";
-            skelDirs["_6502"] = "6502Skel";
             skelDirs["_Apple2"] = "6502Skel";
+            skelDirs["_C64"] = "6502Skel";
             skelDirs["_Spectrum"] = "z80Skel";
 
             pltfDirs["_Spectrum"] = "spectrum";
             pltfDirs["_TRS80"] = "trs80";
+            pltfDirs["_Apple2"] = "apple2";
+            pltfDirs["_C64"] = "c64";
+
         }
 
 
@@ -1172,7 +1175,9 @@ namespace XMLtoAdv
             }
         }
 
-
+        /*Creates the directory (if needed) and copies 
+         * code in from the appropriate common folder
+         */
         void CreateOutputDir(string tgtPlatform)
         {
             XmlNodeList list = doc.SelectNodes("//project/projname");            
@@ -1203,7 +1208,8 @@ namespace XMLtoAdv
 
             p.WaitForExit();
 
-            if (tgtPlatform.Equals("_Spectrum") || tgtPlatform.Equals("_TRS80"))
+            if (tgtPlatform.Equals("_Spectrum") || tgtPlatform.Equals("_TRS80") ||
+                tgtPlatform.Equals("_C64") || tgtPlatform.Equals("_Apple2"))
             {
                 //copy platform specific files into working dir
                 string pltfDir = pltfDirs[tgtPlatform];
@@ -1248,5 +1254,41 @@ namespace XMLtoAdv
             }
 
         }
+
+
+        public void ConvertC64(string fileName)
+        {
+            string oldDir = Environment.CurrentDirectory;
+
+            try
+            {
+
+                //get the file path 
+                CreateTables(fileName, "_C64");
+
+                WriteWelcomeMessage("Welcome6502.asm", ".text", "\n.byte 0\n");
+                WriteStringTable6502("StringTable6502.asm", "string_table", descriptionTable);
+                WriteStringTable6502("Dictionary6502.asm", "dictionary", dict);
+                WriteStringTable6502("NogoTable6502.asm", "nogo_table", nogoTable);
+                WriteStringTable6502("PrepTable6502.asm", "prep_table", prepTable);
+                WriteObjectTable6502("ObjectTable6502.asm");
+                WriteObjectWordTable("ObjectWordTable6502.asm", ".byte");
+                WriteVerbTable6502("VerbTable6502.asm");
+                WriteCheckTable("CheckRules6502.asm", ".byte", ".word");
+                WriteSentenceTable("6502", "before", ".byte", ".word");
+                WriteSentenceTable("6502", "instead", ".byte", ".word");
+                WriteSentenceTable("6502", "after", ".byte", ".word");
+                WriteUserVarTable(doc, "6502");           // WriteEvents(doc, "6502", new AsmWriter6809());
+
+                WriteBackdropTable(doc, "BackDropTable6502.asm", ".db");
+                WriteEvents(doc, "6502", new AsmWriter6502());
+            }
+            finally
+            {
+                Environment.CurrentDirectory = oldDir;
+            }
+
+        }
+
     }//end class
 }
