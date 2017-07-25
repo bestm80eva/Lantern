@@ -77,23 +77,6 @@ print_description
 	rts
 
  	
-;prints the string whose addr is stored in strAddr
-printstr:
-			pha
-			tya
-			pha
-			ldy #0
-_lp1		lda ($strAddr),y
-			cmp #0
-			beq _x2
-			ora #80h	; turn on don't flash bit
-			jsr $cout1
-			iny
-			jmp _lp1
-_x2			pla
-			tay
-			pla	
-			rts
 			
 ;prints the name of the object supplied in 'a'
 ;each entry is 4 four bytes
@@ -147,20 +130,6 @@ _x		jsr printsp ;print a space
 		tay
 		pla
 		tax
-		pla
-		rts
-		
-printcr:
-		pha
-		lda #$8D ; non-flashing cr
-		jsr $cout1
-		pla
-		rts
-
-printsp
-		pha
-		lda #$A0  ; non-flashing cr
-		jsr $cout1
 		pla
 		rts
 		 
@@ -286,7 +255,7 @@ print_list_header
 		jsr print_on_a_is
 		jmp _x
 _c		
-		ldy #0
+		ldy #0 
 		lda ($tableAddr),y
 		jsr print_a_contains
 _x		pla
@@ -294,48 +263,86 @@ _x		pla
 		pla
 		rts
 
-	.module
-print_score
-		;move cursor to bar
-		lda SCORE
-		psha
+		
+	.module print_adj	
+print_adj
+	ldy #PROPERTY_BYTE_2
+	lda ($tableAddr),y
+	and #LIT_MASK
+	cmp #0
+	beq _bw
+	lda #providingLight%256
+	sta strAddr	
+	lda #providingLight/256
+	sta strAddr+1
+	jsr printstr
+	jmp _x
+_bw	lda ($tableAddr),y
+	and #BEINGWORN_MASK
+	cmp #0
+	beq _x
+	lda #beingWorn%256
+	sta strAddr	
+	lda #beingWorn/256
+	sta strAddr+1
+	jsr printstr
+_x	 
+	rts
 
-_lp		pla
-		ldy #10
-		call a_div_y ; a mod b
-		pha ; save right-shifted score
-		cmp #0  ; done?
-		beq _x
+;computes the length of the word at strAddr,y
+;and stores in wrdLen
+;use to make sure words don't wrap onto the next line
+;registers are preserved
+	.module get_wrd_len
+get_wrd_len
+	pha
+	txa
+	pha
+	tya
+	pha
+	ldx #0
+	iny ; space space word starts on
+_lp lda ($strAddr),y
+	cmp #32 ; space
+	beq _x
+	cmp #0 ; null
+	beq _x
+	inx
+	iny
+	jmp _lp	
+_x  stx wrdLen
+	pla
+	tay
+	pla
+	tax
+	pla
+	rts
+
+
+ 		
+;the sub is used by print score		
+backup_2
+	lda hcur
+	sec
+	sbc #2
+	sta hcur
+	jsr $fc22 ; recompute cur offset
+	rts	
 	
-		lda (divRemainder)
-		clc
-		adc #48 ; to ascii
-		jsr cout1	
-		jsr backup_2
-
-		jmp _lp
-_x	
-		;print last char
-		ld a,c
-		add a,48 ; to ascii
-		call print1_zx	
-		call backup_2
-
-		pop de
-		pop bc
-		pop af
-		ret 
-		rts
-
-back_up_2
-		rts
 contains .text "CONTAINS..."	
 	.byte 0
 onthe .text "ON THE "	
 	.byte 0
 is .text "IS..."	
 	.byte 0
-	
+providingLight .text " (PROVIDING LIGHT)"	
+	.byte 0
+beingWorn .text " (BEING WORN)"	
+	.byte 0
+scoreText .text "SCORE "
+	.byte 0
+hundred .text "/100"
+	.byte 0
 objId .byte 0		
 srchIndex .byte  0
-
+wrdLen .byte 0

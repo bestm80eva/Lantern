@@ -1,5 +1,7 @@
 ;6502 parse routines
 
+#define kbBufLo kbdbuf%256
+#define kbBufHi kbdbuf/256
 
 ;clr_buffr
 ;sets page to all 0s
@@ -208,7 +210,7 @@ remove_articles
 		pha
 		tya
 		pha
-		lda #0 ;  put kb buff in tableAddr
+		lda #kbBufLo ;  put kb buff in tableAddr
 		sta $tableAddr
 		lda #kbBufHi ;  set up addr  in $200
 		sta $tableAddr+1		
@@ -253,7 +255,7 @@ _x		pla
 	.module collapse_buffer
 collapse_buffer
 		pha
-		lda #0
+		lda #kbBufLo
 		sta $tableAddr
 		lda #$kbBufHi
 		sta $tableAddr+1
@@ -392,7 +394,7 @@ is_article
 	.module is_preposition
 is_preposition
 		pha
-		lda #0
+		lda #kbBufLo
 		sta $strDest	; set table to search
 		lda #kbBufHi
 		sta $strDest+1
@@ -445,7 +447,7 @@ _lp1	lda $200,y			;copy 1st word to word1
 		jmp _lp1
 _shft1	sty $wrdEnd			; shift keyboard buffer left	
 		sty firstWrdLen
-		lda #0				; set address to shift from
+		lda #kbBufLo				; set address to shift from
 		sta $tableAddr
 		lda #kbBufHi
 		sta $tableAddr+1		
@@ -481,7 +483,7 @@ _out	pha   ; save whitespace char
 		lda #0
 		sta $word1,y
 		jmp _x
-_prp	lda #0				; set address to shift from
+_prp	lda #kbBufLo			; set address to shift from
 		sta $tableAddr
 		lda #kbBufHi
 		sta $tableAddr+1		

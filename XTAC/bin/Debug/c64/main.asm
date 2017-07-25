@@ -20,6 +20,9 @@
 #define strSrc 	$FB ; (fb-fc)
 #define strDest	$FD ; (fd-de)
 
+#define kbBufLo kbdbuf%256
+#define kbBufHi kbdbuf/256
+
 ;define cls $FC58
 
 ;basic header

@@ -26,7 +26,10 @@
 #define tableAddr FE
 #define strSrc 	$EB ; some zero page addr
 #define strDest	$FA ; some zero page addr
+
+#define kbBufLo $0
 #define kbBufHi $02
+
 #define cls $FC58
 .org $800
 	.module main

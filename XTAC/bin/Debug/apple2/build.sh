@@ -1,5 +1,4 @@
 #!/bin/sh
-B
 echo "This script requires java and AppleCommander-1.3.5.13-ac"
 rm -f errs.txt
 rm -f main.bin
@@ -25,4 +24,4 @@ java -jar AppleCommander-1.3.5.13-ac.jar -p advent.dsk game.bin bin 0x800 < main
 
 cp advent.dsk "/cygdrive/c/Users/Evan/Documents/Apple2/ADTPro-2.0.2/disks"
 
-./Applewin.exe -d1 ADOS3.3.dsk -d2 advent.dsk
+./Applewin.exe -d1 advent.dsk -d2 PRODOS.dsk

@@ -317,13 +317,13 @@ namespace XTAC
 
         bool GetCheck(string s)
         {
-            if (s.Equals("1"))
-            {
-                return true;
-            }
-            else
+            if (s == null || s.Equals("0"))
             {
                 return false;
+            }
+            else  
+            {
+                return true;
             }
         }
 

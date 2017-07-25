@@ -124,9 +124,17 @@ namespace XMLtoAdv
             for (int i=0; i < xmlFlagNames.Length; i++)
             {
                 bool yesNo = false;
-                string val = flagsNode.Attributes.GetNamedItem(xmlFlagNames[i]).Value;
-                if (val == "1") { yesNo = true; }
-                flagsMap.Add(xmlFlagNames[i], yesNo);
+                string val = "0";
+
+                try
+                {
+                    val = flagsNode.Attributes.GetNamedItem(xmlFlagNames[i]).Value;
+                }
+                finally
+                {
+                    if (val == "1") { yesNo = true; }
+                    flagsMap.Add(xmlFlagNames[i], yesNo);
+                }
             }
         }
 

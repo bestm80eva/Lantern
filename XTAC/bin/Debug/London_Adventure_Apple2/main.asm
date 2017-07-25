@@ -16,7 +16,9 @@
 #define keyin  $FD0C
 #define getlin $FD6A 
 #define cout1 $FDF0
+#define scrWdth $21
 #define hcur $24
+#define vcur $25
 
 ;zero page vars
 #define strAddr $CE
@@ -25,16 +27,22 @@
 #define strSrc 	$EB ; some zero page addr
 #define strDest	$FA ; some zero page addr
 #define kbBufHi $02
-
+#define cls $FC58
 .org $800
 	.module main
 start
+	tsx			 ;save stack
+	stx stack
+	
+	jsr cls
 	jsr show_intro
  	jsr look_sub
 _lp
  	jsr clr_buffr
 	jsr clr_words
-
+    jsr printcr
+	jsr print_title_bar
+			
 	jsr readkb
 	lda $200
 	cmp #$8D ; cr
@@ -45,15 +53,15 @@ _c 	jsr toascii
 	lda #0
 	sta strSrc
 	
-	lda #kbBufHi ; did the user type quit
-	sta strSrc+1
-	lda #quit%256
-	sta strDest
-	lda #quit/256	
-	sta strDest+1
-	jsr streq6
-	cmp #1
-	beq _x
+;	lda #kbBufHi ; did the user type quit
+;	sta strSrc+1
+;	lda #quit%256
+;	sta strDest
+;	lda #quit/256	
+;	sta strDest+1
+;	jsr streq6
+;	cmp #1
+;	beq _x
 
 	jsr remove_articles
 	jsr get_verb
@@ -73,17 +81,13 @@ _c 	jsr toascii
 	
 	jsr process_sentence	
 	
-	lda handled
-	cmp #0
-	jmp _nh
+;	jsr do_events
+	jsr player_can_see	
 	jsr do_events
-	jmp _c
-_nh lda #confused%256	
-	sta strAddr
-	lda #confused/256	
-	sta strAddr+1
-	jsr printstrctr
-_c	jmp _lp
+	jsr inv_weight
+ 		
+	jmp _lp
+
 _x 	jsr printcr
 	rts
 
@@ -91,6 +95,7 @@ _x 	jsr printcr
 .include "intro6502.asm"
 .include "strings6502.asm"
 .include "printing6502.asm"
+.include "a2printing.asm"
 .include "look6502.asm"
 .include "parser6502.asm"
 .include "tables6502.asm"
@@ -99,10 +104,12 @@ _x 	jsr printcr
 .include "checks6502.asm"
 .include "sentences6502.asm"
 .include "movement6502.asm"
+.include "light6502.asm"
 .include "inventory6502.asm"
 .include "containers6502.asm"
-.include "doevents6502.asm"
 .include "math6502.asm"
+.include "doevents6502.asm"
+.include "wear_sub.asm"
 .include "Events6502.asm"
 .include "ObjectWordTable6502.asm"
 .include "Dictionary6502.asm"
@@ -126,12 +133,13 @@ goodbye .text "BYE"
 	.byte 0
 prompt 	.text ">"
 	.byte 0
-
-quit .byte "QUIT",0h
 confused .text "I DON'T FOLLOW YOU."
 	.byte 0
+;quit .byte "QUIT",0h
+stack .byte 0
 
 .include "UserVars6502.asm"	
 score .byte 0
 gameOver .byte 0
+temp .byte 0
 .end

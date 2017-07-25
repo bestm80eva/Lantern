@@ -4,13 +4,21 @@
 #define CLR 147
 #define CCOL D4
 #define CROW C9 
+
 printsp
 		pha
 		lda #SPACE  ; non-flashing cr
 		jsr $cout1
 		pla
 		rts
-		
+
+printcr:
+	pha
+	lda #$CR ; non-flashing cr
+	jsr $cout1
+	pla
+	rts
+	
 ;prints the room name and score across the top
 	.module print_title_bar
 print_title_bar
