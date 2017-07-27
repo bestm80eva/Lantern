@@ -1,6 +1,6 @@
-../bin/Z80asm.exe -nh main.asm
+.\Z80asm.exe -nh main.asm
 
-if [ -e "main.cmd" ]
+if  EXIST main.cmd 
 then
 echo "main.cmd has been built"
 echo ""

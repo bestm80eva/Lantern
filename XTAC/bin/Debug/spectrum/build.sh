@@ -1,7 +1,7 @@
 #!/bin/sh
 
 rm data 
-./Z80asm.exe -com main.asm
+../bin/Z80asm.exe -com main.asm
 
 if [ ! -e "main.com" ]
 then
@@ -18,7 +18,7 @@ then
 	echo "attaching load screen"
 	cp sloader.tap game.tap
 	cp loading.scr loading
-	./mctrd add loading game.tap
+	../bin/mctrd add loading game.tap
 else
 	cp loader.tap game.tap
 fi

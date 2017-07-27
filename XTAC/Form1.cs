@@ -1396,6 +1396,7 @@ namespace XTAC
 
             if (fileName != "")
             {
+                Save();
                 XmlToTables converter = XmlToTables.GetInstance();
                 converter.ConvertTRS80(fileName);  //"f3xml.xml"
                 MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
@@ -1411,6 +1412,7 @@ namespace XTAC
 //            fileName = Save();
             if (fileName != "")
             {
+                Save();
                 XmlToTables converter = XmlToTables.GetInstance();
                 converter.Convert6809(fileName);  //"f3xml.xml"
                 MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
@@ -1439,6 +1441,7 @@ namespace XTAC
                 XmlToTables converter = XmlToTables.GetInstance();
                 try
                 {
+                    Save();
                     converter.ConvertApple2(fileName);  //"f3xml.xml"
                     MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
                 }
@@ -1502,6 +1505,7 @@ namespace XTAC
 
             if (fileName != "")
             {
+                Save();
                 XmlToTables converter = XmlToTables.GetInstance();
                 try
                 {
@@ -1523,6 +1527,7 @@ namespace XTAC
         {
             if (fileName != "")
             {
+                Save();
                 XmlToTables converter = XmlToTables.GetInstance();
                 try
                 {
@@ -1540,8 +1545,6 @@ namespace XTAC
             }
 
         }
-
-        
 
     }
 }
