@@ -157,7 +157,6 @@
             this.ruleNameTextBox = new System.Windows.Forms.TextBox();
             this.ruleCodeTextBox = new System.Windows.Forms.TextBox();
             this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.label41 = new System.Windows.Forms.Label();
             this.userVarsListBox = new System.Windows.Forms.ListBox();
             this.label37 = new System.Windows.Forms.Label();
@@ -176,12 +175,12 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.appleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commodore64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coCoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tRS80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zXSpectrumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.commodore64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -1522,7 +1521,6 @@
             // 
             // tabPage7
             // 
-            this.tabPage7.Controls.Add(this.textBox5);
             this.tabPage7.Controls.Add(this.label41);
             this.tabPage7.Controls.Add(this.userVarsListBox);
             this.tabPage7.Controls.Add(this.label37);
@@ -1536,17 +1534,6 @@
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Text = "Variables";
             this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // textBox5
-            // 
-            this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox5.Location = new System.Drawing.Point(173, 44);
-            this.textBox5.Multiline = true;
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(100, 20);
-            this.textBox5.TabIndex = 9;
-            this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
             // 
             // label41
             // 
@@ -1666,28 +1653,28 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveToolStripMenuItem.Text = "Save As...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1709,6 +1696,13 @@
             this.appleToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.appleToolStripMenuItem.Text = "Apple ][";
             this.appleToolStripMenuItem.Click += new System.EventHandler(this.appleToolStripMenuItem_Click);
+            // 
+            // commodore64ToolStripMenuItem
+            // 
+            this.commodore64ToolStripMenuItem.Name = "commodore64ToolStripMenuItem";
+            this.commodore64ToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.commodore64ToolStripMenuItem.Text = "Commodore 64";
+            this.commodore64ToolStripMenuItem.Click += new System.EventHandler(this.commodore64ToolStripMenuItem_Click);
             // 
             // coCoToolStripMenuItem
             // 
@@ -1745,13 +1739,6 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // commodore64ToolStripMenuItem
-            // 
-            this.commodore64ToolStripMenuItem.Name = "commodore64ToolStripMenuItem";
-            this.commodore64ToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.commodore64ToolStripMenuItem.Text = "Commodore 64";
-            this.commodore64ToolStripMenuItem.Click += new System.EventHandler(this.commodore64ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -1937,7 +1924,6 @@
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem coCoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tRS80ToolStripMenuItem;
-        private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.ToolStripMenuItem appleToolStripMenuItem;
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.Label label54;

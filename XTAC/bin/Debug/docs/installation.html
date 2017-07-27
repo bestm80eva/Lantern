@@ -1,0 +1,52 @@
+<html>
+<body>
+<h3>Overview</h3>
+Latern is an IDE which lets you create a text adventure that can be exported to several classic 8-bit computers.
+<br>
+<br>
+Platforms currently supported are: Apple 2, Coco 2/3, Commodore 64/128, TRS-80 1/3/4, ZX Spectrum
+<br><br>
+The IDE writes assembly code for a specific target computer.  Other free, 3rd party tools will be needed to assemble the code and attach it to a disk or tape image. A list of these tools is provided below.
+<br>
+<br>
+<b>Features</b>:<br> 
+A GUI for creating the game.<br>
+A decent, four-word parser<br>
+A simple 'C' like language for custom logic.<br>
+Easy export to the target platform.<br>
+<br>
+<b>Limitations</b><br>
+No saving/restoring game (yet)<br>
+Game Size - Unlike Infocom's Z-Machine, this tool does not support paging. Consequently, the maximum game size is limited to the amount of RAM available in the target machine.
+<br>
+<h3>System Requirements</h3>
+A Windows PC or Linux/WINE.<br>
+The .Net runtine environment.<br>
+<h3>Installation</h3>
+Download the file release.zip from http://github.com/evancwright/lantern<br>
+Unzip the archive in a convenient location. Next, you'll need to get the tools to support building on your intended target platform.<br>
+<br>
+<h3>3rd Party Tools</h3>
+As mentioned before, Latern writes assembly code for several classic computers. However, free 3rd party tools are needed for assembling, creating disk images, and attaching disk images.<br>
+Tools used by Latern need to be placed in the <i>bin</i> folder under the Latern installation so the build scripts can find them.<br>
+<br>
+<b>Apple 2</b><br>
+Tools required: java runtime,tasm.exe (Telemark Assembler),AppleCommander.<br> 
+<br>
+<b>Coco 2/3</b><br>
+Tools required: lwasm,writecocofile<br>
+These are part of lwtools and can be built from source.<br><br>
+<b>Commodore 64/128</b><br>
+Tools required: tasm.exe (Telemark Assembler), C1541.exe.<br>
+<br>
+C1541 is a part of the WinVice C64 emulator suite. If you download WinVice you can also run your finished game using x64.exe<br>
+<br>
+<b>TRS-80</b><br>
+Tools required: TRSTools and Z80asm.exe.  These can be downloaded freely from Matthew Reed's site.<br><br>
+<b>ZX Spectrum</b><br>
+Tools required: Z80asm.exe, taputils.exe.  <br><br>
+<br>
+Again, these tools need to go in the <i>bin</i> directory under <i>Lantern</i>.
+
+</body>
+</html><br>

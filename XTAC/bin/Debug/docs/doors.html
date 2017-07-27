@@ -1,0 +1,30 @@
+<html>
+<body>
+<h3>Doors</h3>
+Doors are modeled as an object that exists between two rooms.<br>
+1. Create a new object<br>
+2. Check its <i>door</i> check box.<br>
+3. Connect it to two rooms<br>
+4. Set its parent to the room where you want the door to appear.<br>
+
+ 
+<img src="doors.png"><br>
+<br>
+<b>Making a door that appears in 2 rooms.</b><br>
+(This would be like the kitchen window in Zork, which you can open or close the window from either the kitchen or from behind the house).
+<br>
+This can be achieved using an Event to place the door in the player's current location.<br>
+<br>
+<pre>
+if (player.holder == room1)
+{
+	wooden door.holder = room1;
+}
+else if (player.holder == room2)
+{
+	wooden door.holder = room2;
+}
+</pre>
+
+</body>
+</html>
