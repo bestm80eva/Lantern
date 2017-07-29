@@ -130,6 +130,10 @@ namespace XMLtoAdv
                 {
                     val = flagsNode.Attributes.GetNamedItem(xmlFlagNames[i]).Value;
                 }
+                catch
+                {
+                    val = "0";
+                }
                 finally
                 {
                     if (val == "1") { yesNo = true; }

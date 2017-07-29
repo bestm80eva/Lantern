@@ -74,12 +74,14 @@ namespace XMLtoAdv
             skelDirs["_6809"] = "6809Skel";
             skelDirs["_Apple2"] = "6502Skel";
             skelDirs["_C64"] = "6502Skel";
+            skelDirs["_CPC464"] = "z80Skel";
             skelDirs["_Spectrum"] = "z80Skel";
 
             pltfDirs["_Spectrum"] = "spectrum";
             pltfDirs["_TRS80"] = "trs80";
             pltfDirs["_Apple2"] = "apple2";
             pltfDirs["_C64"] = "c64";
+            pltfDirs["_CPC464"] = "cpc464";
 
         }
 
@@ -356,6 +358,19 @@ namespace XMLtoAdv
 
             //get the file path 
             CreateTables(fileName, "_TRS80");
+
+            WriteZ80Common();
+
+            Environment.CurrentDirectory = oldDir;
+        }
+
+
+        public void ConvertCPC464(string fileName)
+        {
+            string oldDir = Environment.CurrentDirectory;
+
+            //get the file path 
+            CreateTables(fileName, "_CPC464");
 
             WriteZ80Common();
 
@@ -1209,7 +1224,8 @@ namespace XMLtoAdv
             p.WaitForExit();
 
             if (tgtPlatform.Equals("_Spectrum") || tgtPlatform.Equals("_TRS80") ||
-                tgtPlatform.Equals("_C64") || tgtPlatform.Equals("_Apple2"))
+                tgtPlatform.Equals("_C64") || tgtPlatform.Equals("_Apple2") ||
+                tgtPlatform.Equals("_CPC464"))
             {
                 //copy platform specific files into working dir
                 string pltfDir = pltfDirs[tgtPlatform];
