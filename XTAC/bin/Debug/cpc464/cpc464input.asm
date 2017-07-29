@@ -3,8 +3,8 @@ BS equ 7Fh
 ;read a line of text into the input buffer
 *MOD
 getlin
-;		call TXT_CUR_ENABLE
-;		call TXT_PLACE_CUR
+		call TXT_CUR_ENABLE
+		call TXT_PLACE_CUR
 		ld hl,inbuf
 $lp?  	call WAIT_CHAR
 		jp nc,$lp?	;no char ready
@@ -18,20 +18,38 @@ $lp?  	call WAIT_CHAR
 		call CHAROUT
 		pop hl
 		inc hl
+		call TXT_PLACE_CUR
 		jp $lp? ;get next char
-$bs?			;are we at the start?
+$bs?	;are we at the start?
+		ld a,(HCUR)
+		cp 0
+		jp z,$lp?
 		ld a,0		;clear buffer
-		ld (hl),a	;output a space
-		ld a,32d
+		dec hl
+		ld (hl),a	
+		ld a,32d  ;output a space
 		call CHAROUT 
 		ld a,08h		;backup twice
 		call CHAROUT
+		ld a,08h		;backup twice
+		call CHAROUT
+		ld a,32d  ;output a space
+		call CHAROUT 
 		ld a,08h
 		call CHAROUT
+		call TXT_PLACE_CUR
 		jp $lp? ;get next char
-$out? 	call printcr
+$out? 	call TXT_HIDE_CUR
+		call printcr
 		ld a,0
 		ld (hl),a
+		;call TXT_UNDRAW_CUR
+		call TXT_HIDE_CUR
+		ld a,32
+		call CHAROUT
+		call TXT_CUR_DISABLE
+		
+		;call TXT_UNDRAW_CUR
 		ret
 		
 ;puts cursor back on bottom line		

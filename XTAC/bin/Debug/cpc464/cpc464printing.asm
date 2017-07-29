@@ -34,9 +34,23 @@ OUTLIN
 $lp?	ld a,(hl)
 		cp 0
 		jp z,$x?
+		cp 32 ; space;
+		jp nz,$c?
+		call word_len ;len->b
+		;is there room left on line
+		ld a,(HCUR)
+		ld c,a
+		ld a,39
+		sub c ; a has remaining len
+		cp b
+		jp p,$sp?
+		call printcr
 		inc hl
+		jp $lp?
+$sp?	ld a,32 ; reload space	
+$c?		inc hl
 		push hl
-		call 47962
+		call CHAROUT
 		pop hl
 		jp $lp?	
 $x?
