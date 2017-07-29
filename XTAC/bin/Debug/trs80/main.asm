@@ -42,6 +42,7 @@ getcommand
 
 *INCLUDE doeventsZ80.asm		
 *INCLUDE io.asm	
+*INCLUDE trs80printing.asm
 *INCLUDE parser.asm
 *INCLUDE look.asm
 *INCLUDE tables.asm
@@ -80,5 +81,7 @@ moves DB 0
 ;turns_without_light DB 0
 turnsWithoutLight DB 0
 health DB 100
+stacksav DW 0
+
 	END START
 ;END
