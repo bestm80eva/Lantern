@@ -82,3 +82,31 @@ atoupper
 	jp p,$x?
 	sub 32
 $x?	ret
+
+;returns the length of the word indexed 
+;by hl in register b
+;other registers are preserved.
+;assumes (hl) points to a space
+*MOD
+word_len
+	push af
+	push hl
+	
+	inc hl	
+	ld b,1
+$lp?
+	ld a,(hl)
+	
+    cp 0  ; null
+	jp z,$x?
+
+    cp 32  ; space
+	jp z,$x?	 
+
+	inc b
+	inc hl
+	jp $lp?
+
+$x?	pop hl
+	pop af
+	ret

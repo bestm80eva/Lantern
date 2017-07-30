@@ -111,7 +111,7 @@ quit	ret
 *INCLUDE math.asm
 *INCLUDE UserVarsZ80.asm
 
-score DB 100
+score DB 0
 gameOver DB 0
 moves DB 0
 turnsWithoutLight DB 0

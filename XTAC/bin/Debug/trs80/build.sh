@@ -1,4 +1,16 @@
-../bin/Z80asm.exe -nh main.asm
+#!/bin/sh
+
+
+
+if [ ! -e "../bin/z80asm.exe" ]
+then
+	echo "unable to find Z80asm.exe"
+	echo "please download this and put it in the 'bin' folder"
+	exit
+fi
+
+rm -f main.cmd
+../bin/z80asm.exe -nh main.asm
 
 if [ -e "main.cmd" ]
 then
