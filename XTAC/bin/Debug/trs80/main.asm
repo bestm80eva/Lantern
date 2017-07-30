@@ -42,7 +42,6 @@ getcommand
 
 *INCLUDE doeventsZ80.asm		
 *INCLUDE io.asm	
-*INCLUDE trs80printing.asm
 *INCLUDE parser.asm
 *INCLUDE look.asm
 *INCLUDE tables.asm

@@ -1,6 +1,6 @@
 BUFSIZE EQU 48
 KEYIN EQU 40H
-
+SCR_WIDTH EQU 64
 *MOD
 getlin
 		push bc
@@ -32,8 +32,27 @@ OUTLIN
 $lp?	ld a,(hl)
 		cp 0
 		jp z,$x?
+		cp 32 ; space;
+		jp nz,$c?
+		call word_len ;len->b
+		;is there room left on line
+		ld a,(hcur)
+		ld c,a
+		ld a,SCR_WIDTH
+		sub c ; a has remaining len
+		cp b
+		jp p,$sp?
+		call printcr
 		inc hl
+		jp $lp?
+$sp?	ld a,32 ; reload space
+$c?		inc hl
 		call CRTBYTE
+		push hl
+		ld hl,(hcur)
+		inc hl
+		ld (hcur),hl
+		pop hl
 		jp $lp?	
 $x?		pop iy
 		pop ix
@@ -90,10 +109,13 @@ printcr
 	push iy
 	ld a,0dh ; carriage return
 	call CRTBYTE
+	ld a,0
+	ld (hcur),a
 	pop iy
 	pop de
 	pop bc
 	pop af
 	ret
-;INBUF DB 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+hcur dw 0
 	
