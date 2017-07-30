@@ -95,6 +95,7 @@ namespace XTAC
                 // Deserialize the content of the file into a Book object.
                 xproject = (Xml)reader.Deserialize(file);
                 ShowProject();
+                file.Close();
             }
         }
 
@@ -1110,10 +1111,10 @@ namespace XTAC
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fileName = Save();
+            fileName = SaveAs();
         }
 
-        string Save()
+        string SaveAs()
         {
             SaveFileDialog openFileDialog1 = new SaveFileDialog();
             openFileDialog1.Filter = "XML Files|*.xml";
@@ -1124,29 +1125,10 @@ namespace XTAC
             // a .CUR file was selected, open it.  
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                StreamWriter file = null;
-                try
-                {
-                    System.Xml.Serialization.XmlSerializer writer = new XmlSerializer(typeof(Xml));
-
-                    // Read the XML file.
-                    file = new StreamWriter(openFileDialog1.FileName);
-
-                    // Serialize the project
-                    writer.Serialize(file, xproject);
-                    fileName = openFileDialog1.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.InnerException.Message);
-                }
-                finally
-                {
-                    if (file != null)
-                        file.Close();
-                }
-
+                fileName = openFileDialog1.FileName;
+                Save();
             }
+
             return fileName;      
         }
 
@@ -1544,6 +1526,45 @@ namespace XTAC
                 MessageBox.Show("File name is null.  Please save your project before exporting.");
             }
 
+        }
+
+        private void Save()
+        {
+            StreamWriter file = null;
+
+            try 
+            {
+                System.Xml.Serialization.XmlSerializer writer = new XmlSerializer(typeof(Xml));
+                // Write the XML file.
+               
+                file = new StreamWriter(fileName);
+                // Serialize the project
+                writer.Serialize(file, xproject);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.Message);
+            }
+            finally
+            {
+                if (file != null)
+                    file.Close();
+            }
+        }
+
+        private void amstradCPC464ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fileName != "")
+            {
+                Save();
+                XmlToTables converter = XmlToTables.GetInstance();
+                converter.ConvertCPC464(fileName);  //"f3xml.xml"
+                MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh or build.bat");
+            }
+            else
+            {
+                MessageBox.Show("File name is null.  Please save your project before exporting.");
+            }
         }
 
     }

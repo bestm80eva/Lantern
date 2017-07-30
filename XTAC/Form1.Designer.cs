@@ -181,6 +181,7 @@
             this.zXSpectrumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.amstradCPC464ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -1127,20 +1128,19 @@
             this.label48.AutoSize = true;
             this.label48.Location = new System.Drawing.Point(355, 409);
             this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(400, 13);
+            this.label48.Size = new System.Drawing.Size(501, 13);
             this.label48.TabIndex = 13;
             this.label48.Text = "portable, door, container, supporter,  openable, open, lockable, emittinglight, l" +
-    "ocked";
+    "ocked, wearable,beingworn";
             // 
             // label49
             // 
             this.label49.AutoSize = true;
             this.label49.Location = new System.Drawing.Point(355, 387);
             this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(394, 13);
+            this.label49.Size = new System.Drawing.Size(378, 13);
             this.label49.TabIndex = 12;
-            this.label49.Text = "holder, description, initial_description,n,s,e,w,ne,se,sw,nw,up,down,enter,out,ma" +
-    "ss";
+            this.label49.Text = "holder, description, initial_description,n,s,e,w,ne,se,sw,nw,up,down,in,out,mass";
             this.label49.Click += new System.EventHandler(this.label49_Click);
             // 
             // label47
@@ -1653,37 +1653,38 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveToolStripMenuItem.Text = "Save As...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem1
             // 
             this.exportToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.amstradCPC464ToolStripMenuItem,
             this.appleToolStripMenuItem,
-            this.commodore64ToolStripMenuItem,
             this.coCoToolStripMenuItem,
+            this.commodore64ToolStripMenuItem,
             this.tRS80ToolStripMenuItem,
             this.zXSpectrumToolStripMenuItem});
             this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
@@ -1707,15 +1708,15 @@
             // coCoToolStripMenuItem
             // 
             this.coCoToolStripMenuItem.Name = "coCoToolStripMenuItem";
-            this.coCoToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.coCoToolStripMenuItem.Text = "TRS-80  CoCo 2/3";
+            this.coCoToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.coCoToolStripMenuItem.Text = "CoCo 2,3";
             this.coCoToolStripMenuItem.Click += new System.EventHandler(this.coCoToolStripMenuItem_Click);
             // 
             // tRS80ToolStripMenuItem
             // 
             this.tRS80ToolStripMenuItem.Name = "tRS80ToolStripMenuItem";
-            this.tRS80ToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.tRS80ToolStripMenuItem.Text = "TRS-80 Model I, III, IV";
+            this.tRS80ToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.tRS80ToolStripMenuItem.Text = "TRS-80 I, III, IV";
             this.tRS80ToolStripMenuItem.Click += new System.EventHandler(this.tRS80ToolStripMenuItem_Click);
             // 
             // zXSpectrumToolStripMenuItem
@@ -1739,6 +1740,13 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // amstradCPC464ToolStripMenuItem
+            // 
+            this.amstradCPC464ToolStripMenuItem.Name = "amstradCPC464ToolStripMenuItem";
+            this.amstradCPC464ToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.amstradCPC464ToolStripMenuItem.Text = "Amstrad CPC464";
+            this.amstradCPC464ToolStripMenuItem.Click += new System.EventHandler(this.amstradCPC464ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -1932,6 +1940,7 @@
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.ToolStripMenuItem zXSpectrumToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem commodore64ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem amstradCPC464ToolStripMenuItem;
     }
 }
 
