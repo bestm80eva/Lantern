@@ -15,7 +15,7 @@ using XMLtoAdv;
 
 namespace XTAC
 {
-    public partial class Form1 : Form
+    public partial class Lantern : Form
     {
         public static Xml xproject;
         string fileName = "";
@@ -27,12 +27,12 @@ namespace XTAC
             "check_iobj_container", "check_light"
         };
 
-        static Form1()
+        static Lantern()
         {
             xproject = new Xml();
         }
 
-        public Form1()
+        public Lantern()
         {
             InitializeComponent();
 
@@ -1354,7 +1354,15 @@ namespace XTAC
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException.Message);
+                string msg = ex.Message;
+
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    msg += "\r\n" + ex.Message;
+                }
+
+                MessageBox.Show(msg);
             }
         }
 
@@ -1564,6 +1572,26 @@ namespace XTAC
             else
             {
                 MessageBox.Show("File name is null.  Please save your project before exporting.");
+            }
+        }
+
+        private void checkButton_Click(object sender, EventArgs e)
+        {
+
+            SyntaxChecker checker = new SyntaxChecker();
+
+            try
+            {
+                checker.WriteRoutine(null, "test", codeTextBox.Text);
+                MessageBox.Show("Looks good");
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                if (ex.InnerException != null)
+                    msg += ex.InnerException.Message;
+
+                MessageBox.Show(msg);
             }
         }
 

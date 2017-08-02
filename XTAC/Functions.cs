@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace XTAC
 {
-    public partial class Form1 : Form
+    public partial class Lantern : Form
     {
 
         void AddDefaultFunctions()

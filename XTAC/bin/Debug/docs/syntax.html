@@ -11,28 +11,27 @@ Variable are single bytes (0-255).<br>
 Amazingly, this seems to be enough to get a game working.<br>
 
 <h3>object attributes:</h3>
-The following attributes can be tested or set in code.<br>
-holder<br>
-intialdesc - generally you don't need to mess with this.<br>
-description<br>
-
-n,s,e,w,ne,se,nw,sw,up,down,in,out - You might change these if your game layout changes at run time.<br>
-mass<br>
-<h3>object properties:</h3>
-The following properties can be 0 or 1<br>
+The following attributes can be tested or set in code:<br>
+&nbsp;holder<br>
+&nbsp;intialdesc - generally you don't need to mess with this.<br>
+&nbsp;description<br>
+&nbsp;n,s,e,w,ne,se,nw,sw,up,down,in,out - You might change these if your game layout changes at run time.<br>
+&nbsp;mass<br>
 <br>
-portable<br>
-openable<br>
-open<br>
-container - can you put things in it?<br>
-supporter - can you put things on it?<br>
-lit<br>
-on<br>
-wearable<br>
-beingworn<br>
-lockable<br>
-locked<br>
-scenery - is this item explicitly listed<br>
+<h3>object properties:</h3>
+The following properties can be set to 0 or 1:<br>
+&nbsp;portable<br>
+&nbsp;openable<br>
+&nbsp;open<br>
+&nbsp;container - can you put things in it?<br>
+&nbsp;supporter - can you put things on it?<br>
+&nbsp;lit<br>
+&nbsp;on<br>
+&nbsp;wearable<br>
+&nbsp;beingworn<br>
+&nbsp;lockable<br>
+&nbsp;locked<br>
+&nbsp;scenery - is this item explicitly listed<br>
 <br>
 <h3>built-in functions:</h3><br>
 print("some text");  //prints text<br>
@@ -41,7 +40,7 @@ add(<i>somevar</i>,5);  //adds 5 to somevar<br>
 sub(<i>somevar</i>,5);  //subtracts 5 from somevar<br>
 look(); print room description<br>
 move(); move the player<br>
-random(10); creates a number between 0 and 10<br>
+random(<i>somenumber</i>); creates a number between 0 and <i>somenumber</i><br>
 <br>
 <h3>Examples</h3>
 
@@ -59,6 +58,7 @@ When refering to an object in code, it is fine if the name has spaces.  If you h
 The following will work just fine.<br>
 <br>
 5.description = "YOU NOTICE NOTHING UNUSUAL.";
-
+<br>
+<center><a href="./documentation.html">Back to Table of Contents</a></center><br>
 </body>
 </html>

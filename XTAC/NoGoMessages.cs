@@ -19,7 +19,7 @@ namespace XTAC
         {
             InitializeComponent();
 
-            obj = Form1.xproject.Project.Objects.Object[roomNum];
+            obj = Lantern.xproject.Project.Objects.Object[roomNum];
             
             label10.Text = "Blocked movement message for room: " + obj.Name;
 

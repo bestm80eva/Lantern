@@ -114,7 +114,7 @@ $_lp?	ld a,(iy)
 $_nf?   ld b,255		
 $_x?	pop de
 		ret
-	
+
 ;returns the object id for the object whose
 ;'word' is supplied in b
 ;the value replaces the parameter
@@ -132,25 +132,38 @@ get_obj_id
 $lp?	ld a,(ix)	; hit end of table?
 		cp 255
 		jp z,$nf?
-		ld c,a ; the current object
-		call b_ancestor_of_c  ; reslt->a. Note this should really check visibility
-		cp 0
-		jp z,$c?    ; can't see it - go to next obj
+		;do the words match?
 		ld a,(ix+1)	;  get word entry
 		cp d		;  equal to supplied word?
-		jp z, $_y?
+		jp z,$cv?
 		ld a,(ix+2)		; get lp counter
 		cp d		;  equal to supplied word?
-		jp z, $_y?
+		jp z, $cv?
 		ld a,(ix+3)	;get object's word entry
 		cp d		;  equal to supplied word?
-		jp z, $_y?
+		jp z, $cv?
+		jp $c?	; words don't match
+		;possible match...
+		;is it a visible backdrop?
+$cv?	ld a,(ix)
+		call is_vis_bckdrp
+		cp 1
+		jp z,$y?
+		;is it a visible ancestor of player's room
+		ld a,(player_room)
+		ld b,a
+		ld c,(ix); the current object
+		call b_ancestor_of_c  ; reslt->a. Note this should really check visibility
+		cp 1
+		jp z,$y?    ; can't see it - go to next obj
+
 $c?		inc ix		; not found. increment ix to next entry
 		inc ix		
 		inc ix		
 		inc ix		
 		jp $lp?	; go to next object
-$_y?	ld b,(ix)	; they match! back up put the id in b
+$y?		ld a,(ix)	; they match! back up put the id in b
+		ld b,a
 		jp $_x?
 $nf?	ld b,255 	; not found code
 $_x?	pop ix
@@ -158,6 +171,7 @@ $_x?	pop ix
 		pop af
 		ret
 
+		
 
 ;get_verb_id
 ;the verb is assumed to be in word1

@@ -72,35 +72,6 @@ $x?		pop de
 		pop bc
 		ret
 
-;sets property c of object b to val in register 'a'
-;the property should be 0-15 inclusive
-;*MOD
-;set_obj_prop2
-;		push bc
-;		push de
-;		push hl
-;		ld l,a ; save val
-;		ld d,PROPERTY_BYTE_1
-;		ld a,c ; get the correct byte
-;		ld e,c ; save the prop to get (we need it later) 
-;		cp 8
-;		jp m,$s? ;jump on minus
-;		inc d	; property is in the next byte
-;$s?		ld c,d  ; move byte to get to c
-;		call get_obj_attr ; put attr byte 'c' in 'a'
-;		ld h,b	; save 'b' (the object)
-;		ld b,e	; put prop to test in 'b'
-;		call make_prop_mask ; puts mask from pop 'b' in 'b'
-;		or b ; test the bit in the mask (and leave result in 'a')
-;		ld b,h 		; put obj in 'b'
-;		ld a,b		; now set it back (val->a)
-;		ld a,1		;NOT SURE THIS WORKS
-;	;		ld c,d		;the byte to store
-;		call set_obj_attr ;  put a
-;$x?		pop hl
-;		pop de
-;		pop bc
-;		ret
 
 ;sets property c of object b to val in register 'a'
 ;the property should be 0-15 inclusive
@@ -198,8 +169,64 @@ $y?		ld a,1
 $x?		pop de
 		pop bc
 		ret
+
+;sets a to 1 if object 
+;in reg 'a'
+;is a visible backdrop 
+*MOD
+is_vis_bckdrp
+		push bc
+		push de
+		push hl
+		push ix
+
+;		ld a,(HL+PROPERTY_BYTE_1)
+		ld b,a 
+;		and BACKDROP_MASK
+;		cmp 0
+;		beq $n?
+;		nop ;loop through bckdrp tbl
+		ld ix,backdrop_table		
+$lp?	ld a,(ix) ; get obj id
+		cp 255
+		jp z,$n?
+		cp b ; is this the correct obj?
+		jp nz,$c?
+		inc ix
+		ld a,(player_room)
+		ld b,a
+		ld a,(ix) ; get times to loop
+		inc ix
+$lp2?   cp 0	  ; done looping	
+		jp z,$n?
+		ld d,a ; save a
+		ld a,(ix)		
+		cp b  ;in player room?
+		jp z,$y?		
+		ld a,d ; restore a
+		dec a	
+		inc ix
+		jp $lp2?		
+		jp $n?  ; safety check (shouldn't happen)
+$c?		inc ix  ; move to l
+		ld d,0
+		ld e, (ix) ; get bytes to skip
+		push ix	; ix->hl
+		pop hl
+		add hl,de ; skip ahead
+		inc hl ; skip len byte
+		push hl
+		pop ix ; restore ix
+		jp $lp?
+$n?		ld a,0
+		jp $x?
+$y?		ld a,1
+$x?		pop ix
+		pop hl
+		pop de
+		pop bc
+		ret
 		
-player_room DB 0
 
 ;multiple b x c and puts result in bc
 ;registers are preserved
@@ -245,4 +272,4 @@ mask_table
 	DB UNUSED_MASK ;equ 128
 
 propVal DB 0	
-		
+player_room DB 0

@@ -3,7 +3,6 @@ C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\bin\Debug\Lantern.
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\bin\Debug\XmlToAdv.dll
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\bin\Debug\XmlToAdv.pdb
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.csprojResolveAssemblyReference.cache
-C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.Form1.resources
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.NoGoMessages.resources
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.Properties.Resources.resources
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.SyntaxHelpForm.resources
@@ -11,3 +10,4 @@ C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.csp
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\Lantern.exe
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\Lantern.pdb
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\bin\Debug\Lantern.pdb
+C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.Lantern.resources
