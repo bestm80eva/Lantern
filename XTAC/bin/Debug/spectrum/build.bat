@@ -1,33 +1,33 @@
+echo off
+del /q data
+del /q main.com 
 
-del data 
-./Z80asm.exe -com main.asm 
+echo Assembling code...
+..\bin\Z80asm.exe -com main.asm 
 
-if NOT EXIST main.com
-(
-	echo "build errors occurred"
+if NOT EXIST main.com (
+	echo Build errors occurred
+	echo See errs.txt for details
 	exit /b 1
 )
 	
-echo "main.cmd has been built"
+echo main.cmd has been built
 
 ren main.com data 
 
-if exist loading.scr
-(
-	echo "attaching load screen"
+if exist loading.scr (
+	echo Attaching load screen...
 	copy sloader.tap game.tap
 	copy loading.scr loading
-	.\mctrd add loading game.tap
-	
-)
-else
-(
+	..\bin\mctrd add loading game.tap
+) else (
+	echo No load screen found...
 	copy loader.tap game.tap
 )
 
 
-.\mctrd add data game.tap 
+..\bin\mctrd add data game.tap 
 
-echo "game.tap is ready."
-echo "load this into an emulator and enter LOAD \"\"."  
-echo "When the file has loaded, enter RUN"
+echo game.tap is ready.
+echo Load this into an emulator and enter LOAD ""
+echo When the file has loaded, enter RUN.
