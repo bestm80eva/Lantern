@@ -167,152 +167,167 @@ namespace XMLtoAdv
 
         public void WriteCode(string code, StreamWriter sw)
         {
+            try
+            { 
 
-            code = code.Trim();
-            if (code.Length > 0 && code != "}")
-            {
-
-                //does it start with an 'if' statement
-
-                if (code.IndexOf("if") == 0)
-                {
-                    string label = GetNextLabel();
-
-                    int start = code.IndexOf("(");
-                    int end = code.IndexOf(")");
-                    string expr = code.Substring(start, (end - start) + 1);
-
-                    WriteExpr(sw, expr, label);
-
-                    //find the matching }
-                    string remainder = code.Substring(code.IndexOf("{"));
-
-                    int closingBrace = findClosingBrace(remainder);
-                    string inside = remainder.Substring(1, closingBrace - 1).Trim();
-                    string outside = remainder.Substring(closingBrace + 1).Trim();  //the next block or statements
-
-                    WriteCode(inside, sw);
-
-                    //while outside is an else if  or else
-
-                    //will we need a branch
-                    if (PeekAheadForElse(outside))
-                    {
-                        string l = GetNextLabel();
-                        labelStack.Add(l);
-                        WriteJump(sw, l);
-
-                    }
-                    //close block
-                    sw.WriteLine(label + "\tnop ; close " + expr);
-
-                    WriteCode(outside, sw);
-                }
-                else if (code.IndexOf("else") == 0)
+                code = code.Trim();
+                if (code.Length > 0 && code != "}")
                 {
 
-                    code = code.Substring(4); //strip off 'else'
-                    code = UnWrapCurlyBraces(code);
-                    WriteCode(code, sw);
+                    //does it start with an 'if' statement
 
-                    string l = labelStack[labelStack.Count - 1];
-                    labelStack.RemoveAt(labelStack.Count - 1);
+                    if (code.IndexOf("if") == 0)
+                    {
+                        string label = GetNextLabel();
 
-                    sw.WriteLine( l + "\tnop ; end else");
+                        int start = code.IndexOf("(");
+                        int end = code.IndexOf(")");
+                        string expr = code.Substring(start, (end - start) + 1);
 
-                }
-                else
-                {//must just be statements
+                        WriteExpr(sw, expr, label);
 
-                    //first part must be a set attr
-                    //chop it off, then parse the rest
-                    string statement = code.Substring(0, code.IndexOf(";"));
+                        //find the matching }
+                        string remainder = code.Substring(code.IndexOf("{"));
 
-                    sw.WriteLine("\tnop ; " + statement);
+                        int closingBrace = findClosingBrace(remainder);
+                        string inside = remainder.Substring(1, closingBrace - 1).Trim();
+                        string outside = remainder.Substring(closingBrace + 1).Trim();  //the next block or statements
 
-                    //what kind of statement is it?
-                    //if there's a += or -=
-                    //if there's a '=' and a '.' then it's an object attr or prop assignment
-                    //if there's a '=' and no '.' then its a variable assignment
-                    //if there's a "print", then it's a print statement
+                        WriteCode(inside, sw);
 
-                    if (statement.IndexOf("printl") != -1)
-                    {
-                        WritePrintStatement(sw, statement);
-                        WritePrintNewline(sw);
-                    }
-                    else if (statement.IndexOf("print") != -1)
-                    {
-                        WritePrintStatement(sw,statement);
-                    }
-                    else if (statement.IndexOf("look()") != -1)
-                    {
-                        WriteLookStatement(sw);
-                    }
-                    else if (statement.IndexOf("move()") != -1)
-                    {
-                        WriteMoveStatement(sw);
-                    }
-                    else if (statement.IndexOf("add(") != -1)
-                    {
-                        WriteAddVar(sw, statement);
-                    }
-                    else if (statement.IndexOf("set(") != -1)
-                    {
-                        WriteSetVar(sw, statement);
-                    }
-                    else if (statement.IndexOf("call") == 0)
-                    {
-                        statement = statement.Substring(4).Trim(); //chop off "call"
-                        if (XmlToTables.GetInstance().IsSubroutine(statement))
+                        //while outside is an else if  or else
+
+                        //will we need a branch
+                        if (PeekAheadForElse(outside))
                         {
-                            string subName = statement.Substring(0, statement.IndexOf("("));
-                            WriteSubroutineCall(sw, subName);
+                            string l = GetNextLabel();
+                            labelStack.Add(l);
+                            WriteJump(sw, l);
+
                         }
-                        else throw new Exception("Invalid subroutine name near " + statement);
+                        //close bloc
+                        if (sw != null)
+                            sw.WriteLine(label + "\tnop ; close " + expr);
+
+                        WriteCode(outside, sw);
                     }
-                    else if (statement.IndexOf(".") != -1)
-                    { //attribute or property assignment
-                        string right = statement.Substring(statement.IndexOf("=") + 1, statement.Length - statement.IndexOf("=") - 1).Trim();
-                        string attr = statement.Substring(statement.IndexOf(".") + 1, statement.IndexOf("=") - statement.IndexOf(".") - 1).Trim();
-                        string obj = statement.Substring(0, statement.IndexOf("."));
-                        int objId = -1;
-                        
-                        objId = project.GetObjectId(obj);
-                        if (objId == -1 && !IsVar(obj))
-                        {
-                            throw new Exception("unknown object: " + obj + " near : " + statement);
-                        }
-                        
+                    else if (code.IndexOf("else") == 0)
+                    {
 
-                        if (IsAttribute(attr))
-                        {//attribute
+                        code = code.Substring(4); //strip off 'else'
+                        code = UnWrapCurlyBraces(code);
+                        WriteCode(code, sw);
 
-                            int attrNum = attrIndexes[attr.Trim().ToLower()];
+                        string l = labelStack[labelStack.Count - 1];
+                        labelStack.RemoveAt(labelStack.Count - 1);
 
-                            //convert right to an id;
-                            WriteAttrAssignment(sw, obj + "." + attr, right);
-                        }
-                        else
-                        {//property assignment
-                            int bit = ToBit(right);
-                            WritePropAssignment(sw, objId, obj, attr, bit);
-                        }
+                        if (sw != null)
+                            sw.WriteLine(l + "\tnop ; end else");
 
-                    }//end attr or prop assignment (dot found)
+                    }
                     else
-                    {//var assignment not using set()
-//                        throw new Exception("Need to Implement var setting");
-//                      WriteAttrAssignment(statement, obj, right);
-                        sw.WriteLine("\tnop ; this code hasn't been tested.");
-                        string right = statement.Substring(statement.IndexOf("=") + 1, statement.Length - statement.IndexOf("=") - 1).Trim();
-                        string left = statement.Substring(0, statement.IndexOf("=")).Trim();
-                        WriteAttrAssignment(sw, left, right);
+                    {//must just be statements
 
+                        //first part must be a set attr
+                        //chop it off, then parse the rest
+                        if (code.IndexOf(";") == -1)
+                            throw new Exception("Missing ; near " + code);
+
+                        string statement = code.Substring(0, code.IndexOf(";"));
+
+                        if (sw != null)
+                            sw.WriteLine("\tnop ; " + statement);
+
+                        //what kind of statement is it?
+                        //if there's a += or -=
+                        //if there's a '=' and a '.' then it's an object attr or prop assignment
+                        //if there's a '=' and no '.' then its a variable assignment
+                        //if there's a "print", then it's a print statement
+
+                        if (statement.IndexOf("printl") != -1)
+                        {
+                            WritePrintStatement(sw, statement);
+                            WritePrintNewline(sw);
+                        }
+                        else if (statement.IndexOf("print") != -1)
+                        {
+                            WritePrintStatement(sw, statement);
+                        }
+                        else if (statement.IndexOf("look()") != -1)
+                        {
+                            WriteLookStatement(sw);
+                        }
+                        else if (statement.IndexOf("move()") != -1)
+                        {
+                            WriteMoveStatement(sw);
+                        }
+                        else if (statement.IndexOf("add(") != -1)
+                        {
+                            WriteAddVar(sw, statement);
+                        }
+                        else if (statement.IndexOf("set(") != -1)
+                        {
+                            WriteSetVar(sw, statement);
+                        }
+                        else if (statement.IndexOf("call") == 0)
+                        {
+                            statement = statement.Substring(4).Trim(); //chop off "call"
+                            if (XmlToTables.GetInstance().IsSubroutine(statement))
+                            {
+                                string subName = statement.Substring(0, statement.IndexOf("("));
+                                WriteSubroutineCall(sw, subName);
+                            }
+                            else throw new Exception("Invalid subroutine name near " + statement);
+                        }
+                        else if (statement.IndexOf(".") != -1)
+                        { //attribute or property assignment
+                            string right = statement.Substring(statement.IndexOf("=") + 1, statement.Length - statement.IndexOf("=") - 1).Trim();
+                            string attr = statement.Substring(statement.IndexOf(".") + 1, statement.IndexOf("=") - statement.IndexOf(".") - 1).Trim();
+                            string obj = statement.Substring(0, statement.IndexOf("."));
+                            int objId = -1;
+
+                            objId = project.GetObjectId(obj);
+                            if (objId == -1 && !IsVar(obj))
+                            {
+                                throw new Exception("unknown object: " + obj + " near : " + statement);
+                            }
+
+
+                            if (IsAttribute(attr))
+                            {//attribute
+
+                                int attrNum = attrIndexes[attr.Trim().ToLower()];
+
+                                //convert right to an id;
+                                WriteAttrAssignment(sw, obj + "." + attr, right);
+                            }
+                            else
+                            {//property assignment
+                                int bit = ToBit(right);
+                                WritePropAssignment(sw, objId, obj, attr, bit);
+                            }
+
+                        }//end attr or prop assignment (dot found)
+                        else
+                        {//var assignment not using set()
+                            //                        throw new Exception("Need to Implement var setting");
+                            //                      WriteAttrAssignment(statement, obj, right);
+                            if (sw != null)
+                                sw.WriteLine("\tnop ; this code hasn't been tested.");
+                            string right = statement.Substring(statement.IndexOf("=") + 1, statement.Length - statement.IndexOf("=") - 1).Trim();
+                            string left = statement.Substring(0, statement.IndexOf("=")).Trim();
+                            WriteAttrAssignment(sw, left, right);
+
+                        }
+
+                        string remainder = code.Substring(code.IndexOf(";") + 1).Trim();
+                        WriteCode(remainder, sw);
                     }
-                    string remainder = code.Substring(code.IndexOf(";") + 1).Trim();
-                    WriteCode(remainder, sw);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error near code: " + code, ex);
             }
         }
 
