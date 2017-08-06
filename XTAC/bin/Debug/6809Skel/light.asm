@@ -13,6 +13,8 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ambient_light
 	pshs d,x,y
+	lda #0
+	sta playerCanSee
 	pulu a	;get object from stack
 	ldb #OBJ_ENTRY_SIZE
 	mul
@@ -25,6 +27,7 @@ ambient_light
 	bne @s ; not emitting light, check children
 @y	lda #1 ; emitting light, push 1 and return
 	pshu a
+	sta playerCanSee
 	bra @x
 @s	nop 	; see if any children are emitting light
 	ldb OBJ_ID,x	;reload id of parent
@@ -60,4 +63,4 @@ ambient_light
 @x	puls y,x,d
 	rts
 	
-	
+playerCanSee .db 0
