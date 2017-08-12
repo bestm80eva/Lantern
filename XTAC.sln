@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTAC", "XTAC\XTAC.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlToAdv", "XmlToAdv\XmlToAdv.csproj", "{6267617B-0D98-4FB8-B675-CE45C08EA68E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player", "Player\Player.csproj", "{5AFC2281-F43A-4003-B472-E623EF078C04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerLib", "PlayerLib\PlayerLib.csproj", "{59BBA7D0-C54E-47E8-A5C5-69C9DAF7EEAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{6267617B-0D98-4FB8-B675-CE45C08EA68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6267617B-0D98-4FB8-B675-CE45C08EA68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6267617B-0D98-4FB8-B675-CE45C08EA68E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AFC2281-F43A-4003-B472-E623EF078C04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AFC2281-F43A-4003-B472-E623EF078C04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AFC2281-F43A-4003-B472-E623EF078C04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AFC2281-F43A-4003-B472-E623EF078C04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59BBA7D0-C54E-47E8-A5C5-69C9DAF7EEAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59BBA7D0-C54E-47E8-A5C5-69C9DAF7EEAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59BBA7D0-C54E-47E8-A5C5-69C9DAF7EEAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59BBA7D0-C54E-47E8-A5C5-69C9DAF7EEAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
