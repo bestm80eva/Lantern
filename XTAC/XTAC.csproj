@@ -51,6 +51,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Functions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +77,9 @@
     <Compile Include="XmlMappings.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NoGoMessages.resx">
       <DependentUpon>NoGoMessages.cs</DependentUpon>
@@ -101,6 +110,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PlayerLib\PlayerLib.csproj">
+      <Project>{59bba7d0-c54e-47e8-a5c5-69c9daf7eeaa}</Project>
+      <Name>PlayerLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XmlToAdv\XmlToAdv.csproj">
       <Project>{6267617b-0d98-4fb8-b675-ce45c08ea68e}</Project>
       <Name>XmlToAdv</Name>

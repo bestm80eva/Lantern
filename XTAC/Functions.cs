@@ -158,7 +158,7 @@ namespace XTAC
             AddCheck("light", "check_dobj_supplied");
             AddCheck("light", "check_have_dobj");
             AddCheck("open", "check_dobj_supplied");
-            AddCheck("open", "check_dobj_openable");
+            AddCheck("open", "check_dobj_opnable");
             AddCheck("put", "check_dobj_supplied");
             AddCheck("put", "check_prep_supplied");
             AddCheck("put", "check_iobj_supplied");

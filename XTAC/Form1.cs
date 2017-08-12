@@ -1001,8 +1001,7 @@ namespace XTAC
         private void objNameTextBox_TextChanged(object sender, EventArgs e)
         {
             //objNameTextBox.Text = objNameTextBox.Text.Trim().ToUpper();
-            //objNameTextBox.Ins
-            GetCurObj().Name = objNameTextBox.Text;
+            //GetCurObj().Name = objNameTextBox.Text;
         }
 
         private void objDescTextBox_TextChanged(object sender, EventArgs e)
@@ -1012,7 +1011,7 @@ namespace XTAC
 
         private void initialDescTextBox_TextChanged(object sender, EventArgs e)
         {
-            GetCurObj().Initialdescription = initialDescTextBox.Text;
+            //GetCurObj().Initialdescription = initialDescTextBox.Text;
         }
 
        
@@ -1243,7 +1242,7 @@ namespace XTAC
 
         private void welcomeTextBox_TextChanged(object sender, EventArgs e)
         {
-            xproject.Project.Welcome = welcomeTextBox.Text.Trim().ToUpper();
+            //
         }
 
         private void objNameTextBox_Leave(object sender, EventArgs e)
@@ -1269,6 +1268,7 @@ namespace XTAC
             string temp = objDescTextBox.Text.ToUpper().Trim();
             temp = temp.Replace('\"', '\''); 
             GetCurObj().Description = temp;
+            objDescTextBox.Text = temp;
         }
 
         private void sentenceTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1577,7 +1577,6 @@ namespace XTAC
 
         private void checkButton_Click(object sender, EventArgs e)
         {
-
             SyntaxChecker checker = new SyntaxChecker();
 
             try
@@ -1594,6 +1593,27 @@ namespace XTAC
                 MessageBox.Show(msg);
             }
         }
+
+        private void welcomeTextBox_Leave(object sender, EventArgs e)
+        {
+            xproject.Project.Welcome = welcomeTextBox.Text.Trim().ToUpper();
+        }
+
+        private void launchPlayerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fileName != "")
+            {
+                //create a modeless dialog
+                TestClient tc = new TestClient();
+                tc.SetFile(fileName);
+                tc.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("You haven't loaded a game yet.");
+            }
+        }
+
 
     }
 }
