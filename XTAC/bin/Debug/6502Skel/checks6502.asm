@@ -47,6 +47,8 @@ check_dobj_portable
 		jsr thats_not_something
 _x		rts
 
+check_dobj_unlocked
+		rts
 
 ;produces an error message if the
 ;do is a child of the io
