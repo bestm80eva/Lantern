@@ -30,6 +30,7 @@ namespace PlayerLib
             checkTable.Add("check_dobj_opnable", new VerbCheckDlgt(check_dobj_opnable));
             checkTable.Add("check_dobj_supplied", new VerbCheckDlgt(check_dobj_supplied));
             checkTable.Add("check_iobj_supplied", new VerbCheckDlgt(check_iobj_supplied));
+            checkTable.Add("check_dobj_unlocked", new VerbCheckDlgt(check_dobj_unlocked));
 
             XmlNodeList checks = doc.SelectNodes("//project/checks/check");
 
@@ -112,6 +113,16 @@ namespace PlayerLib
             return true;
         }
 
+        bool check_dobj_unlocked()
+        {
+            if (GetObjectAttr(dobj, "LOCKED") == 1)
+            {
+                PrintStringCr("THE " + GetObjectName(dobj) + " IS LOCKED.");
+                return false;
+            }
+            return true;
+        }
+
         bool check_iobj_container()
         {
             if (GetObjectAttr(dobj, "CONTAINER") == 0)
@@ -136,7 +147,7 @@ namespace PlayerLib
         {
             if (GetObjectAttr(dobj, "OPENABLE") == 0)
             {
-                PrintStringCr("THAT'S NOT A OPENABLE.");
+                PrintStringCr("THAT'S NOT OPENABLE.");
                 return false;
             }
             return true;

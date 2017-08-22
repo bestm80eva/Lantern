@@ -82,12 +82,14 @@ namespace PlayerLib
     {
         public int score;
         public string name;
+        public List<string> synonyms;
         Dictionary<string, int> attrs = new Dictionary<string, int>(); //attrs and props
 
         public ObjTableEntry(GameObject gobj, Table stringTable)
         {
             score = 0;
             name = gobj.name;
+            synonyms = gobj.synonyms;
             attrs["ID"] = gobj.id;
             //attrs["NAME"] = stringTable.GetEntryId(gobj.name);
             int strId = stringTable.GetEntryId(gobj.description);
@@ -116,8 +118,14 @@ namespace PlayerLib
 
         public int GetObjAttr(string name)
         {
-             
-            return attrs[name.ToUpper()];
+            try
+            {
+                return attrs[name.ToUpper()];
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Bad attribute: " + name, ex);
+            }
         }
 
         public void SetObjAttr(string name, int val)

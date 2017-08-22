@@ -47,6 +47,8 @@ namespace PlayerLib
 
         static Game _game;
 
+        string[] dirs = { "n", "s", "e", "w", "ne", "se", "nw", "sw", "up", "down" };
+
         private Game() {
             articleTable.Add("A");
             articleTable.Add("AN");
@@ -101,6 +103,7 @@ namespace PlayerLib
             BuildSentences(doc);
             BuildFunctions(doc);
             BuildCheckTable(doc);
+
         }
 
         public void SetOutputWindow(TextBox tb)
@@ -426,6 +429,19 @@ namespace PlayerLib
                         dictionary.AddEntry(s);
                 }
 
+
+                //check for nogo messages
+                //if any movement dir has a corresponding entry in the nogo table
+                //set the atr to 255 - string id
+                foreach (string d in dirs)
+                {
+                    if (gobj.HasNogoMsg(d))
+                    {
+                        string msg = gobj.GetNogoMsg(d);
+                        int nogoIndex = nogoTable.GetEntryId(msg);
+                        objTable.SetObjAttr(gobj.id, d.ToUpper(), (255 - nogoIndex)+1);
+                    }
+                }
             }
 
         }
@@ -454,18 +470,57 @@ namespace PlayerLib
             PrintStringCr(author);
             PrintCr();
             Look();
-
+            PrintString(">");
+            outputWindow.SelectionLength = 0;
         }
 
         public void AcceptCommand(string command)
         {
             string[] commands = command.Split(',');
 
+            PrintCr();
+
             foreach (string s in commands)
             {
                 if (s.ToUpper().Equals("DEBUG"))
                 {
                     debug = !debug;
+
+                    if (debug)
+                        PrintStringCr("DEBUG ON");
+                    else
+                        PrintStringCr("DEBUG OFF");
+                    return;
+                }
+                if (s.ToUpper().Equals("VARS"))
+                {
+                    foreach (string v in vars.Keys)
+                    {
+                        PrintStringCr(v + "=" + vars[v].val);
+                    }
+                    return;
+                }
+                if (s.ToUpper().Equals("DICT"))
+                {
+                    for (int i = 0; i < dictionary.GetNumEntries(); i++ )
+                    {
+                        PrintStringCr(dictionary.GetEntry(i) + "=" + i);
+                    }
+                    return;
+                }
+                if (s.ToUpper().Equals("OWT"))
+                {
+                    foreach (int i in objWordTable.entries.Keys)
+                    {
+                        PrintString(objTable.GetObj(i).name + "=" );
+                        
+                        List<int> words = objWordTable.entries[i];
+                        foreach (int w in words)
+                        {
+                            PrintString(w + " ");
+                        }
+                        PrintStringCr("");
+                    }
                     return;
                 }
 
@@ -478,6 +533,7 @@ namespace PlayerLib
                     }
                 }
             }
+            PrintString(">");
         }
 
         //make sure the nouns correspond to visible objects
@@ -553,6 +609,7 @@ namespace PlayerLib
 
                 DoEvents();
             }
+            
         }
 
         bool Parse(string command)
@@ -697,6 +754,25 @@ namespace PlayerLib
                 }
 
                 objWordTable.AddNewEntry(i,words.ToList<string>(), dictionary);
+            }
+
+            //add synonyms to objWordTable
+            for (int i = 0; i < objTable.GetCount(); i++)
+            {
+                List<int> l = new List<int>();
+
+                 
+                List<string> syns = new List<string>();
+
+                foreach (string s in  objTable.objects[i].synonyms)
+                {
+                    syns.Add(s.ToUpper().Trim());
+                }
+                if (syns.Count > 0)
+                {
+///                    objWordTable.AddNewEntry(i, syns, dictionary);
+                    objWordTable.AppendSynonyms(i, syns, dictionary);
+                }
             }
         }
 
@@ -884,6 +960,22 @@ namespace PlayerLib
             {
                 f.Execute();
             }
+
+            if (vars["$moves"].val < 255)
+            {
+                vars["$moves"].val++;
+            }
+
+            if (PlayerCanSee())
+            {
+                vars["$turnsWithoutLight"].val = 0;
+            }
+            else
+            {
+                vars["$turnsWithoutLight"].val++;
+            }
+             
+
         }
 
         public void Debug(string s)
@@ -891,6 +983,23 @@ namespace PlayerLib
             if (debug)
             {
                 PrintStringCr(s);
+            }
+        }
+
+        public void SetVar(string name, int val)
+        {
+            vars[name].val = val;
+        }
+
+        public void Unwear()
+        {
+            foreach (ObjTableEntry ote in objTable.objects.Values)
+            {
+                if (ote.GetObjAttr("BEINGWORN")==1)
+                {
+                    ote.SetObjAttr("BEINGWORN", 1);
+                    Debug("Unwearing " + ote.name);
+                }
             }
         }
     }

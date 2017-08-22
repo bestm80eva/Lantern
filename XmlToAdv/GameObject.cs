@@ -24,7 +24,7 @@ namespace XMLtoAdv
         Dictionary<string, string> nogoMap = new Dictionary<string, string>(); 
         public int[] properties = new int[NUM_PROPERTIES];
         public int[] attribs = new int[NUM_ATTRIBS];
-        public int[] backdropRooms = new int[NUM_BACKDROP_ROOMS];
+        public List<int> backdropRooms = new List<int>();
 
         public static string[] attribNames = { "n", "s", "e", "w", "ne", "se", "sw", "nw", "up", "down", "in", "out", "mass"};  //12
 
@@ -51,12 +51,7 @@ namespace XMLtoAdv
             _desc = data.SelectSingleNode("description").InnerText;
             _initial_desc = data.SelectSingleNode("initialdescription").InnerText;
             _holder = Convert.ToInt32(data.Attributes.GetNamedItem("holder").Value);
-
-            for (int i = 0; i < NUM_BACKDROP_ROOMS; i++ )
-            {
-                backdropRooms[i] = 255;       
-            }
-
+          
 
             LoadBackdrop(data);
             LoadAttribs(data);
@@ -85,7 +80,7 @@ namespace XMLtoAdv
 
                         for (int i = 0; i < rooms.Length; i++)
                         {
-                            backdropRooms[i] = Convert.ToInt32(rooms[i].Trim());
+                            backdropRooms.Add(Convert.ToInt32(rooms[i].Trim()));
                         }
                     }
                 }
@@ -129,6 +124,7 @@ namespace XMLtoAdv
                 try
                 {
                     val = flagsNode.Attributes.GetNamedItem(xmlFlagNames[i]).Value;
+                    
                 }
                 catch
                 {
@@ -136,8 +132,13 @@ namespace XMLtoAdv
                 }
                 finally
                 {
-                    if (val == "1") { yesNo = true; }
+                    if (val == "1") 
+                    {
+                        yesNo = true;
+                        properties[i] = 1;
+                    }
                     flagsMap.Add(xmlFlagNames[i], yesNo);
+                    
                 }
             }
         }

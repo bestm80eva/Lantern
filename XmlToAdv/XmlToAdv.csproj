@@ -39,10 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asm6502.cs" />
+    <Compile Include="AsmEmitter.cs" />
     <Compile Include="AsmWriter.cs" />
     <Compile Include="AsmWriter6502.cs" />
     <Compile Include="AsmWriter6809.cs" />
+    <Compile Include="AsmWriterTest.cs" />
     <Compile Include="AsmWriterZ80.cs" />
+    <Compile Include="CodeWriter.cs" />
+    <Compile Include="Emitter6502.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Table.cs" />

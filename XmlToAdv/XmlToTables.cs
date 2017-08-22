@@ -13,7 +13,7 @@ namespace XMLtoAdv
     public class XmlToTables
     {
         protected XmlDocument doc;
-        protected Table nameTable = new Table();
+//        protected Table nameTable = new Table();
         protected Table nogoTable = new Table();
         protected Table descriptionTable = new Table();
         protected Table dict = new Table();
@@ -88,8 +88,6 @@ namespace XMLtoAdv
 
         protected void CreateTables(string fileName, string tgtPlatform)
         {
-
-
             doc = new XmlDocument();
             doc.Load(fileName);
 
@@ -97,25 +95,25 @@ namespace XMLtoAdv
             descriptionTable.Clear();
             descriptionTable.AddEntry("YOU NOTICE NOTHING UNEXPECTED.");
             PopulateNameTable(doc);
-            PopulateNogoTable(doc);
-            PopulateVerbTable(doc);
+            PopulateNogoTable(doc, nogoTable);
+            PopulateVerbTable(doc, verbs);
             PopulateVariableTable(doc);
             PopulateSubroutineNames(doc);
-            ParseForStrings(doc);
+            ParseForStrings(doc, descriptionTable);
 
         }
 
         private void PopulateNameTable(XmlDocument doc)
         {
             XmlNodeList list = doc.SelectNodes("//project/objects/object");
-            nameTable.Clear();
+//            nameTable.Clear();
             objects.Clear();
             descriptionTable.Clear();
 
             foreach (XmlNode n in list)
             {
                 string name = n.Attributes.GetNamedItem("name").Value;
-                nameTable.AddEntry(name);
+  //              nameTable.AddEntry(name);
 
                 //get the child node with the description
                 XmlNode child = n.ChildNodes[0];
@@ -162,12 +160,12 @@ namespace XMLtoAdv
 
         }
 
-        private void PopulateNogoTable(XmlDocument doc)
+        public void PopulateNogoTable(XmlDocument doc, Table table)
         {
             XmlNode list = doc.SelectSingleNode("//project/objects");
-            nogoTable.Clear();
-            nogoTable.AddEntry("BLANK");
-            nogoTable.AddEntry("YOU CAN'T GO THAT WAY.");
+            table.Clear();
+            table.AddEntry("BLANK");
+            table.AddEntry("YOU CAN'T GO THAT WAY.");
 
             foreach (XmlNode child in list)
             {
@@ -180,13 +178,12 @@ namespace XMLtoAdv
                         if (!n.InnerText.Equals(""))
                         {
                             string msg = n.InnerText;
-                            nogoTable.AddEntry(msg);
+                            table.AddEntry(msg);
                         }
                     }
                 }
 
             }
-
         }
 
         void PopulateVariableTable(XmlDocument doc)
@@ -217,7 +214,7 @@ namespace XMLtoAdv
             }
         }
 
-        private void PopulateVerbTable(XmlNode doc)
+        public void PopulateVerbTable(XmlNode doc, Table table)
         {
             verbs.Clear();
 
@@ -227,7 +224,7 @@ namespace XMLtoAdv
 
             foreach (XmlNode n in v)
             {
-                verbs.AddEntry(n.InnerText);
+                table.AddEntry(n.InnerText);
             }
 
             biv = doc.SelectSingleNode("//project/verbs/userverbs");
@@ -236,13 +233,13 @@ namespace XMLtoAdv
 
             foreach (XmlNode n in v)
             {
-                verbs.AddEntry(n.InnerText);
+                table.AddEntry(n.InnerText);
             }
         }
 
         virtual public void Convert() { }
 
-        protected void ParseForStrings(string code)
+        private void ParseForStrings(string code, Table table)
         {
             try
             {
@@ -254,9 +251,9 @@ namespace XMLtoAdv
 
                     string substr = rem.Substring(0, end);
 
-                    descriptionTable.AddEntry(substr);
+                    table.AddEntry(substr);
                     string rest = rem.Substring(end + 1);
-                    ParseForStrings(rest);
+                    ParseForStrings(rest, table);
                 }
             }
             catch
@@ -268,14 +265,14 @@ namespace XMLtoAdv
         /*
          * Scans for strings in the events and puts them in the description table.
          */
-        private void ParseForStrings(XmlDocument doc)
+        public void ParseForStrings(XmlDocument doc, Table table)
         {
             XmlNodeList events = doc.SelectNodes("//project/events/event");
 
             foreach (XmlNode n in events)
             {
                 string code = n.InnerText;
-                ParseForStrings(code);
+                ParseForStrings(code, table);
             }
 
             events = doc.SelectNodes("//project/routines/routine");
@@ -283,7 +280,7 @@ namespace XMLtoAdv
             foreach (XmlNode n in events)
             {
                 string code = n.InnerText;
-                ParseForStrings(code);
+                ParseForStrings(code, table);
             }
         }
 
@@ -476,9 +473,7 @@ namespace XMLtoAdv
                     }
                 }
                 sw.WriteLine("\tDB 255 ; end of table");
-
             }
-
         }
 
         private void WriteObjectTableZ80(string fileName)
@@ -510,6 +505,19 @@ namespace XMLtoAdv
 
                 foreach (GameObject o in objects)
                 {
+                    WriteObjectAttrs(o,sw,byteSep);
+                    WriteObjectProps(o, sw, byteSep, orSym);
+
+                }//end each obj
+        
+                sw.WriteLine("\t" + byteSep + " 255  ; end of array indicator");
+
+            }
+        }
+
+        
+        private void WriteObjectAttrs(GameObject o, StreamWriter sw, String byteSep)
+        {
                     //write the data bytes
                     sw.Write("\t" + byteSep + " ");
                     sw.Write(o.id.ToString() + ",");
@@ -548,7 +556,11 @@ namespace XMLtoAdv
                     }
                     sw.Write("   ; " + o.name);
 
-                    //write the two bytes with the flags
+        }
+
+
+        private void WriteObjectProps(GameObject o, StreamWriter sw, string byteSep, string orSym)
+        {
                     sw.WriteLine("");
 
                     List<string> flags = new List<string>();
@@ -600,15 +612,7 @@ namespace XMLtoAdv
                         sw.WriteLine("\t"+ byteSep + " " + flagsStr + " ; flags 9-16");
                     }
 
-
-                }//end each obj
-
-                sw.WriteLine("\t" + byteSep + " 255  ; end of array indicator");
-
-
-            }
         }
-
 
         private void WriteObjectWordTable(string fileName, string byteDirective=".DB")
         {
@@ -862,7 +866,14 @@ namespace XMLtoAdv
 //                AsmWriter6809 asm = new AsmWriter6809();
                 using (StreamWriter sw = File.CreateText(fileName + "_sub_" + processor + ".asm"))
                 {
-                    asm.WriteRoutine(sw, name + "_sub", n.InnerText);
+                    try
+                    {
+                        asm.WriteRoutine(sw, name + "_sub", n.InnerText);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Error Writing routine " + name, ex);
+                    }
                 }
             }
 
@@ -1147,7 +1158,7 @@ namespace XMLtoAdv
             }
              
         }
-
+        /*
         private void WriteBackdropTable(XmlDocument doc, string fileName, string byteSep)
         {
             using (StreamWriter sw = File.CreateText(fileName))
@@ -1168,6 +1179,37 @@ namespace XMLtoAdv
                         sw.Write("\t" +  byteSep + " " + o.id );
 
                         for (int j=0; j < o.backdropRooms.Length; j++)
+                        {
+                            sw.Write("," + o.backdropRooms[j]);
+                        }
+                        sw.WriteLine(" ; " + o.name);
+                    }
+                }
+                sw.WriteLine("\t" + byteSep + " 255");
+            }
+        }
+         */
+
+        private void WriteBackdropTable(XmlDocument doc, string fileName, string byteSep)
+        {
+            using (StreamWriter sw = File.CreateText(fileName))
+            {
+
+                sw.WriteLine(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+                sw.WriteLine("; Machine Generated Backdrop Table ");
+                sw.WriteLine("; Format: id, followed by 5 rooms where that object is visible (or 255)");
+                sw.WriteLine(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+                sw.WriteLine("");
+                sw.WriteLine("backdrop_table");
+                for (int i = 0; i < objects.Count; i++)
+                {
+                    GameObject o = objects[i];
+
+                    if (o.IsBackdrop())
+                    {
+                        sw.Write("\t" + byteSep + " " + o.id);
+                        sw.Write("," + o.backdropRooms.Count);
+                        for (int j = 0; j < o.backdropRooms.Count; j++)
                         {
                             sw.Write("," + o.backdropRooms[j]);
                         }
@@ -1296,7 +1338,7 @@ namespace XMLtoAdv
                 WriteSentenceTable("6502", "after", ".byte", ".word");
                 WriteUserVarTable(doc, "6502");           // WriteEvents(doc, "6502", new AsmWriter6809());
 
-                WriteBackdropTable(doc, "BackDropTable6502.asm", ".db");
+               // WriteBackdropTable(doc, "BackDropTable6502.asm", ".db");
                 WriteEvents(doc, "6502", new AsmWriter6502());
             }
             finally

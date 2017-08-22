@@ -46,7 +46,7 @@ namespace XMLtoAdv
         {
             for (int i = 0; i < entries.Count; i++)
             {
-                if (entries[i].ToUpper() == name.ToUpper())
+                if (entries[i].ToUpper().Equals(name.ToUpper()))
                 {
                     return i; //basic indexes start at 1
                 }
@@ -66,5 +66,12 @@ namespace XMLtoAdv
             return entries.Count; //don't count dummy entry
         }
        
+        public void Uppercase()
+        {
+            for (int i=0; i < entries.Count; i++)
+            {
+                entries[i] = entries[i].ToUpper();
+            }
+        }
     }
 }

@@ -95,16 +95,16 @@ namespace PlayerLib
 
                         if (statement.IndexOf("printl") != -1)
                         {
-                            int start = statement.IndexOf('"');
-                            int innerLen = statement.LastIndexOf('"') - statement.IndexOf('\"');
+                            int start = statement.IndexOf('"')+1;
+                            int innerLen = statement.LastIndexOf('"') - start;
                             string msg = statement.Substring(start, innerLen);
                             PrintlnStatement ps = new PrintlnStatement(msg);
                             parent.Add(ps);
                         }
                         else if (statement.IndexOf("print") != -1)
                         {
-                            int start = statement.IndexOf('"');
-                            int innerLen = statement.LastIndexOf('"') - statement.IndexOf('\"');
+                            int start = statement.IndexOf('"')+1;
+                            int innerLen = statement.LastIndexOf('"') - start;
                             string msg = statement.Substring(start, innerLen);
                             PrintStatement ps = new PrintStatement(msg);
                             parent.Add(ps);

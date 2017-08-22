@@ -31,6 +31,7 @@ namespace XMLtoAdv
             attrIndexes.Add("id", 0);
             attrIndexes.Add("holder", 1);
             attrIndexes.Add("initial_description", 2);
+            attrIndexes.Add("initialdescription", 2);
             attrIndexes.Add("description", 3);
             attrIndexes.Add("n", 4);
             attrIndexes.Add("s", 5);
@@ -85,6 +86,7 @@ namespace XMLtoAdv
             propBytes.Add("beingworn", "PROPERTY_BYTE_2");
             propBytes.Add("lightable", "PROPERTY_BYTE_2");
             propBytes.Add("lit", "PROPERTY_BYTE_2");
+            propBytes.Add("emittinglight", "PROPERTY_BYTE_2");
             propBytes.Add("door", "PROPERTY_BYTE_2");
 
             //bit masks
@@ -125,6 +127,7 @@ namespace XMLtoAdv
             propBits.Add("beingworn", "8");
             propBits.Add("lightable", "16");
             propBits.Add("lit", "32");
+            propBits.Add("emittinglight", "32");
             propBits.Add("door", "64");
             propBits.Add("unused", "128");
         }
@@ -165,7 +168,7 @@ namespace XMLtoAdv
             attr = lhs.Substring(dot+1);
         }
 
-        public void WriteCode(string code, StreamWriter sw)
+        public virtual void WriteCode(string code, StreamWriter sw)
         {
             try
             { 
@@ -357,7 +360,7 @@ namespace XMLtoAdv
             return (code.IndexOf("else") == 0);
         }
 
-        string UnWrapCurlyBraces(string code)
+        protected string UnWrapCurlyBraces(string code)
         {
             if (code[0] == '{')
             {
@@ -493,7 +496,7 @@ namespace XMLtoAdv
             left = code.Substring(1, code.IndexOf(op)-1).Trim();
         }
 
-        protected string GetOperator(string code)
+        public string GetOperator(string code)
         {
             string[] ops = { "==", "!=", "<", ">" };
 
