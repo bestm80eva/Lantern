@@ -32,8 +32,9 @@ namespace XTAC
             game.SetOutputWindow(outputWindow);
             game.SetGameData(fileName);
             game.Run();
+            //outputWindow.DeselectAll();
+            outputWindow.SelectionStart = outputWindow.Text.Length;
             outputWindow.DeselectAll();
-            inputWindow.Focus();
         }
 
         private void ReloadBtn_Click(object sender, EventArgs e)
@@ -57,14 +58,14 @@ namespace XTAC
         }
 
         private void inputWindow_KeyPress(object sender, KeyPressEventArgs e)
-        {
+        {/*
             if (game != null)
             {
                 if (e.KeyChar == '\r')
                 {
-                    outputWindow.AppendText(inputWindow.Text + "\r\n");
+                    outputWindow.AppendText(">" + inputWindow.Text.Trim().ToUpper() + "\r\n\r\n");
 
-                    game.AcceptCommand(inputWindow.Text);
+                    game.AcceptCommand(inputWindow.Text.Trim());
 
 
                     inputWindow.Clear();
@@ -74,7 +75,50 @@ namespace XTAC
                     outputWindow.ScrollToCaret();
                     e.Handled = true;
                 }
+            }*/
+        }
+
+        private void ReplyBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void outputWindow_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            outputWindow.SelectionStart = outputWindow.Text.Length ;// add some logic if length is 0
+            outputWindow.SelectionLength = 0;
+
+            if (e.KeyChar  == '\b' )
+            {
+                if (outputWindow.Text[outputWindow.Text.Length-1] != '>')
+                {
+                    outputWindow.Text = outputWindow.Text.Remove(outputWindow.Text.Length - 1);
+                }
+                e.Handled = true;
             }
+            else if (e.KeyChar == '\r')
+            {
+                outputWindow.ScrollToCaret();
+                int start = outputWindow.Text.LastIndexOf('>');
+                string command = outputWindow.Text.Substring(start + 1);
+                try
+                {
+                    game.AcceptCommand(command);
+                } 
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                e.Handled = true;
+            }
+            else
+            {
+                outputWindow.ScrollToCaret();
+                outputWindow.Text += e.KeyChar;
+                e.Handled = true;
+            }
+            outputWindow.SelectionStart = outputWindow.Text.Length;
+            outputWindow.ScrollToCaret();
         }
 
     }

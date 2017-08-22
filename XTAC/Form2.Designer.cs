@@ -29,45 +29,35 @@
         private void InitializeComponent()
         {
             this.outputWindow = new System.Windows.Forms.TextBox();
-            this.inputWindow = new System.Windows.Forms.TextBox();
-            this.ReloadBtn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // outputWindow
             // 
-            this.outputWindow.Location = new System.Drawing.Point(1, 3);
+            this.outputWindow.Location = new System.Drawing.Point(1, 1);
             this.outputWindow.Multiline = true;
             this.outputWindow.Name = "outputWindow";
-            this.outputWindow.Size = new System.Drawing.Size(434, 228);
+            this.outputWindow.Size = new System.Drawing.Size(434, 260);
             this.outputWindow.TabIndex = 0;
             this.outputWindow.TextChanged += new System.EventHandler(this.outputWindow_TextChanged);
+            this.outputWindow.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.outputWindow_KeyPress);
             // 
-            // inputWindow
+            // label1
             // 
-            this.inputWindow.Location = new System.Drawing.Point(1, 237);
-            this.inputWindow.Name = "inputWindow";
-            this.inputWindow.Size = new System.Drawing.Size(356, 20);
-            this.inputWindow.TabIndex = 1;
-            this.inputWindow.TextChanged += new System.EventHandler(this.inputWindow_TextChanged);
-            this.inputWindow.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputWindow_KeyPress);
-            // 
-            // ReloadBtn
-            // 
-            this.ReloadBtn.Location = new System.Drawing.Point(363, 235);
-            this.ReloadBtn.Name = "ReloadBtn";
-            this.ReloadBtn.Size = new System.Drawing.Size(75, 23);
-            this.ReloadBtn.TabIndex = 2;
-            this.ReloadBtn.Text = "Reload";
-            this.ReloadBtn.UseVisualStyleBackColor = true;
-            this.ReloadBtn.Click += new System.EventHandler(this.ReloadBtn_Click);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1, 268);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(414, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Hint:  To speed up testing, you can enter a series of commands separated by comma" +
+    "s.";
             // 
             // TestClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(441, 261);
-            this.Controls.Add(this.ReloadBtn);
-            this.Controls.Add(this.inputWindow);
+            this.ClientSize = new System.Drawing.Size(441, 290);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.outputWindow);
             this.Name = "TestClient";
             this.Text = "Test Client";
@@ -80,7 +70,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox outputWindow;
-        private System.Windows.Forms.TextBox inputWindow;
-        private System.Windows.Forms.Button ReloadBtn;
+        private System.Windows.Forms.Label label1;
     }
 }

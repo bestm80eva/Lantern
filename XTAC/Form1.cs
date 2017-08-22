@@ -96,6 +96,7 @@ namespace XTAC
                 xproject = (Xml)reader.Deserialize(file);
                 ShowProject();
                 file.Close();
+                Text = "Lantern (" + fileName + ")";
             }
         }
 
@@ -390,6 +391,11 @@ namespace XTAC
                 o.Synonyms = new Synonyms();
                 o.Synonyms.Names = "";
             }
+
+            if (i < 2)
+                objNameTextBox.ReadOnly = true;
+            else
+                objNameTextBox.ReadOnly = false;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1265,10 +1271,17 @@ namespace XTAC
 
         private void objDescTextBox_Leave(object sender, EventArgs e)
         {
-            string temp = objDescTextBox.Text.ToUpper().Trim();
-            temp = temp.Replace('\"', '\''); 
-            GetCurObj().Description = temp;
-            objDescTextBox.Text = temp;
+            if (objDescTextBox.Text.Length == 0)
+            {
+                objDescTextBox.Text = "YOU NOTICE NOTHING UNEXPECTED.";
+            }
+            else
+            {
+                string temp = objDescTextBox.Text.ToUpper().Trim();
+                temp = temp.Replace('\"', '\''); 
+                GetCurObj().Description = temp;
+                objDescTextBox.Text = temp;
+            }
         }
 
         private void sentenceTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1386,10 +1399,19 @@ namespace XTAC
 
             if (fileName != "")
             {
+
                 Save();
-                XmlToTables converter = XmlToTables.GetInstance();
-                converter.ConvertTRS80(fileName);  //"f3xml.xml"
-                MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+
+                try
+                {
+                    XmlToTables converter = XmlToTables.GetInstance();
+                    converter.ConvertTRS80(fileName);  //"f3xml.xml"
+                    MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.InnerException.Message);
+                }
             }
             else
             {
@@ -1403,13 +1425,21 @@ namespace XTAC
             if (fileName != "")
             {
                 Save();
-                XmlToTables converter = XmlToTables.GetInstance();
-                converter.Convert6809(fileName);  //"f3xml.xml"
-                MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+
+                try
+                {
+                    XmlToTables converter = XmlToTables.GetInstance();
+                    converter.Convert6809(fileName);  //"f3xml.xml"
+                    MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.InnerException.Message);
+                }
             }
             else
             {
-                MessageBox.Show("");
+                MessageBox.Show("File is null.");
             }
 
         }
@@ -1565,9 +1595,21 @@ namespace XTAC
             if (fileName != "")
             {
                 Save();
-                XmlToTables converter = XmlToTables.GetInstance();
-                converter.ConvertCPC464(fileName);  //"f3xml.xml"
-                MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh or build.bat");
+                try
+                {
+                    XmlToTables converter = XmlToTables.GetInstance();
+                    converter.ConvertCPC464(fileName);  //"f3xml.xml"
+                    MessageBox.Show("Export complete.  Open the directory " + converter.buildDir + " in Cygwin and run: build.sh or build.bat");
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    if (ex.InnerException != null)
+                        msg += ex.InnerException.Message +"\r\n";
+
+                    MessageBox.Show(msg);
+
+                }
             }
             else
             {
@@ -1603,14 +1645,92 @@ namespace XTAC
         {
             if (fileName != "")
             {
+                   
                 //create a modeless dialog
                 TestClient tc = new TestClient();
-                tc.SetFile(fileName);
-                tc.ShowDialog();
+
+                try
+                {
+                    tc.SetFile(fileName);
+                    tc.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    
+                    MessageBox.Show(msg);
+                }
+
             }
             else
             {
                 MessageBox.Show("You haven't loaded a game yet.");
+            }
+        }
+
+        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (fileName == "")
+            {
+                MessageBox.Show("There is no file loaded.");
+            }
+            else
+            {
+                Save();
+            }
+        }
+
+        private void codeTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\t')
+            {
+                codeTextBox.Paste("     ");
+                e.Handled = true;
+            }
+        }
+
+        private void codeTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab)
+            {
+             //   codeTextBox.Paste("   ");
+
+                e.Handled = true;
+            }
+        }
+
+        private void codeTextBox_TabStopChanged(object sender, EventArgs e)
+        {
+            int x = 5;
+        }
+
+        private void codeTextBox_TabIndexChanged(object sender, EventArgs e)
+        {
+            int x = 5;
+        }
+
+        private void codeTextBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
+        private void ruleCodeTextBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
+        private void ruleCodeTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\t')
+            {
+                ruleCodeTextBox.Paste("     ");
+                e.Handled = true;
             }
         }
 
