@@ -47,11 +47,13 @@ namespace Player
   //              xproject = (Xml)reader.Deserialize(file);
                 
   //              file.Close();
-                 
+                outputWindow.Text = ""; 
                 game = Game.GetInstance();
                 game.SetOutputWindow(outputWindow);
                 game.SetGameData(fileName);
                 game.Run();
+                outputWindow.SelectionStart = outputWindow.Text.Length;
+
             }
         }
 
@@ -64,33 +66,51 @@ namespace Player
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (game != null)
-            {
-                game.AcceptCommand(textBox1.Text);
-                textBox1.Clear();
-                textBox1.Focus();
-            }
+           
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (game != null)
+          
+        }
+
+        private void outputWindow_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (outputWindow.Text.Length > 0)
             {
-                if (e.KeyCode == Keys.Enter)
+                outputWindow.SelectionStart = outputWindow.Text.Length;// add some logic if length is 0
+                outputWindow.SelectionLength = 0;
+
+                if (e.KeyChar == '\b')
                 {
-                    outputWindow.AppendText(textBox1.Text + "\r\n");
-
-                    game.AcceptCommand(textBox1.Text);
-
- 
-                    textBox1.Clear();
-                    textBox1.Focus();
-
-                    outputWindow.SelectionStart = outputWindow.TextLength;
-                    outputWindow.ScrollToCaret();
-
+                    if (outputWindow.Text[outputWindow.Text.Length - 1] != '>')
+                    {
+                        outputWindow.Text = outputWindow.Text.Remove(outputWindow.Text.Length - 1);
+                    }
+                    e.Handled = true;
                 }
+                else if (e.KeyChar == '\r')
+                {
+                    outputWindow.ScrollToCaret();
+                    int start = outputWindow.Text.LastIndexOf('>');
+                    string command = outputWindow.Text.Substring(start + 1);
+                    game.AcceptCommand(command);
+                    e.Handled = true;
+                }
+                else
+                {
+                    outputWindow.ScrollToCaret();
+                    outputWindow.Text += e.KeyChar;
+                    e.Handled = true;
+                }
+                outputWindow.SelectionStart = outputWindow.Text.Length;
+                outputWindow.ScrollToCaret();
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("By Evan Wright, 2017");
         }
     }
 }
