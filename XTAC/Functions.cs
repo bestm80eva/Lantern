@@ -154,6 +154,7 @@ namespace XTAC
             AddCheck("examine", "check_dobj_supplied");
             AddCheck("get", "check_dobj_supplied");
             AddCheck("get", "check_dont_have_dobj");
+            AddCheck("get", "check_dobj_portable");
             AddCheck("kill", "check_dobj_supplied");
             AddCheck("light", "check_dobj_supplied");
             AddCheck("light", "check_have_dobj");
@@ -181,7 +182,7 @@ namespace XTAC
 
         void AddPrepositions()
         {
-            string[] defaultPreps = new string[] { "in", "on", "at", "under", "into", "inside", "through", "out", "behind", "off", "up", "with", "to" };
+            string[] defaultPreps = new string[] { "in", "on", "at", "under", "into", "inside", "through", "out", "behind", "off", "up", "with", "to", "off" };
 
             xproject.Project.Preps.Prep = new List<string>();
             foreach (string s in defaultPreps) { xproject.Project.Preps.Prep.Add(s); }
@@ -193,7 +194,7 @@ namespace XTAC
             string[] defaultVerbs = new string[] { 
                 "n,go north,north","s,go south,south","e,go east,east","w,go west,west","ne,go northeast,northeast","se,go southeast,southeast","sw,go southwest,southwest","nw,go northwest,northwest",
 "up,go up,u","down,go down,d","enter,go in,go into,go inside","out","get,take,grab,pick up","give","inventory,i","kill","drop","light","look,l","examine,x,look at,inspect","look in,search","open","lock","unlock","close,shut","eat","drink","put,place","quit","smell,sniff","listen","wait","climb",
-"yell,scream,shout", "jump", "talk to", "turn on","wear"
+"yell,scream,shout", "jump", "talk to", "turn on","wear", "turn off"
             };
 
             foreach (string s in defaultVerbs) { xproject.Project.Verbs.Builtinverbs.Verb.Add(s); }

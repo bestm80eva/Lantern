@@ -53,6 +53,7 @@ namespace XTAC
             allChecksListBox.Items.Add("check_not_self_or_child");
             */
             NewProject();
+            ShowProject();
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -875,7 +876,7 @@ namespace XTAC
 
         private void synonymsTextBox_TextChanged(object sender, EventArgs e)
         {
-            GetCurObj().Synonyms.Names = ((TextBox)sender).Text;
+            GetCurObj().Synonyms.Names = ((TextBox)sender).Text.ToUpper();
         }
 
         void NewProject()
@@ -915,7 +916,7 @@ namespace XTAC
             AddDefaultVars();
             AddDefaultFunctions();
             AddDefaultSentences();
-            ShowProject();
+            //ShowProject();
         }
 
         Object CreateObject(string name)
@@ -991,6 +992,8 @@ namespace XTAC
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            userVerbListView.Clear();
+            ruleCodeTextBox.Clear();
             NewProject();
             ShowProject();
         }
@@ -1123,7 +1126,7 @@ namespace XTAC
         {
             SaveFileDialog openFileDialog1 = new SaveFileDialog();
             openFileDialog1.Filter = "XML Files|*.xml";
-            openFileDialog1.Title = "Select an XML File";
+            openFileDialog1.Title = "Save as...";
          
             // Show the Dialog.  
             // If the user clicked OK in the dialog and  
@@ -1175,6 +1178,28 @@ namespace XTAC
                 
             }
 
+
+            /*
+            foreach (ListViewItem lvi in this.builtInVerbsTextBox)
+            {
+                string[] toks = lvi.Text.Split(',');
+
+                if (toks.Contains(v))
+                    return true;
+
+            }
+            */
+            char[] seps = { '\r', '\n', ',' };
+            string builtIn = builtInVerbsTextBox.Text;
+            string[] verbs = builtIn.Split(seps);
+
+            foreach (string s in verbs)
+            {
+                if (v.Equals(s))
+                {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -1646,6 +1671,8 @@ namespace XTAC
             if (fileName != "")
             {
                    
+               Save();
+
                 //create a modeless dialog
                 TestClient tc = new TestClient();
 
@@ -1654,7 +1681,7 @@ namespace XTAC
                     tc.SetFile(fileName);
                     tc.ShowDialog();
                 }
-                catch (Exception ex)
+                 catch (Exception ex)
                 {
                     string msg = ex.Message;
                     
@@ -1664,7 +1691,7 @@ namespace XTAC
             }
             else
             {
-                MessageBox.Show("You haven't loaded a game yet.");
+                SaveAs();
             }
         }
 
@@ -1734,6 +1761,89 @@ namespace XTAC
             }
         }
 
+        private void FromTrizbort()
+        {
+            string fileName = "";
+            NewProject();
+            TrizbortImporter ti = new TrizbortImporter(); //pass blank project to converter
+            ti.Import(xproject, fileName);
+        }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Object obj = CreateObject("OBJECT " + xproject.Project.Objects.Object.Count);
+
+
+            obj.Flags.Emittinglight = "1";
+
+            xproject.Project.Objects.Object.Add(obj);
+
+            //refresh list
+            ShowProject();
+            objectsComboBox.SelectedIndex = objectsComboBox.Items.Count - 1;
+            
+        }
+
+        private void seComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetDirection((ComboBox)sender, "SE");
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Object obj = CreateObject("OBJECT " + xproject.Project.Objects.Object.Count);
+
+            obj.Flags.Door = "1";
+            obj.Flags.Locked = "1";
+            obj.Flags.Lockable = "1";
+            obj.Flags.Open = "1";
+            obj.Flags.Openable = "1";
+
+            xproject.Project.Objects.Object.Add(obj);
+
+            //refresh list
+            ShowProject();
+            objectsComboBox.SelectedIndex = objectsComboBox.Items.Count - 1;
+        }
+
+        private void importTrizbortFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("This will create a new project. Make sure you've save your project.\r\nDo you wish to continue?", "Confirm Import", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
+                {
+                    OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                    openFileDialog1.Filter = "Trizbort Files|*.trizbort";
+                    openFileDialog1.Title = "Select a Trizbort File";
+
+                    // Show the Dialog.  
+                    // If the user clicked OK in the dialog and  
+                    // a .CUR file was selected, open it.  
+                    if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+
+                        NewProject();
+                        TrizbortImporter trizImp = new TrizbortImporter();
+                        trizImp.Import(xproject, openFileDialog1.FileName);
+                        ShowProject();
+                        MessageBox.Show("Import Complete. You will now be prompted to save your project.");
+                        SaveAs();
+//                        fileName = "";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void synonymsTextBox_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+
+        
     }
 }

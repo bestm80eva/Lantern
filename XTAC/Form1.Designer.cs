@@ -33,6 +33,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importTrizbortFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -136,6 +137,8 @@
             this.userVerbListView = new System.Windows.Forms.ListView();
             this.label17 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.label46 = new System.Windows.Forms.Label();
             this.enterComboBox = new System.Windows.Forms.ComboBox();
             this.label35 = new System.Windows.Forms.Label();
@@ -236,6 +239,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.loadToolStripMenuItem,
+            this.importTrizbortFileToolStripMenuItem,
             this.saveToolStripMenuItem1,
             this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -246,35 +250,42 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            // 
+            // importTrizbortFileToolStripMenuItem
+            // 
+            this.importTrizbortFileToolStripMenuItem.Name = "importTrizbortFileToolStripMenuItem";
+            this.importTrizbortFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.importTrizbortFileToolStripMenuItem.Text = "Import Trizbort File";
+            this.importTrizbortFileToolStripMenuItem.Click += new System.EventHandler(this.importTrizbortFileToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem1
             // 
             this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(123, 22);
+            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(174, 22);
             this.saveToolStripMenuItem1.Text = "Save";
             this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem1_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.saveToolStripMenuItem.Text = "Save As...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1293,6 +1304,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button5);
+            this.tabPage2.Controls.Add(this.button4);
             this.tabPage2.Controls.Add(this.label46);
             this.tabPage2.Controls.Add(this.enterComboBox);
             this.tabPage2.Controls.Add(this.label35);
@@ -1342,6 +1355,26 @@
             this.tabPage2.UseVisualStyleBackColor = true;
             this.tabPage2.Click += new System.EventHandler(this.tabPage2_Click);
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(69, 306);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(133, 23);
+            this.button5.TabIndex = 46;
+            this.button5.Text = "Add Door";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(69, 278);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(133, 23);
+            this.button4.TabIndex = 45;
+            this.button4.Text = "Add Lit Room/Object";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // label46
             // 
             this.label46.AutoSize = true;
@@ -1377,6 +1410,7 @@
             this.synonymsTextBox.Size = new System.Drawing.Size(341, 20);
             this.synonymsTextBox.TabIndex = 41;
             this.synonymsTextBox.TextChanged += new System.EventHandler(this.synonymsTextBox_TextChanged);
+            this.synonymsTextBox.Leave += new System.EventHandler(this.synonymsTextBox_Leave);
             // 
             // initialDescTextBox
             // 
@@ -1494,7 +1528,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(494, 210);
+            this.label12.Location = new System.Drawing.Point(497, 211);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(24, 13);
             this.label12.TabIndex = 28;
@@ -1824,6 +1858,7 @@
             this.seComboBox.Name = "seComboBox";
             this.seComboBox.Size = new System.Drawing.Size(137, 21);
             this.seComboBox.TabIndex = 13;
+            this.seComboBox.SelectedIndexChanged += new System.EventHandler(this.seComboBox_SelectedIndexChanged);
             // 
             // swComboBox
             // 
@@ -2231,6 +2266,9 @@
         private System.Windows.Forms.Label label66;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ToolStripMenuItem importTrizbortFileToolStripMenuItem;
     }
 }
 

@@ -11,3 +11,6 @@ C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\Lantern.
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\Lantern.pdb
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\bin\Debug\Lantern.pdb
 C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.Lantern.resources
+C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\bin\Debug\PlayerLib.dll
+C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\bin\Debug\PlayerLib.pdb
+C:\Users\Evan\documents\visual studio 2013\Projects\XTAC\XTAC\obj\Debug\XTAC.TestClient.resources

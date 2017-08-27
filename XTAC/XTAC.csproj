@@ -75,6 +75,8 @@
     <Compile Include="SyntaxHelpForm.Designer.cs">
       <DependentUpon>SyntaxHelpForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TrizbortImporter.cs" />
+    <Compile Include="TrizbortXml.cs" />
     <Compile Include="XmlMappings.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

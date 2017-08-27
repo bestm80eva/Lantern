@@ -25,7 +25,7 @@ java -jar AppleCommander-1.3.5.13-ac.jar -p advent.dsk game.bin bin 0x800 < main
 
 :: copy advent.dsk "/cygdrive/c/Users/Evan/Documents/Apple2/ADTPro-2.0.2/disks"
 
-:: .\Applewin.exe -d1 advent.dsk -d2 PRODOS.dsk
+.\Applewin.exe -d1 advent.dsk -d2 PRODOS.dsk
 
 echo Done.  File is attached to advent.dsk
  
