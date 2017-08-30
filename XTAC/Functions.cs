@@ -55,6 +55,12 @@ namespace XTAC
             r.Name = "jump";
             r.Text = "println(\"WHEEEEEE!\");";
             xproject.Project.Routines.Routine.Add(r);
+
+            r = new Routine();
+            r.Name = "default_eat";
+            r.Text = "println(\"THAT'S NOT PART OF A HEALTHY DIET.\");";
+            xproject.Project.Routines.Routine.Add(r);
+
         }
 
         void AddDefaultVars()
@@ -139,6 +145,16 @@ namespace XTAC
             s.Sub = "jump";
             s.Type = "instead";
             xproject.Project.Sentences.Sentence.Add(s);
+
+            s = new Sentence();
+            s.Verb = "eat";
+            s.Do = "*";
+            s.Io = "";
+            s.Prep = "";
+            s.Sub = "default_eat";
+            s.Type = "instead";
+            xproject.Project.Sentences.Sentence.Add(s);
+
         }
 
 
@@ -167,7 +183,7 @@ namespace XTAC
             AddCheck("put", "check_not_self_or_child");
             AddCheck("talk to", "check_dobj_supplied");
             AddCheck("turn on", "check_dobj_supplied");
-            AddCheck("turn on", "check_have_dobj");
+            //AddCheck("turn on", "check_have_dobj");
             AddCheck("unlock", "check_dobj_supplied");
             AddCheck("look in", "check_dobj_supplied");
         }

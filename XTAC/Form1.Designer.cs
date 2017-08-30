@@ -1068,9 +1068,11 @@
             // funcNameTextBox
             // 
             this.funcNameTextBox.Location = new System.Drawing.Point(82, 320);
+            this.funcNameTextBox.MaxLength = 12;
             this.funcNameTextBox.Name = "funcNameTextBox";
             this.funcNameTextBox.Size = new System.Drawing.Size(148, 20);
             this.funcNameTextBox.TabIndex = 3;
+            this.funcNameTextBox.TextChanged += new System.EventHandler(this.funcNameTextBox_TextChanged);
             // 
             // codeTextBox
             // 
@@ -1415,6 +1417,7 @@
             // initialDescTextBox
             // 
             this.initialDescTextBox.Location = new System.Drawing.Point(350, 122);
+            this.initialDescTextBox.MaxLength = 254;
             this.initialDescTextBox.Multiline = true;
             this.initialDescTextBox.Name = "initialDescTextBox";
             this.initialDescTextBox.Size = new System.Drawing.Size(485, 38);
@@ -1425,6 +1428,7 @@
             // objDescTextBox
             // 
             this.objDescTextBox.Location = new System.Drawing.Point(350, 43);
+            this.objDescTextBox.MaxLength = 254;
             this.objDescTextBox.Multiline = true;
             this.objDescTextBox.Name = "objDescTextBox";
             this.objDescTextBox.Size = new System.Drawing.Size(485, 59);
@@ -1438,6 +1442,7 @@
             this.objNameTextBox.Name = "objNameTextBox";
             this.objNameTextBox.Size = new System.Drawing.Size(161, 20);
             this.objNameTextBox.TabIndex = 1;
+            this.objNameTextBox.Text = " ";
             this.objNameTextBox.TextChanged += new System.EventHandler(this.objNameTextBox_TextChanged);
             this.objNameTextBox.Leave += new System.EventHandler(this.objNameTextBox_Leave);
             // 
@@ -1452,6 +1457,7 @@
             // 
             // parentComboBox
             // 
+            this.parentComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.parentComboBox.FormattingEnabled = true;
             this.parentComboBox.Location = new System.Drawing.Point(701, 15);
             this.parentComboBox.Name = "parentComboBox";

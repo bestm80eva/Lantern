@@ -88,7 +88,8 @@ namespace XTAC
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 System.Xml.Serialization.XmlSerializer reader = new XmlSerializer(typeof(Xml));
-
+                userVerbListView.Clear();
+                builtinVarsListBox.Items.Clear();
                 // Read the XML file.
                 StreamReader file = new StreamReader(openFileDialog1.FileName);
                 fileName = openFileDialog1.FileName;
@@ -478,9 +479,11 @@ namespace XTAC
             else 
             {
                 //check for duplicates
-
+                string name = funcNameTextBox.Text;
+                name = name.Replace(' ', '_');
+                funcNameTextBox.Text = name;
                 Routine r = new Routine();
-                r.Name = funcNameTextBox.Text;
+                r.Name = name;
                 
                 r.Text = "";
 
@@ -992,11 +995,14 @@ namespace XTAC
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            userVerbListView.Clear();
-            ruleCodeTextBox.Clear();
-            NewProject();
-            ShowProject();
-        }
+            if (MessageBox.Show("This will delete your current project.  Proceed?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                userVerbListView.Clear();
+                ruleCodeTextBox.Clear();
+                NewProject();
+                ShowProject();
+            }
+         }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -1173,8 +1179,13 @@ namespace XTAC
             {
                 string[] toks = lvi.Text.Split(',');
 
-                if (toks.Contains(v))
+                foreach (string item in toks)
+                {
+                    if (item.ToUpper().Equals(v.ToUpper()))
+                    {
                         return true;
+                    }
+                }
                 
             }
 
@@ -1195,9 +1206,12 @@ namespace XTAC
 
             foreach (string s in verbs)
             {
-                if (v.Equals(s))
+                foreach (string item in verbs)
                 {
-                    return true;
+                    if (item.ToUpper().Equals(v.ToUpper()))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -1406,8 +1420,15 @@ namespace XTAC
 
         private void userVarsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            varNameTextBox.Text = xproject.Project.Variables.User.Var[userVarsListBox.SelectedIndex].Name;
-            valueTextBox.Text = xproject.Project.Variables.User.Var[userVarsListBox.SelectedIndex].Value;
+            try
+            {
+                varNameTextBox.Text = xproject.Project.Variables.User.Var[userVarsListBox.SelectedIndex].Name;
+                valueTextBox.Text = xproject.Project.Variables.User.Var[userVarsListBox.SelectedIndex].Value;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
@@ -1681,7 +1702,11 @@ namespace XTAC
                     tc.SetFile(fileName);
                     tc.ShowDialog();
                 }
-                 catch (Exception ex)
+                catch (KeyNotFoundException knf)
+                {
+                    MessageBox.Show("Unknown object or value: " + knf.Message );
+                }
+                catch (Exception ex)
                 {
                     string msg = ex.Message;
                     
@@ -1839,6 +1864,11 @@ namespace XTAC
         }
 
         private void synonymsTextBox_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void funcNameTextBox_TextChanged(object sender, EventArgs e)
         {
 
         }
