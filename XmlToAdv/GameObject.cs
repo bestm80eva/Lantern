@@ -15,7 +15,7 @@ namespace XMLtoAdv
         public const int NUM_BACKDROP_ROOMS = 5;
         private int _id;
         private string _name;
-        private string _initial_desc;
+        private string _initial_desc = "";
         private string _desc ;
         private int _holder;
         private bool _isBackdrop = false;
@@ -47,11 +47,30 @@ namespace XMLtoAdv
         public GameObject(XmlNode data)
         {
             _name = data.Attributes.GetNamedItem("name").Value;
-            _id = Convert.ToInt32(data.Attributes.GetNamedItem("id").Value);
+
+            try
+            {
+                string strId = data.Attributes.GetNamedItem("id").Value;
+                _id = Convert.ToInt32(strId);
+                _id = id;
+            }
+            catch (Exception e)
+            {
+                _id = 0;
+            }
+
             _desc = data.SelectSingleNode("description").InnerText;
-            _initial_desc = data.SelectSingleNode("initialdescription").InnerText;
+
+            try
+            {
+                _initial_desc = data.SelectSingleNode("initialdescription").InnerText;
+            }
+            catch
+            {
+                _initial_desc = "";
+            }
             _holder = Convert.ToInt32(data.Attributes.GetNamedItem("holder").Value);
-          
+            
 
             LoadBackdrop(data);
             LoadAttribs(data);
@@ -149,9 +168,16 @@ namespace XMLtoAdv
 
             for (int i=0; i < NUM_ATTRIBS; i++)
             {
-                 string roomStr = dirs.Attributes.GetNamedItem(attribNames[i]).Value;
-                 int roomNum = Convert.ToInt32(roomStr);
-                 attribs[i] = roomNum;
+                try
+                {
+                    string roomStr = dirs.Attributes.GetNamedItem(attribNames[i]).Value;
+                    int roomNum = Convert.ToInt32(roomStr);
+                    attribs[i] = roomNum;
+                }
+                catch (Exception e)
+                {
+                    attribs[i] = -1;
+                }
             }
         }
 

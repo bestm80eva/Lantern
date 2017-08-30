@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.Diagnostics;
-
+using System.Text.RegularExpressions;
 
 namespace XMLtoAdv
 {
@@ -639,7 +639,7 @@ namespace XMLtoAdv
 
                     int blanks = 3 - count;
 
-                    for (int i = 0; i < count; i++)
+                    for (int i = 0; i < Math.Min(count,3); i++)
                     {
                         //look up the id of each word
                         int wordId = dict.GetEntryId(toks[i]);
@@ -849,7 +849,9 @@ namespace XMLtoAdv
                // AsmWriter6809 asm = new AsmWriter6809();
                 using (StreamWriter sw = File.CreateText(fileName + "_event_" + processor + ".asm"))
                 {
-                    asm.WriteRoutine(sw, name + "_event", n.InnerText);
+                    string innerText = n.InnerText;
+                    string noComments = Regex.Replace(innerText, "//.*", "");
+                    asm.WriteRoutine(sw, name + "_event", noComments);
                 }
             }
 
@@ -868,7 +870,10 @@ namespace XMLtoAdv
                 {
                     try
                     {
-                        asm.WriteRoutine(sw, name + "_sub", n.InnerText);
+                        string innerText = n.InnerText;
+                        string noComments = Regex.Replace(innerText, "//.*", "");
+
+                        asm.WriteRoutine(sw, name + "_sub", noComments);
                     }
                     catch (Exception ex)
                     {
