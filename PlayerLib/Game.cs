@@ -382,68 +382,96 @@ namespace PlayerLib
             stringTable.AddEntry("YOU NOTICE NOTHING UNEXPECTED.");
 
             XmlNodeList list = doc.SelectNodes("//project/objects/object");
-             
+            int idCounter = 0;
             foreach (XmlNode n in list)
             {
                 string name = n.Attributes.GetNamedItem("name").Value;
-  
-                //get the child node with the description
-                XmlNode child = n.ChildNodes[0];
-                string desc = child.InnerText;
 
-                //don't add blank descriptions
-                if (desc != "")
+                try
                 {
-                    stringTable.AddEntry(desc);
-                }
+                    //get the child node with the description
+                    XmlNode child = n.ChildNodes[0];
+                    string desc = child.InnerText;
 
-                //initial desc
-                string initialDesc = n.SelectSingleNode("initialdescription").InnerText;
-
-                if (initialDesc != "" && initialDesc != null)
-                {
-                    stringTable.AddEntry(initialDesc);
-                }
-
-                //break the name into words and put each word in the dictionary
-                char[] delimiterChars = { ' ' };
-                string[] toks = name.Split(delimiterChars);
-
-                foreach (string s in toks)
-                {
-                    if (s != null && !s.Equals(""))
+                    //don't add blank descriptions
+                    if (desc != "")
                     {
-                        dictionary.AddEntry(s);
+                        stringTable.AddEntry(desc);
+                    }
+                    else
+                    {
+                        stringTable.AddEntry("YOU NOTICE NOTHING UNEXPECTED.");
+                        n.ChildNodes[0].InnerText = "YOU NOTICE NOTHING UNEXPECTED.";
+                    }
+
+                    //initial desc
+
+                    try
+                    {
+                        string initialDesc = n.SelectSingleNode("initialdescription").InnerText.Trim();
+
+                        if (initialDesc != "" && initialDesc != null)
+                        {
+                            stringTable.AddEntry(initialDesc);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    //break the name into words and put each word in the dictionary
+                    char[] delimiterChars = { ' ' };
+                    string[] toks = name.Split(delimiterChars);
+
+                    foreach (string s in toks)
+                    {
+                        if (s != null && !s.Equals(""))
+                        {
+                            dictionary.AddEntry(s);
+                        }
+                    }
+
+                    //create the object from the data
+                    GameObject gobj = null;
+                    try
+                    {
+                        gobj = new GameObject(n);
+                        objTable.Add(new ObjTableEntry(gobj, stringTable));
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Unable to add object to name", ex);
+                    }
+
+
+                    //put synoyms in table
+                    if (gobj.synonyms != null)
+                    {
+                        foreach (string s in gobj.synonyms)
+                        {
+                            if (!s.Equals(""))
+                                dictionary.AddEntry(s);
+                        }
+                    }
+
+                    //check for nogo messages
+                    //if any movement dir has a corresponding entry in the nogo table
+                    //set the atr to 255 - string id
+                    foreach (string d in dirs)
+                    {
+                        if (gobj.HasNogoMsg(d))
+                        {
+                            string msg = gobj.GetNogoMsg(d);
+                            int nogoIndex = nogoTable.GetEntryId(msg);
+                            objTable.SetObjAttr(gobj.id, d.ToUpper(), (255 - nogoIndex) + 1);
+                        }
                     }
                 }
-
-                //create the object from the data
-                GameObject gobj = new GameObject(n);
-                objTable.Add(new ObjTableEntry(gobj, stringTable));
-
-                 
-                //put synoyms in table
-                foreach (string s in gobj.synonyms)
+                catch (Exception ex)
                 {
-                    if (!s.Equals(""))
-                        dictionary.AddEntry(s);
-                }
-
-
-                //check for nogo messages
-                //if any movement dir has a corresponding entry in the nogo table
-                //set the atr to 255 - string id
-                foreach (string d in dirs)
-                {
-                    if (gobj.HasNogoMsg(d))
-                    {
-                        string msg = gobj.GetNogoMsg(d);
-                        int nogoIndex = nogoTable.GetEntryId(msg);
-                        objTable.SetObjAttr(gobj.id, d.ToUpper(), (255 - nogoIndex)+1);
-                    }
+                    throw new Exception("Error adding " + name + " to dictionary", ex);
                 }
             }
-
+            
         }
 
         void GetIntro(XmlDocument doc)
@@ -694,7 +722,7 @@ namespace PlayerLib
                     int iobjId = dictionary.GetEntryId(list[prepIndex+1]);
                     if (iobjId == -1)
                     {
-                        PrintStringCr("I DON'T KNOW THE WORD '" + list[1] + "'");
+                        PrintStringCr("I DON'T KNOW THE WORD '" + list[prepIndex+1] + "'");
                         return false;
                     }
                     iobj = iobjId;
@@ -713,10 +741,19 @@ namespace PlayerLib
         bool IsVisibleToPlayer(int objId)
         {
             int playerRoom = GetPlayerRoom();
+            /*
+            //backdrop
+            if (GetObjectAttr(objId, "BACKDROP") == 1)
+            {
+                if (objTable[objId] )
+                {
 
+                }
+            }
+            */
             while (true)
             {
-                int parent = GetObjectAttr(objId, "HOLDER");
+                 int parent = GetObjectAttr(objId, "HOLDER");
                 if (parent == PLAYER || parent == playerRoom)
                     return true;
                 if (parent == OFFSCREEN)
@@ -743,17 +780,17 @@ namespace PlayerLib
         {
             for (int i = 0; i < objTable.GetCount(); i++ )
             {
-                List<int> l = new List<int>();
+                    List<int> l = new List<int>();
 
-                string n = objTable.objects[i].name;
-                string[] words = n.Split(' ');
+                    string n = objTable.objects[i].name;
+                    string[] words = n.Split(' ');
 
-                for (int j = 0; j < words.Length; j++ )
-                {
-                    words[j] = words[j].ToUpper();
-                }
+                    for (int j = 0; j < words.Length; j++)
+                    {
+                        words[j] = words[j].ToUpper();
+                    }
 
-                objWordTable.AddNewEntry(i,words.ToList<string>(), dictionary);
+                    objWordTable.AddNewEntry(i, words.ToList<string>(), dictionary);
             }
 
             //add synonyms to objWordTable
@@ -974,8 +1011,8 @@ namespace PlayerLib
             {
                 vars["$turnsWithoutLight"].val++;
             }
-             
 
+            Unwear();
         }
 
         public void Debug(string s)
@@ -995,10 +1032,13 @@ namespace PlayerLib
         {
             foreach (ObjTableEntry ote in objTable.objects.Values)
             {
-                if (ote.GetObjAttr("BEINGWORN")==1)
+                if (ote.GetObjAttr("HOLDER") != PLAYER)
                 {
-                    ote.SetObjAttr("BEINGWORN", 1);
-                    Debug("Unwearing " + ote.name);
+                    if (ote.GetObjAttr("BEINGWORN")==1)
+                    {
+                        ote.SetObjAttr("BEINGWORN", 0);
+                        Debug("Unwearing " + ote.name);
+                    }
                 }
             }
         }

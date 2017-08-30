@@ -130,7 +130,15 @@ namespace PlayerLib
 
         public void SetObjAttr(string name, int val)
         {
-            attrs[name.ToUpper()]=val;
+            
+            if (attrs.ContainsKey(name.ToUpper()))
+            {
+                attrs[name.ToUpper()] = val;
+            }
+            else
+            {
+                throw new Exception("Invalid attribute: " + name);
+            }
         }
 
 

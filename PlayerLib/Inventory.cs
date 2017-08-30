@@ -66,7 +66,11 @@ namespace PlayerLib
                 {
                     if (objTable.GetObjAttr(i, "SCENERY") == 0)
                     {
-                        if (objTable.GetObjAttr(i, "INITIALDESCRIPTION")==-1)
+
+                        int strId = objTable.GetObjAttr(i, "INITIALDESCRIPTION");
+                            
+
+                        if (strId == -1 || strId == 255 || stringTable.GetEntry(strId) == "")
                         {
                             PrintStringCr("THERE IS A " + objTable.objects[i].name + " HERE");
                         }

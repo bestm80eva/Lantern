@@ -75,14 +75,36 @@ namespace PlayerLib
                 string left = lhs.Substring(0, lhs.IndexOf("."));
 
                 if (g.IsVariable(left))
-                    return g.GetVarVal(left);
+                {
+                    try
+                    {
+                        return g.GetVarVal(left);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Unknown var:" + left, ex);
+                    }
+                }
                 else
-                    return g.GetObjectId(left);
+                {
+                    try
+                    {
+                        return g.GetObjectId(left);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Unknown object:" + left, ex);
+                    }
+                }
             }
             else
             {
                 Game g = Game.GetInstance();
-                return g.GetObjectId(lhs);
+                int _id =  g.GetObjectId(lhs);
+                if (_id == -1)
+                    throw new Exception("Unknown object:" + lhs);
+                return _id;
+
             }
         }
 
@@ -202,10 +224,16 @@ namespace PlayerLib
 
         public override void Execute()
         {
-            Game g = Game.GetInstance();
-            int v = val.Eval();
-            g.AddVar(varName, v);
-            
+            try
+            {
+                Game g = Game.GetInstance();
+                int v = val.Eval();
+                g.AddVar(varName, v);
+            }
+            catch (KeyNotFoundException knf)
+            {
+                throw new KeyNotFoundException("Unknown variable: " + varName, knf);
+            }
         }
 
         public override void AcceptEmitter(AsmEmitter asm)
@@ -416,8 +444,15 @@ namespace PlayerLib
 
         public override int Eval() 
         {
-            Game g = Game.GetInstance();
-            return g.GetVarVal(name);
+            try
+            {
+                Game g = Game.GetInstance();
+                return g.GetVarVal(name);
+            }
+            catch (KeyNotFoundException knf)
+            {
+                throw new Exception("Variable not found:" + name, knf);
+            }
         }
     }
    
@@ -473,9 +508,9 @@ namespace PlayerLib
             this.attr = attr;
         }
 
-        public override int Eval() { 
-            Game g = Game.GetInstance();
-            return g.GetObjectAttr(GetLhsObj(lhs),attr.ToUpper());
+        public override int Eval() {
+                Game g = Game.GetInstance();
+                return g.GetObjectAttr(GetLhsObj(lhs), attr.ToUpper());
         }
     }
     /*

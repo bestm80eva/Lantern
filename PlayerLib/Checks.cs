@@ -76,7 +76,7 @@ namespace PlayerLib
         {
             if (!VisibleAncestor(PLAYER, iobj))
             {
-                PrintStringCr("YOU DON'T SEE THAT.");
+                PrintStringCr("YOU DON'T HAVE THAT.");
                 return false;
             }
             return true;
@@ -84,9 +84,9 @@ namespace PlayerLib
 
         bool check_dobj_portable()
         {
-            if (GetObjectAttr(dobj,"PORTABLE") == 1)
+            if (GetObjectAttr(dobj,"PORTABLE") == 0)
             {
-                PrintStringCr("THAT IS FIXED IN PLACE.");
+                PrintStringCr("YOU CAN'T DO THAT.");
                 return false;
             }
             return true;
@@ -137,7 +137,7 @@ namespace PlayerLib
         {
             if (!VisibleAncestor(PLAYER, dobj))
             {
-                PrintStringCr("YOU DON'T SEE THAT.");
+                PrintStringCr("YOU DON'T HAVE THAT.");
                 return false;
             }
             return true;
