@@ -30,6 +30,11 @@ namespace XMLtoAdv
 
         public int  AddEntry(string name)
         {
+            if (name.Length > 255)
+            {
+                name = name.Substring(0, 255);
+            }
+
             if (GetEntryId(name) != -1)
             {//check for dupes
                 return GetEntryId(name);
@@ -44,6 +49,11 @@ namespace XMLtoAdv
        
         public int GetEntryId(string name)
         {
+            if (name.Length > 255)
+            {
+                name = name.Substring(0, 255);
+            }
+
             for (int i = 0; i < entries.Count; i++)
             {
                 if (entries[i].ToUpper().Equals(name.ToUpper()))

@@ -851,6 +851,7 @@ namespace XMLtoAdv
                 {
                     string innerText = n.InnerText;
                     string noComments = Regex.Replace(innerText, "//.*", "");
+                    noComments = Regex.Replace(noComments, "\"\"", "\" \"");
                     asm.WriteRoutine(sw, name + "_event", noComments);
                 }
             }
@@ -873,6 +874,8 @@ namespace XMLtoAdv
                         string innerText = n.InnerText;
                         string noComments = Regex.Replace(innerText, "//.*", "");
 
+
+                        noComments = Regex.Replace(noComments, "\"\"", "\" \"");
                         asm.WriteRoutine(sw, name + "_sub", noComments);
                     }
                     catch (Exception ex)
