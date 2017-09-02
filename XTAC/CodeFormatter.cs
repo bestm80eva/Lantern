@@ -12,49 +12,51 @@ namespace XTAC
         const int numSpaces = 5;
          
 
-        
+        //formats the code in string 's'
         public static string Format(string s)
         {
 
             int indentLevel = 0;
             int index = 0;
+            int charIx = 0;
+            char lastChar = ' ';
 
             StringBuilder code = new StringBuilder(s);
             while (index != code.Length)
             {
+                
                 if (code[index] == '{')
                 {
-                    //need to delete which space behind {
+                    //need to delete white space behind {
                     DeleteTrailing(code, ref index);
                     code.Insert(index, '\n');
                     code.Insert(index, '\r');
-                    index += 2;
-                    FormatLine(code, ref index, indentLevel);
+                    index += 2; 
+                    InsertWhiteSpace(code, ref index, indentLevel);
                     indentLevel++;
                     code.Insert(index + 1, '\n');
                     code.Insert(index+1, '\r');
                     index += 3;
-                    FormatLine(code, ref index, indentLevel);
+                    InsertWhiteSpace(code, ref index, indentLevel);
                 }
                 else if (code[index] == '}')
-                {
-                    //back up
-                    
-                    code.Remove(index - numSpaces, numSpaces);
-                    index -= numSpaces;
-                    code.Insert(index + 1, '\n');
-                    code.Insert(index + 1, '\r');
-                    index += 3;
+                {  
+                    //insert a cr before the }
+                    DeleteTrailing(code, ref index);                   
+                    code.Insert(index, '\n');
+                    code.Insert(index, '\r');
+                    index += 2; //skip cr  
                     indentLevel--;
-                    FormatLine(code, ref index, indentLevel);
+                    InsertWhiteSpace(code, ref index, indentLevel);
+                    index++; 
                 }
                 else if (code[index] == ';')
                 {
-                    index++;
+                    index++; //skip ;
                     code.Insert(index, '\n');
                     code.Insert(index, '\r');
                     index += 2;
-                    FormatLine(code, ref index, indentLevel);
+                    InsertWhiteSpace(code, ref index, indentLevel); //insert padding for next line
                 }
                 else
                 {
@@ -64,7 +66,13 @@ namespace XTAC
             return code.ToString();
         }
          
-        public static void FormatLine(StringBuilder codeStr, ref int index, int indentLevel)
+
+        /*
+         *Trims off leading white space
+         *Adds the appropriate amount back on
+         *starting at index
+         */
+        public static void InsertWhiteSpace(StringBuilder codeStr, ref int index, int indentLevel)
         {
 
             if (index == codeStr.Length) { return; }
@@ -76,12 +84,10 @@ namespace XTAC
                 if (index == codeStr.Length) { return; }
             }
 
-
+            //add the correct amount back
             if (indentLevel > 0)
             {
-                //add the correct amount back
                 for (int i = 0; i < indentLevel * numSpaces; i++) { codeStr.Insert(index, ' '); index++; }
-                //now look ah
             }
         }
 
@@ -103,6 +109,8 @@ namespace XTAC
             if (ch == '\r') return true;
             if (ch == '\n') return true;
             if (ch == '\t') return true;
+//            if (ch == 'X') return true;
+
             return false;
         }
     }

@@ -117,22 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="textBox5.Text" xml:space="preserve">
-    <value>Variables are pieces of data which keep track of the state of your game.  A project contains several variables by default.  If you need more, you can add your own using the interface on the right. Variables are limited to values between 0 and 255.</value>
-  </data>
-  <data name="textBox2.Text" xml:space="preserve">
-    <value>Event rules are run after each user command is processed.  They can be used to do things things like add 1 to the player's health, consume fuel or batteries for objects that are on.  They can also be used to create randomly occuring events such as the thief in Zork.  Rules have a name to identify them and code to execute.</value>
-  </data>
-  <metadata name="eventContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>132, 3</value>
-  </metadata>
-  <metadata name="verbContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>132, 17</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>65</value>
-  </metadata>
 </root>

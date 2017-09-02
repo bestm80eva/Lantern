@@ -507,9 +507,24 @@ namespace XTAC
             }
             else
             {
-                Event evt = new Event();
-
+                string name = ruleNameTextBox.Text.Trim().Replace(' ', '_');
                 //check for dupes!
+
+                foreach (string s in this.rulesListBox.Items)
+                {
+                    if (s.ToUpper().Equals(name.ToUpper()))
+                    {
+                        MessageBox.Show("There is already an event with that name.");
+                        ruleNameTextBox.Clear();
+                        ruleNameTextBox.Focus();
+                        return;
+                    }
+                }
+
+                Event evt = new Event();
+                
+                ruleNameTextBox.Text = name;
+
                 evt.Name = ruleNameTextBox.Text;
                 evt.Text = "";
                 xproject.Project.Events.Event.Add(evt);
@@ -712,16 +727,19 @@ namespace XTAC
         private void saveVarValueButton_Click(object sender, EventArgs e)
         {
             //add a new variable
-            varNameTextBox.Text.Trim();
+            string varName = varNameTextBox.Text.Trim().Replace(' ', '_');
+            varName = varName.Replace("$", string.Empty);
+            //varNameTextBox.Text = varNameTextBox.Text.Trim().Replace(' ', '_');
+            varNameTextBox.Text = varName;
 
             //check for duplicates in user and built-in variables
             IEnumerable<Var> vars = from v in xproject.Project.Variables.User.Var
-                             where v.Name.Equals(varNameTextBox.Text)
+                             where v.Name.Equals(varName)
                              select v;
 
             if (vars.Count<Var>() > 0)
             {
-                vars.First<Var>().Value = valueTextBox.Text.Trim();
+                vars.First<Var>().Value = varName;
                 MessageBox.Show("Variable updated.");
             }
             else
@@ -886,6 +904,7 @@ namespace XTAC
         {
             xproject = new Xml();
             xproject.Project = new Project();
+            xproject.Project.ProjName = "NEW PROJECT";
             xproject.Project.Version = "VERSION 1.0";
             xproject.Project.Author = "YOUR NAME";
             xproject.Project.Welcome = "SHORT WELCOME MESSAGE.";
@@ -1317,7 +1336,9 @@ namespace XTAC
             else
             {
                 string temp = objDescTextBox.Text.ToUpper().Trim();
-                temp = temp.Replace('\"', '\''); 
+                temp = temp.Replace('\"', '\'');
+                temp = temp.Replace('\r', ' '); 
+                temp = temp.Replace('\n', ' '); 
                 GetCurObj().Description = temp;
                 objDescTextBox.Text = temp;
             }
@@ -1433,11 +1454,13 @@ namespace XTAC
 
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
+             
             string name = textBox4.Text;
             name = name.Replace(' ','_');
             name = name.Replace(".","");
             xproject.Project.ProjName = name;
             textBox4.Text = name;
+            
         }
 
         private void tRS80ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1513,7 +1536,7 @@ namespace XTAC
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Export failed!" + ex.Message + ex.InnerException.Message); 
+                    MessageBox.Show("Export failed!" + ex.Message); 
                 }
             }
             else
@@ -1869,6 +1892,104 @@ namespace XTAC
         }
 
         private void funcNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label70_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ruleNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            //string ruleNameTextBox.Text;
+        }
+
+        private void label73_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rulesListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (rulesListBox.SelectedIndex != -1)
+            {
+                rulesListBox.ContextMenuStrip = eventContextMenuStrip;
+            }
+
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        //rename an event
+        private void Rename_Click(object sender, EventArgs e)
+        {
+            RenameEventForm ren = new RenameEventForm();
+           
+            ren.OldName = rulesListBox.Items[rulesListBox.SelectedIndex].ToString();
+            ren.ShowDialog();
+            if (ren.result)
+            {
+                xproject.Project.Events.Event.ElementAt(rulesListBox.SelectedIndex).Name = ren.NewName;
+                rulesListBox.Items[rulesListBox.SelectedIndex] = ren.NewName;
+            }
+        }
+
+        //delete an event
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Really delete this event?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                rulesListBox.Items.RemoveAt(rulesListBox.SelectedIndex);
+                ruleCodeTextBox.Text = "";
+                rulesListBox.SelectedIndex = -1;
+                rulesListBox.ContextMenuStrip = null;
+            }
+
+                
+        }
+
+        private void verbContextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string verb = userVerbListView.Items[userVerbListView.SelectedIndices[0]].Text.ToString();
+            //delete a verb
+            //is the verb used in a sentence?
+            foreach (Sentence s in xproject.Project.Sentences.Sentence)
+            {
+                if (s.Verb.Equals(verb))
+                {
+                    MessageBox.Show("Unable to delete verb.  It is being used by a sentence.");
+                    return;
+                }
+            }
+
+            //delete from project
+            xproject.Project.Verbs.Userverbs.Verb.RemoveAt(userVerbListView.SelectedIndices[0]);  
+
+            //delete from form
+            userVerbListView.Items.RemoveAt(userVerbListView.SelectedIndices[0]);
+
+            userVerbListView.ContextMenuStrip = null;
+        }
+
+        private void userVerbListView_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (userVerbListView.SelectedIndices.Count !=0)
+            {
+                userVerbListView.ContextMenuStrip = verbContextMenuStrip;
+            }
+        }
+
+        private void textBox4_Leave(object sender, EventArgs e)
         {
 
         }

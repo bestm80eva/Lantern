@@ -12,10 +12,21 @@ namespace XTAC
 
         void AddDefaultFunctions()
         {
-            //kill self routine
+
             Routine r = new Routine();
+            r.Name = "get_portable";
+            r.Text = "if ($dobj.portable == 1) { if ($dobj.holder != player) { println(\"(TAKEN)\"); $dobj.holder = player;}  } ";
+            xproject.Project.Routines.Routine.Add(r);
+
+            //kill self routine
+            r = new Routine();
             r.Name = "kill_self";
             r.Text = "println(\"IF YOU ARE EXPERIENCING SUICIDAL THOUGHTS, YOU SHOULD SEEK PSYCHIATRIC HELP.\");";
+            xproject.Project.Routines.Routine.Add(r);
+
+            r = new Routine();
+            r.Name = "default_kill";
+            r.Text = "println(\"PERHAPS YOU SHOULD COUNT TO 3 AND CALM DOWN.\");";
             xproject.Project.Routines.Routine.Add(r);
 
             r = new Routine();
@@ -27,6 +38,11 @@ namespace XTAC
             r = new Routine();
             r.Name = "talk_to_self";
             r.Text = "println(\"TALKING TO YOURSELF IS A SIGN OF IMPENDING MENTAL COLLAPSE.\");";
+            xproject.Project.Routines.Routine.Add(r);
+
+            r = new Routine();
+            r.Name = "default_talk";
+            r.Text = "println(\"THAT DOES PRODUCE AN EXCITING CONVERSATION.\");";
             xproject.Project.Routines.Routine.Add(r);
 
             //listen
@@ -61,6 +77,10 @@ namespace XTAC
             r.Text = "println(\"THAT'S NOT PART OF A HEALTHY DIET.\");";
             xproject.Project.Routines.Routine.Add(r);
 
+            r = new Routine();
+            r.Name = "default_drink";
+            r.Text = "println(\"THAT'S HARDLY A REFRESHING DRINK.\");";
+            xproject.Project.Routines.Routine.Add(r);
         }
 
         void AddDefaultVars()
@@ -82,6 +102,16 @@ namespace XTAC
         void AddDefaultSentences()
         {
             Sentence s = new Sentence();
+            s = new Sentence();
+            s.Verb = "examine";
+            s.Do = "*";
+            s.Io = "";
+            s.Prep = "";
+            s.Sub = "get_portable";
+            s.Type = "before";
+            xproject.Project.Sentences.Sentence.Add(s);
+
+            s = new Sentence();
             s.Verb = "kill";
             s.Do = "PLAYER";
             s.Io = "";
@@ -91,11 +121,38 @@ namespace XTAC
             xproject.Project.Sentences.Sentence.Add(s);
 
             s = new Sentence();
+            s.Verb = "kill";
+            s.Do = "*";
+            s.Io = "";
+            s.Prep = "";
+            s.Sub = "default_kill";
+            s.Type = "instead";
+            xproject.Project.Sentences.Sentence.Add(s);
+
+            s = new Sentence();
+            s.Verb = "kill";
+            s.Do = "*";
+            s.Io = "*";
+            s.Prep = "with";
+            s.Sub = "default_kill";
+            s.Type = "instead";
+            xproject.Project.Sentences.Sentence.Add(s);
+
+            s = new Sentence();
             s.Verb = "talk to";
             s.Do = "PLAYER";
             s.Io = "";
             s.Prep = "";
             s.Sub = "talk_to_self";
+            s.Type = "instead";
+            xproject.Project.Sentences.Sentence.Add(s);
+
+            s = new Sentence();
+            s.Verb = "talk to";
+            s.Do = "*";
+            s.Io = "";
+            s.Prep = "";
+            s.Sub = "default_talk";
             s.Type = "instead";
             xproject.Project.Sentences.Sentence.Add(s);
 
@@ -153,6 +210,25 @@ namespace XTAC
             s.Prep = "";
             s.Sub = "default_eat";
             s.Type = "instead";
+            xproject.Project.Sentences.Sentence.Add(s);
+
+
+            s = new Sentence();
+            s.Verb = "drink";
+            s.Do = "*";
+            s.Io = "";
+            s.Prep = "";
+            s.Sub = "default_drink";
+            s.Type = "instead";
+            xproject.Project.Sentences.Sentence.Add(s);
+
+            s = new Sentence();
+            s.Verb = "wear";
+            s.Do = "*";
+            s.Io = "";
+            s.Prep = "";
+            s.Sub = "get_portable";
+            s.Type = "before";
             xproject.Project.Sentences.Sentence.Add(s);
 
         }
