@@ -1994,6 +1994,29 @@ namespace XTAC
 
         }
 
+        private void reviewTextBox_VisibleChanged(object sender, EventArgs e)
+        {
+            reviewTextBox.Clear();
+            String s = "";
+            foreach (Object o in xproject.Project.Objects.Object)
+            {
+
+                s += o.Name;
+                if (o.Flags.Portable.Equals("1")) { s += "(PORTABLE)"; }
+                if (o.Flags.Scenery.Equals("1")) { s += "(SCENERY)"; }
+                s+="\r\n";
+                s += "Description:" +  o.Description + "\r\n";
+                s += "Initial Description:" +  o.Initialdescription + "\r\n";
+                s += "\r\n";
+            }
+            reviewTextBox.Text = s;
+        }
+
+        private void tabPage9_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
         
     }

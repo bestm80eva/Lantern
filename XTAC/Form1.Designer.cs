@@ -217,6 +217,15 @@
             this.Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.verbContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.reviewTextBox = new System.Windows.Forms.TextBox();
+            this.label74 = new System.Windows.Forms.Label();
+            this.label75 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.textBox10 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -231,6 +240,7 @@
             this.tabControl1.SuspendLayout();
             this.eventContextMenuStrip.SuspendLayout();
             this.verbContextMenuStrip.SuspendLayout();
+            this.tabPage9.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -288,14 +298,14 @@
             // 
             this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
             this.saveToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(174, 22);
+            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(211, 22);
             this.saveToolStripMenuItem1.Text = "Save";
             this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem1_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
             this.saveToolStripMenuItem.Text = "Save As...";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -389,7 +399,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -2131,6 +2141,7 @@
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage7);
+            this.tabControl1.Controls.Add(this.tabPage9);
             this.tabControl1.Location = new System.Drawing.Point(0, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -2171,9 +2182,128 @@
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.textBox10);
+            this.tabPage9.Controls.Add(this.textBox9);
+            this.tabPage9.Controls.Add(this.textBox8);
+            this.tabPage9.Controls.Add(this.textBox7);
+            this.tabPage9.Controls.Add(this.textBox6);
+            this.tabPage9.Controls.Add(this.label75);
+            this.tabPage9.Controls.Add(this.label74);
+            this.tabPage9.Controls.Add(this.reviewTextBox);
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage9.Size = new System.Drawing.Size(1095, 432);
+            this.tabPage9.TabIndex = 8;
+            this.tabPage9.Text = "Review";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            this.tabPage9.Click += new System.EventHandler(this.tabPage9_Click);
+            // 
+            // reviewTextBox
+            // 
+            this.reviewTextBox.Location = new System.Drawing.Point(334, 27);
+            this.reviewTextBox.Multiline = true;
+            this.reviewTextBox.Name = "reviewTextBox";
+            this.reviewTextBox.ReadOnly = true;
+            this.reviewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.reviewTextBox.Size = new System.Drawing.Size(630, 386);
+            this.reviewTextBox.TabIndex = 0;
+            this.reviewTextBox.VisibleChanged += new System.EventHandler(this.reviewTextBox_VisibleChanged);
+            // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.Location = new System.Drawing.Point(35, 11);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(153, 13);
+            this.label74.TabIndex = 1;
+            this.label74.Text = "TIPS FOR A GOOD PROJECT";
+            // 
+            // label75
+            // 
+            this.label75.AutoSize = true;
+            this.label75.Location = new System.Drawing.Point(331, 11);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(194, 13);
+            this.label75.TabIndex = 2;
+            this.label75.Text = "REVIEW OF OBJECT DESCRIPTIONS";
+            // 
+            // textBox6
+            // 
+            this.textBox6.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBox6.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox6.Location = new System.Drawing.Point(38, 126);
+            this.textBox6.Multiline = true;
+            this.textBox6.Name = "textBox6";
+            this.textBox6.ReadOnly = true;
+            this.textBox6.Size = new System.Drawing.Size(274, 51);
+            this.textBox6.TabIndex = 3;
+            this.textBox6.Text = "Do NOT mention portable objects in a room description (because the player could m" +
+    "ove them somewhere else)";
+            // 
+            // textBox7
+            // 
+            this.textBox7.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBox7.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox7.Location = new System.Drawing.Point(38, 183);
+            this.textBox7.Multiline = true;
+            this.textBox7.Name = "textBox7";
+            this.textBox7.ReadOnly = true;
+            this.textBox7.Size = new System.Drawing.Size(274, 70);
+            this.textBox7.TabIndex = 4;
+            this.textBox7.Text = "If you mention a (non portable) object in a room description, add a scenery objec" +
+    "t with the same name because the player will try to examine that object.";
+            // 
+            // textBox8
+            // 
+            this.textBox8.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBox8.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox8.Location = new System.Drawing.Point(38, 259);
+            this.textBox8.Multiline = true;
+            this.textBox8.Name = "textBox8";
+            this.textBox8.ReadOnly = true;
+            this.textBox8.Size = new System.Drawing.Size(274, 56);
+            this.textBox8.TabIndex = 5;
+            this.textBox8.Text = "Do NOT mention things that happen to the player in room descriptions.  Use Events" +
+    " for that.";
+            // 
+            // textBox9
+            // 
+            this.textBox9.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBox9.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox9.Location = new System.Drawing.Point(38, 37);
+            this.textBox9.Multiline = true;
+            this.textBox9.Name = "textBox9";
+            this.textBox9.ReadOnly = true;
+            this.textBox9.Size = new System.Drawing.Size(274, 83);
+            this.textBox9.TabIndex = 6;
+            this.textBox9.Text = "Room descriptions do not need to be very long.  One or two sentences describing t" +
+    "he location is fine.  Then add another sentence saying how the player gets the s" +
+    "urrounding rooms.";
+            // 
+            // textBox10
+            // 
+            this.textBox10.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBox10.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox10.Location = new System.Drawing.Point(38, 321);
+            this.textBox10.Multiline = true;
+            this.textBox10.Name = "textBox10";
+            this.textBox10.ReadOnly = true;
+            this.textBox10.Size = new System.Drawing.Size(274, 92);
+            this.textBox10.TabIndex = 7;
+            this.textBox10.Text = "Put initial descriptions on objects.  For example, \"A BROKEN SWORD LIES ON THE GR" +
+    "OUND.\" is much better than the default \"THERE IS A BROKEN SWORD HERE.\"";
             // 
             // Lantern
             // 
@@ -2210,6 +2340,8 @@
             this.tabControl1.ResumeLayout(false);
             this.eventContextMenuStrip.ResumeLayout(false);
             this.verbContextMenuStrip.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
+            this.tabPage9.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2404,6 +2536,15 @@
         private System.Windows.Forms.ToolStripMenuItem Delete;
         private System.Windows.Forms.ContextMenuStrip verbContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage9;
+        private System.Windows.Forms.TextBox reviewTextBox;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textBox10;
     }
 }
 
