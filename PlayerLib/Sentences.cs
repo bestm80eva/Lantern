@@ -22,13 +22,13 @@ namespace PlayerLib
                 int verbId = verbMap[verb.ToUpper()];
                 string prep = s.Attributes.GetNamedItem("prep").Value;
                 int prepId = prepTable.IndexOf(prep.ToUpper());
-                 
+
 
                 string doObj = s.Attributes.GetNamedItem("do").Value;
                 int doId = GetObjectId(doObj);
 
 
-                 
+
                 string ioObj = s.Attributes.GetNamedItem("io").Value;
                 int ioId = GetObjectId(ioObj);
 
@@ -37,13 +37,13 @@ namespace PlayerLib
 
 
                 string stype = s.Attributes.GetNamedItem("type").Value;
-                    
+
                 if (stype.Equals("before"))
-                    before.Add(new Sentence(verbId,doId,prepId,ioId, subName));
+                    before.Add(new Sentence(verbId, doId, prepId, ioId, subName));
                 else if (stype.Equals("instead"))
-                    instead.Add(new Sentence(verbId,doId,prepId,ioId, subName));
+                    instead.Add(new Sentence(verbId, doId, prepId, ioId, subName));
                 else
-                    after.Add(new Sentence(verbId,doId,prepId,ioId, subName));
+                    after.Add(new Sentence(verbId, doId, prepId, ioId, subName));
 
             }
         }
@@ -57,8 +57,33 @@ namespace PlayerLib
 
                 if (s.verb == verb && s.dobj == dobj && s.prep == prep && s.iobj == iobj)
                 {
-                    functions[s.name].Execute();
-                    return true;
+                    try
+                    {
+
+                        if (functions.ContainsKey(s.name))
+                        {
+                            functions[s.name].Execute();
+                        }
+                        else
+                            throw new Exception("Sentence is calling a missing function: " + s.name);
+
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+
+                        string message = e.Message;
+                        Exception ex = e;
+                        while (ex.InnerException != null)
+                        {
+                            message += "\r\n" + ex.Message;
+                            ex = ex.InnerException;
+                        }
+
+                        throw new Exception("Error in function" + fn + "\r\n" + message);
+
+                    }
+
                 }
             }
 
@@ -87,7 +112,7 @@ namespace PlayerLib
 
         string GetVerbName(int id)
         {
-            foreach (KeyValuePair<string,int> t in verbMap)
+            foreach (KeyValuePair<string, int> t in verbMap)
             {
                 if (t.Value == id)
                 {

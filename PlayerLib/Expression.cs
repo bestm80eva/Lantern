@@ -109,7 +109,7 @@ namespace PlayerLib
         }
 
         public static Node ToNode(string rhs)
-        {
+         {
             Game g = Game.GetInstance();
             rhs = rhs.Trim();
             int result;
@@ -509,8 +509,15 @@ namespace PlayerLib
         }
 
         public override int Eval() {
+            try
+            {
                 Game g = Game.GetInstance();
                 return g.GetObjectAttr(GetLhsObj(lhs), attr.ToUpper());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error near : " + lhs + "." + attr, ex);
+            }
         }
     }
     /*

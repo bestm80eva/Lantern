@@ -8,7 +8,7 @@ namespace PlayerLib
 {
     class Function
     {
-        string name;
+        public string name;
         public Body body;
 
         public Body get{

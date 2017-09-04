@@ -31,7 +31,7 @@ namespace PlayerLib
 
         public void SetObjAttr(int id, string name, int val)
         {
-            objects[id].SetObjAttr(name, val);
+                objects[id].SetObjAttr(name, val);
         }
 
 

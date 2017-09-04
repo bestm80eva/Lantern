@@ -148,6 +148,10 @@ namespace PlayerLib
                 return -1;
             if (name == "*")
                 return 254;
+            if (name == "$dobj")
+                return dobj;
+            if (name == "$iobj")
+                return iobj;
 
             int i = 0;
             foreach (ObjTableEntry o in objTable.objects.Values)
@@ -164,7 +168,14 @@ namespace PlayerLib
 
         public void SetObjectAttr(int id, string name, int val)
         {
-            objTable.SetObjAttr(id, name, val);
+            try
+            {
+                objTable.SetObjAttr(id, name, val);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Unable to set attr " + name + " on object " + id, e);
+            }
         }
 
   
@@ -210,6 +221,25 @@ namespace PlayerLib
         {
             PrintStringCr(objTable.GetObjAttr(dobj, "DESCRIPTION"));
      
+
+        }
+
+
+        public void LookIn()
+        {
+            if (HasVisibleItems(dobj))
+            {
+                PrintString("THE ");
+                PrintObjectName(dobj);
+                PrintStringCr(" CONTAINS:");
+                ListContents(dobj);
+            }
+            else
+            {
+                PrintString("THE ");
+                PrintObjectName(dobj);
+                PrintStringCr(" IS EMPTY.");
+            }
 
         }
 
@@ -822,6 +852,9 @@ namespace PlayerLib
                 new Tuple<int, DfltSentence>(verbMap["LOOK AT"], new DfltSentence(LookAt))
                 );
             defaultSentences.Add(
+                new Tuple<int, DfltSentence>(verbMap["LOOK IN"], new DfltSentence(LookIn))
+                );
+            defaultSentences.Add(
                 new Tuple<int, DfltSentence>(verbMap["INVENTORY"], new DfltSentence(Inventory))
                 );
             defaultSentences.Add(
@@ -957,8 +990,15 @@ namespace PlayerLib
 
         public int GetVarVal(string name)
         {
-            Variable v = vars[name];
-            return v.val;
+            if (vars.ContainsKey(name))
+            {
+                Variable v = vars[name];
+                return v.val;
+            }
+            else
+            {
+                throw new Exception("Bad variable name (in set): " + name);
+            }
         }
 
         public void DumpInstence()
@@ -995,7 +1035,23 @@ namespace PlayerLib
         {
             foreach (Function f in events)
             {
-                f.Execute();
+                try
+                {
+                    f.Execute();
+                }
+                catch (Exception e)
+                {
+
+                    string message = e.Message;
+                    Exception ex = e;
+                    while (ex.InnerException != null)
+                    {
+                        message += "\r\n" + ex.Message;
+                        ex = ex.InnerException;
+                    }
+
+                    MessageBox.Show("Error in event" + f.name + "\r\n" + message);
+                }
             }
 
             if (vars["$moves"].val < 255)
@@ -1025,7 +1081,14 @@ namespace PlayerLib
 
         public void SetVar(string name, int val)
         {
-            vars[name].val = val;
+            if (vars.ContainsKey(name))
+            {
+                vars[name].val = val;
+            }
+            else
+            {
+                throw new Exception("Bad variable: " + name);
+            }
         }
 
         public void Unwear()

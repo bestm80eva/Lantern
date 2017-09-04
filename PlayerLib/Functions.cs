@@ -17,13 +17,23 @@ namespace PlayerLib
 
             XmlNodeList evts = doc.SelectNodes("//project/events/event");
 
+
             foreach (XmlNode n in evts)
             {
-                FunctionBuilder fb = new FunctionBuilder();
+                string name="";
+                try
+                {
 
-                string name = n.Attributes.GetNamedItem("name").Value;
-                string code = n.InnerText;
-                events.Add(fb.CreateRoutine(name, code));
+                    FunctionBuilder fb = new FunctionBuilder();
+
+                    name = n.Attributes.GetNamedItem("name").Value;
+                    string code = n.InnerText;
+                    events.Add(fb.CreateRoutine(name, code));
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error in function " + name + ":" + ex.Message);
+                }
             }
 
             evts = doc.SelectNodes("//project/routines/routine");
