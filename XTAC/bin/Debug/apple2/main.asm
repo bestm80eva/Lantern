@@ -145,4 +145,5 @@ stack .byte 0
 score .byte 0
 gameOver .byte 0
 temp .byte 0
+health .byte 100
 .end
