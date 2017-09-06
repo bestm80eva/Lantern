@@ -39,13 +39,24 @@ _x		rts
 
 	.module check_dobj_portable
 check_dobj_portable
+
+;save table
+		lda $tableAddr
+		pha
+		lda $tableAddr+1
+		pha
+
 		lda $sentence+1
 		ldx #PORTABLE
 		jsr get_obj_prop
 		cmp #0
 		bne _x
 		jsr thats_not_something
-_x		rts
+_x		pla
+		sta $tableAddr+1
+		pla
+		sta $tableAddr
+		rts
 
 check_dobj_unlocked
 		rts
@@ -100,6 +111,10 @@ check_have_dobj
 _x		rts
 
 check_dont_have_dobj 
+		lda #0
+		sta checkFailed
+		rts ;
+		nop ; //this was crashing
 		lda #PLAYER_ID
 		sta parent
 		lda $sentence+1
@@ -251,6 +266,7 @@ thats_not_something
 		lda #period/256
 		sta $strAddr+1		
 		jsr printstrcr	; print period	
+		
 		rts
 
 dobj_already_locked
