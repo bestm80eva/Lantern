@@ -14,6 +14,12 @@ namespace XTAC
         {
 
             Routine r = new Routine();
+
+            r.Name = "not_possible";
+            r.Text = "if ($dobj == player) { println(\"NOT PHYSICALLY POSSIBLE.\");  } ";
+            xproject.Project.Routines.Routine.Add(r);
+
+            r = new Routine();
             r.Name = "get_portable";
             r.Text = "if ($dobj.portable == 1) { if ($dobj.holder != player) { println(\"(TAKEN)\"); $dobj.holder = player;}  } ";
             xproject.Project.Routines.Routine.Add(r);
@@ -31,7 +37,7 @@ namespace XTAC
 
             r = new Routine();
             r.Name = "kill_player";
-            r.Text = "println(\"***YOU HAVE DIED***.\");player.holder=1;\n";
+            r.Text = "println(\"***YOU HAVE DIED***.\");player.holder=2;\n";
             xproject.Project.Routines.Routine.Add(r);
 
             //kill self routine
@@ -109,6 +115,15 @@ namespace XTAC
             s.Prep = "";
             s.Sub = "get_portable";
             s.Type = "before";
+            xproject.Project.Sentences.Sentence.Add(s);
+
+            s = new Sentence();
+            s.Verb = "take";
+            s.Do = "PLAYER";
+            s.Io = "";
+            s.Prep = "";
+            s.Sub = "not_possible";
+            s.Type = "instead";
             xproject.Project.Sentences.Sentence.Add(s);
 
             s = new Sentence();

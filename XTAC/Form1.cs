@@ -1322,8 +1322,15 @@ namespace XTAC
         
         private void initialDescTextBox_Leave(object sender, EventArgs e)
         {
-            initialDescTextBox.Text = initialDescTextBox.Text.Trim().ToUpper();
-            GetCurObj().Initialdescription= initialDescTextBox.Text;
+            string temp = initialDescTextBox.Text.Trim().ToUpper();
+
+            temp = temp.Replace('\"', '\'');
+            temp = temp.Replace('\r', ' ');
+            temp = temp.Replace('\n', ' ');
+            initialDescTextBox.Text = temp;
+
+            initialDescTextBox.Text = temp;
+            GetCurObj().Initialdescription= temp;
 
         }
 
@@ -2002,12 +2009,19 @@ namespace XTAC
             {
 
                 s += o.Name;
-                if (o.Flags.Portable.Equals("1")) { s += "(PORTABLE)"; }
-                if (o.Flags.Scenery.Equals("1")) { s += "(SCENERY)"; }
-                s+="\r\n";
-                s += "Description:" +  o.Description + "\r\n";
-                s += "Initial Description:" +  o.Initialdescription + "\r\n";
-                s += "\r\n";
+                try
+                {
+                    if (o.Flags.Portable.Equals("1")) { s += "(PORTABLE)"; }
+                    if (o.Flags.Scenery.Equals("1")) { s += "(SCENERY)"; }
+                    s += "\r\n";
+                    s += "Description:" + o.Description + "\r\n";
+                   
+                    s += "Initial Description:" + o.Initialdescription + "\r\n";
+                    s += "\r\n";
+                }
+                catch {
+                    s += "\r\n";
+                }
             }
             reviewTextBox.Text = s;
         }
