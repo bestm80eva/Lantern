@@ -307,6 +307,19 @@ namespace XTAC
             foreach (string s in defaultVerbs) { xproject.Project.Verbs.Builtinverbs.Verb.Add(s); }
         }
 
+        void FixFunctions()
+        {
+            foreach (Routine r in xproject.Project.Routines.Routine )
+            {
+                r.Name = r.Name.Replace(' ', '_');
+            }
+
+            foreach (Sentence s in xproject.Project.Sentences.Sentence)
+            {
+                s.Sub = s.Sub.Replace(' ', '_');
+            }
+        }
+
 
     }
 }

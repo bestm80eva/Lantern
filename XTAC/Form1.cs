@@ -96,6 +96,9 @@ namespace XTAC
 
                 // Deserialize the content of the file into a Book object.
                 xproject = (Xml)reader.Deserialize(file);
+
+                FixFunctions();
+
                 ShowProject();
                 file.Close();
                 Text = "Lantern (" + fileName + ")";

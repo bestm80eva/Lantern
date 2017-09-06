@@ -203,6 +203,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label82 = new System.Windows.Forms.Label();
+            this.label81 = new System.Windows.Forms.Label();
+            this.label80 = new System.Windows.Forms.Label();
+            this.label79 = new System.Windows.Forms.Label();
+            this.label78 = new System.Windows.Forms.Label();
+            this.label77 = new System.Windows.Forms.Label();
+            this.label76 = new System.Windows.Forms.Label();
             this.label52 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.versionTextBox = new System.Windows.Forms.TextBox();
@@ -226,13 +233,6 @@
             this.Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.verbContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label76 = new System.Windows.Forms.Label();
-            this.label77 = new System.Windows.Forms.Label();
-            this.label78 = new System.Windows.Forms.Label();
-            this.label79 = new System.Windows.Forms.Label();
-            this.label80 = new System.Windows.Forms.Label();
-            this.label81 = new System.Windows.Forms.Label();
-            this.label82 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1116,7 +1116,7 @@
             // codeTextBox
             // 
             this.codeTextBox.AcceptsReturn = true;
-            this.codeTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.codeTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.codeTextBox.Location = new System.Drawing.Point(270, 30);
             this.codeTextBox.Multiline = true;
             this.codeTextBox.Name = "codeTextBox";
@@ -2073,6 +2073,69 @@
             this.tabPage1.Text = " Welcome";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label82
+            // 
+            this.label82.AutoSize = true;
+            this.label82.Location = new System.Drawing.Point(710, 210);
+            this.label82.Name = "label82";
+            this.label82.Size = new System.Drawing.Size(357, 13);
+            this.label82.TabIndex = 14;
+            this.label82.Text = "Work backwards, putting puzzles bewtween the player and the end game.";
+            // 
+            // label81
+            // 
+            this.label81.AutoSize = true;
+            this.label81.Location = new System.Drawing.Point(710, 155);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(165, 13);
+            this.label81.TabIndex = 13;
+            this.label81.Text = "Set the properties on your objects";
+            // 
+            // label80
+            // 
+            this.label80.AutoSize = true;
+            this.label80.Location = new System.Drawing.Point(710, 185);
+            this.label80.Name = "label80";
+            this.label80.Size = new System.Drawing.Size(122, 13);
+            this.label80.TabIndex = 12;
+            this.label80.Text = "Code the end game first.";
+            // 
+            // label79
+            // 
+            this.label79.AutoSize = true;
+            this.label79.Location = new System.Drawing.Point(710, 131);
+            this.label79.Name = "label79";
+            this.label79.Size = new System.Drawing.Size(196, 13);
+            this.label79.TabIndex = 11;
+            this.label79.Text = "Create a map using Trizbot and import it.";
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(710, 104);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(273, 13);
+            this.label78.TabIndex = 10;
+            this.label78.Text = "Choose a plot (Treasure hunt, escape, kill the monster...)";
+            // 
+            // label77
+            // 
+            this.label77.AutoSize = true;
+            this.label77.Location = new System.Drawing.Point(710, 82);
+            this.label77.Name = "label77";
+            this.label77.Size = new System.Drawing.Size(264, 13);
+            this.label77.TabIndex = 9;
+            this.label77.Text = "Choose a genre (Deep Space, Wild West, Medieval...)";
+            // 
+            // label76
+            // 
+            this.label76.AutoSize = true;
+            this.label76.Location = new System.Drawing.Point(710, 41);
+            this.label76.Name = "label76";
+            this.label76.Size = new System.Drawing.Size(161, 13);
+            this.label76.TabIndex = 8;
+            this.label76.Text = "TIPS FOR GETTING STARTED";
+            // 
             // label52
             // 
             this.label52.AutoSize = true;
@@ -2318,69 +2381,6 @@
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
-            // 
-            // label76
-            // 
-            this.label76.AutoSize = true;
-            this.label76.Location = new System.Drawing.Point(710, 41);
-            this.label76.Name = "label76";
-            this.label76.Size = new System.Drawing.Size(161, 13);
-            this.label76.TabIndex = 8;
-            this.label76.Text = "TIPS FOR GETTING STARTED";
-            // 
-            // label77
-            // 
-            this.label77.AutoSize = true;
-            this.label77.Location = new System.Drawing.Point(710, 82);
-            this.label77.Name = "label77";
-            this.label77.Size = new System.Drawing.Size(264, 13);
-            this.label77.TabIndex = 9;
-            this.label77.Text = "Choose a genre (Deep Space, Wild West, Medieval...)";
-            // 
-            // label78
-            // 
-            this.label78.AutoSize = true;
-            this.label78.Location = new System.Drawing.Point(710, 104);
-            this.label78.Name = "label78";
-            this.label78.Size = new System.Drawing.Size(273, 13);
-            this.label78.TabIndex = 10;
-            this.label78.Text = "Choose a plot (Treasure hunt, escape, kill the monster...)";
-            // 
-            // label79
-            // 
-            this.label79.AutoSize = true;
-            this.label79.Location = new System.Drawing.Point(710, 131);
-            this.label79.Name = "label79";
-            this.label79.Size = new System.Drawing.Size(196, 13);
-            this.label79.TabIndex = 11;
-            this.label79.Text = "Create a map using Trizbot and import it.";
-            // 
-            // label80
-            // 
-            this.label80.AutoSize = true;
-            this.label80.Location = new System.Drawing.Point(710, 185);
-            this.label80.Name = "label80";
-            this.label80.Size = new System.Drawing.Size(122, 13);
-            this.label80.TabIndex = 12;
-            this.label80.Text = "Code the end game first.";
-            // 
-            // label81
-            // 
-            this.label81.AutoSize = true;
-            this.label81.Location = new System.Drawing.Point(710, 155);
-            this.label81.Name = "label81";
-            this.label81.Size = new System.Drawing.Size(165, 13);
-            this.label81.TabIndex = 13;
-            this.label81.Text = "Set the properties on your objects";
-            // 
-            // label82
-            // 
-            this.label82.AutoSize = true;
-            this.label82.Location = new System.Drawing.Point(710, 210);
-            this.label82.Name = "label82";
-            this.label82.Size = new System.Drawing.Size(357, 13);
-            this.label82.TabIndex = 14;
-            this.label82.Text = "Work backwards, putting puzzles bewtween the player and the end game.";
             // 
             // Lantern
             // 
