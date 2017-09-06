@@ -88,7 +88,16 @@ namespace PlayerLib
             GetIntro(doc);
 
             BuildStringTable(doc);
-            
+
+            for (int i = 0; i < stringTable.GetNumEntries(); i++)
+            {
+                string s = stringTable.GetEntry(i);
+                if (s.Length > 255)
+                {
+                    MessageBox.Show("Warning: string \"" + s + "\" is greater than 255 characters long.  This will run fine in test player but will cause problems when exporting.");
+                }
+            }
+
 
             BuildNogoTable(doc);
             BuildVerbTable(doc);
