@@ -96,12 +96,14 @@ namespace XMLtoAdv
 
         public override void WriteConstant(int val)
         {
-            sw.WriteLine("\txor #" + val + " ; load constant " + val);
+            sw.WriteLine("\tlda #" + val + " ; load constant " + val);
             sw.WriteLine("\tpha");
         }
 
-        public virtual void WritePushConstant(StreamWriter sw)
+        public virtual void WritePushConstant(StreamWriter sw, string val)
         {
+            sw.WriteLine("\tlda #"+val + " ; constant");
+            sw.WriteLine("\tpha");
         }
 
         public override void WritePrint(int strId, string msg)
@@ -169,6 +171,7 @@ namespace XMLtoAdv
 
 
         //sets prop to var on stack
+        //
         public override void WriteSetProp()
         {
         }

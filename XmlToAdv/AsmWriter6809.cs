@@ -372,8 +372,27 @@ namespace XMLtoAdv
 
         protected override string GetNextLabel()
         {
-            char c = Convert.ToChar(labelId++);
-            return "@" + c.ToString().ToLower();
+            string s = "";
+            int temp = _label; ;
+
+            char c = Convert.ToChar(temp % 26 + 65);
+            s += c;
+            temp /= 26;
+
+            while (temp > 0)
+            {
+                c = Convert.ToChar(temp % 26 + 65);
+                s += c;
+                temp /= 26;
+            }
+
+            _label++;
+
+            return "@" + s.ToString().ToLower();
+        }
+
+        public override void WriteRMod(StreamWriter sw, string code)
+        {
         }
      }
 }

@@ -62,11 +62,33 @@ namespace XMLtoAdv
             sw.WriteLine("\tjsr printix");
             sw.WriteLine("\tpla ; end print");
         }
-
+        /*
         protected override string GetNextLabel()
         {
             char c = Convert.ToChar(labelId++);
             return "_" + c.ToString().ToLower();
+        }
+        */
+
+        protected override string GetNextLabel()
+        {
+            string s = "";
+            int temp = _label; ;
+
+            char c = Convert.ToChar(temp % 26 + 65);
+            s += c;
+            temp /= 26;
+
+            while (temp > 0)
+            {
+                c = Convert.ToChar(temp%26+65);
+                s += c;
+                temp /= 26;
+            }
+
+            _label++;
+
+            return "_" + s;
         }
 
         protected override void WriteJump(StreamWriter sw, string label)
@@ -323,6 +345,10 @@ namespace XMLtoAdv
                 }
 
             }
+            else if (rhs.IndexOf("rand(") != -1)
+            {
+                WriteRMod(sw,rhs);
+            }
             else throw new Exception("Unable to evaluate: " + rhs);
 
             //sw.WriteLine("\tpha ");  //push the result
@@ -348,5 +374,23 @@ namespace XMLtoAdv
             sw.WriteLine(lbl + " \tnop ; stupid thing because 6502 has no lbeq instruction");
         }
 
+        //write r to a
+        public override void WriteRMod(StreamWriter sw, string code)
+        {
+            int mod = 255;
+
+            int left = code.IndexOf('(');
+            int right = code.IndexOf(')');
+
+            string inner = code.Substring(left+1, (right - left)-1);
+
+            mod = Convert.ToInt32(inner.Trim());
+
+            sw.WriteLine("\tjsr next_rand");
+            sw.WriteLine("\tlda $rval");
+            sw.WriteLine("\tldy #" + mod);
+            sw.WriteLine("\tjsr div");
+            sw.WriteLine("\tlda $remainder");
+        }
     }
 }

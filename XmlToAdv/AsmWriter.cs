@@ -9,7 +9,8 @@ namespace XMLtoAdv
 {
     public  abstract class AsmWriter
     {
-         
+
+        protected int _label = 0;
         protected int labelId = 97;
         public const int IF_STATEMENT = 0;
         public const int IF_ELSE_STATEMENT = 1;
@@ -23,6 +24,7 @@ namespace XMLtoAdv
         protected List<string> labelStack = new List<string>();
 
         protected XmlToTables project = null;
+        char[] label = new char[5];
 
         public AsmWriter()
         {
@@ -41,8 +43,10 @@ namespace XMLtoAdv
             attrIndexes.Add("se", 9);
             attrIndexes.Add("sw", 10);
             attrIndexes.Add("nw", 11);
+            attrIndexes.Add("u", 12);
             attrIndexes.Add("up", 12);
             attrIndexes.Add("down", 13);
+            attrIndexes.Add("d", 13);
             attrIndexes.Add("in", 14);
             attrIndexes.Add("out", 15);
             attrIndexes.Add("mass", 16);
@@ -160,7 +164,8 @@ namespace XMLtoAdv
         protected abstract void WriteJump(StreamWriter sw, string label);
         protected abstract string GetNextLabel();
         public abstract void WriteCall(StreamWriter sw, string label);
-        
+        public abstract void WriteRMod(StreamWriter sw, string code);
+
         protected void SplitOnDot(string lhs, out string obj, out string attr)
         {
             int dot = lhs.IndexOf(".");

@@ -324,8 +324,24 @@ namespace XMLtoAdv
 
         protected override string GetNextLabel()
         {
-            char c = Convert.ToChar(labelId++);
-            return "$" + c.ToString().ToLower() + "?";
+
+            string s = "";
+            int temp = _label; ;
+
+            char c = Convert.ToChar(temp % 26 + 65);
+            s += c;
+            temp /= 26;
+
+            while (temp > 0)
+            {
+                c = Convert.ToChar(temp % 26 + 65);
+                s += c;
+                temp /= 26;
+            }
+
+            _label++;
+
+            return "$" + s.ToLower() + "?";
         }
 
         public override void WriteCall(StreamWriter sw, string label)
@@ -345,6 +361,10 @@ namespace XMLtoAdv
             sw.WriteLine("\tpop bc");
             sw.WriteLine("\tld a,c ; get flags in acc ");
             sw.WriteLine("\tpop bc ; end flags to a");
+        }
+
+        public override void WriteRMod(StreamWriter sw, string code)
+        {
         }
 
     }

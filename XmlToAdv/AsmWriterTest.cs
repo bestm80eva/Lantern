@@ -270,5 +270,8 @@ namespace XMLtoAdv
         {
         }
 
+        public override void WriteRMod(StreamWriter sw, string code)
+        {
+        }
     }
 }

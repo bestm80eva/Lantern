@@ -352,6 +352,8 @@ namespace XMLtoAdv
             sw.WriteLine("\tjmp " + label + " ; finally do the actual jump");
             sw.WriteLine(lbl + " \tnop ; stupid thing because 6502 has no lbeq instruction");
         }
-
+        public override void WriteRMod(StreamWriter sw, string code)
+        {
+        }
     }
 }
