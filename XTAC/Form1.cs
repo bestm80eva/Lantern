@@ -2054,33 +2054,43 @@ namespace XTAC
         {
             foreach (Object o in xproject.Project.Objects.Object)
             {
-                if (o.Flags.Door.Equals("1"))
+                try
                 {
-                    int n = Convert.ToInt32(o.Directions.N);
-                    int s = Convert.ToInt32(o.Directions.S);
-                    int e = Convert.ToInt32(o.Directions.E);
-                    int w = Convert.ToInt32(o.Directions.W);
-                    int ne = Convert.ToInt32(o.Directions.Ne);
-                    int se = Convert.ToInt32(o.Directions.Se);
-                    int nw = Convert.ToInt32(o.Directions.Nw);
-                    int sw = Convert.ToInt32(o.Directions.Sw);
-                    int up =  Convert.ToInt32(o.Directions.Up);
-                    int dn =  Convert.ToInt32(o.Directions.Down);
-
-                    if ( (n == 255 && s != 255) ||
-                        (s == 255 && n != 255) ||
-                        (w == 255 && e != 255) ||
-                        (n == 255 && w != 255) ||
-                        (nw == 255 && se != 255) ||
-                        (se == 255 && nw != 255) ||
-                        (sw == 255 && ne != 255) ||
-                        (ne == 255 && sw != 255) ||
-                        (up == 255 && dn != 255) ||
-                        (dn == 255 && up != 255))
+                    if (o.Flags.Door.Equals("1"))
                     {
-                        MessageBox.Show(o.Name + " is set as a door, but it is not connected to rooms on opposite sides.");
-                        return false;
-                    }
+                        int n = Convert.ToInt32(o.Directions.N);
+                        int s = Convert.ToInt32(o.Directions.S);
+                        int e = Convert.ToInt32(o.Directions.E);
+                        int w = Convert.ToInt32(o.Directions.W);
+                        int ne = Convert.ToInt32(o.Directions.Ne);
+                        int se = Convert.ToInt32(o.Directions.Se);
+                        int nw = Convert.ToInt32(o.Directions.Nw);
+                        int sw = Convert.ToInt32(o.Directions.Sw);
+                        int up = Convert.ToInt32(o.Directions.Up);
+                        int dn = Convert.ToInt32(o.Directions.Down);
+
+                        bool prob1 = (e == 255 && w != 255);
+                        bool prob2 = (w == 255 && e != 255);
+
+                        if ((n == 255 && s != 255) ||
+                            (s == 255 && n != 255) ||
+                            (e == 255 && w != 255) ||
+                            (w == 255 && e != 255) ||
+                            (nw == 255 && se != 255) ||
+                            (se == 255 && nw != 255) ||
+                            (sw == 255 && ne != 255) ||
+                            (ne == 255 && sw != 255) ||
+                            (up == 255 && dn != 255) ||
+                            (dn == 255 && up != 255))
+                        {
+                            MessageBox.Show(o.Name + " is set as a door, but it is not connected to rooms on opposite sides.");
+                            return false;
+                        }
+                    } 
+                }
+                catch (Exception ex)
+                {
+
                 }
             }//end foreach
 
@@ -2096,16 +2106,28 @@ namespace XTAC
 
                     if (o1.Name.ToUpper().Equals(o2.Name.ToUpper()))
                     {
-                        if (o1.Flags.Portable.Equals("1") && o2.Flags.Portable.Equals("1"))
+                        try
                         {
-                            MessageBox.Show("WARNING: You have two portable objects named:  " + o1.Name + "\r\nThis is NOT a good idea.");
-                            break;
+                            if (o1.Flags.Portable.Equals("1") && o2.Flags.Portable.Equals("1"))
+                            {
+                                MessageBox.Show("WARNING: You have two portable objects named:  " + o1.Name + "\r\nThis is NOT a good idea. ");
+                                break;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
                         }
                     }
                 }
             }
  
             return true;
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
         }
         
     }

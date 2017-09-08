@@ -135,7 +135,7 @@ namespace XTAC
                         if (!s.Equals(""))
                         {
                             Object thing = CreateObject();
-                            thing.Name = s;
+                            thing.Name = s.Trim();
                             thing.Id = "" + id;
                             thing.Description = "YOU NOTICE NOTHING UNEXPECTED.";
                             thing.Initialdescription = "";

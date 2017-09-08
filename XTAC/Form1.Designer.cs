@@ -2072,6 +2072,7 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = " Welcome";
             this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
             // label82
             // 
@@ -2172,11 +2173,11 @@
             // 
             // welcomeTextBox
             // 
-            this.welcomeTextBox.Location = new System.Drawing.Point(37, 101);
+            this.welcomeTextBox.Location = new System.Drawing.Point(37, 67);
             this.welcomeTextBox.MaxLength = 255;
             this.welcomeTextBox.Multiline = true;
             this.welcomeTextBox.Name = "welcomeTextBox";
-            this.welcomeTextBox.Size = new System.Drawing.Size(593, 86);
+            this.welcomeTextBox.Size = new System.Drawing.Size(593, 120);
             this.welcomeTextBox.TabIndex = 0;
             this.welcomeTextBox.TextChanged += new System.EventHandler(this.welcomeTextBox_TextChanged);
             this.welcomeTextBox.Leave += new System.EventHandler(this.welcomeTextBox_Leave);
