@@ -887,7 +887,21 @@ namespace XTAC
 
         private void parentComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            GetCurObj().Holder = ((ComboBox)sender).SelectedIndex.ToString();
+            int newSel = ((ComboBox)sender).SelectedIndex;
+            int curObj = objectsComboBox.SelectedIndex;
+
+            if (curObj != 0)
+            {
+                if (newSel != curObj)
+                {
+                    GetCurObj().Holder = ((ComboBox)sender).SelectedIndex.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("An object cannot contain itself!");
+                    ((ComboBox)sender).SelectedIndex = 0;
+                }
+            }
         }
 
         private void backdropTextBox_TextChanged(object sender, EventArgs e)
@@ -1727,25 +1741,27 @@ namespace XTAC
                    
                Save();
 
-                //create a modeless dialog
-                TestClient tc = new TestClient();
+               if (ValidProj())
+               {
+                   //create a modeless dialog
+                   TestClient tc = new TestClient();
 
-                try
-                {
-                    tc.SetFile(fileName);
-                    tc.ShowDialog();
-                }
-                catch (KeyNotFoundException knf)
-                {
-                    MessageBox.Show("Unknown object or value: " + knf.Message );
-                }
-                catch (Exception ex)
-                {
-                    string msg = ex.Message;
-                    
-                    MessageBox.Show(msg);
-                }
+                   try
+                   {
+                       tc.SetFile(fileName);
+                       tc.ShowDialog();
+                   }
+                   catch (KeyNotFoundException knf)
+                   {
+                       MessageBox.Show("Unknown object or value: " + knf.Message);
+                   }
+                   catch (Exception ex)
+                   {
+                       string msg = ex.Message;
 
+                       MessageBox.Show(msg);
+                   }
+               }
             }
             else
             {
@@ -2034,7 +2050,63 @@ namespace XTAC
 
         }
 
+        private bool ValidProj()
+        {
+            foreach (Object o in xproject.Project.Objects.Object)
+            {
+                if (o.Flags.Door.Equals("1"))
+                {
+                    int n = Convert.ToInt32(o.Directions.N);
+                    int s = Convert.ToInt32(o.Directions.S);
+                    int e = Convert.ToInt32(o.Directions.E);
+                    int w = Convert.ToInt32(o.Directions.W);
+                    int ne = Convert.ToInt32(o.Directions.Ne);
+                    int se = Convert.ToInt32(o.Directions.Se);
+                    int nw = Convert.ToInt32(o.Directions.Nw);
+                    int sw = Convert.ToInt32(o.Directions.Sw);
+                    int up =  Convert.ToInt32(o.Directions.Up);
+                    int dn =  Convert.ToInt32(o.Directions.Down);
 
+                    if ( (n == 255 && s != 255) ||
+                        (s == 255 && n != 255) ||
+                        (w == 255 && e != 255) ||
+                        (n == 255 && w != 255) ||
+                        (nw == 255 && se != 255) ||
+                        (se == 255 && nw != 255) ||
+                        (sw == 255 && ne != 255) ||
+                        (ne == 255 && sw != 255) ||
+                        (up == 255 && dn != 255) ||
+                        (dn == 255 && up != 255))
+                    {
+                        MessageBox.Show(o.Name + " is set as a door, but it is not connected to rooms on opposite sides.");
+                        return false;
+                    }
+                }
+            }//end foreach
+
+
+            //warn about duplicate objects with the same name
+
+            for (int i = 0; i < xproject.Project.Objects.Object.Count; i++)
+            {
+                Object o1 = xproject.Project.Objects.Object[i];
+                for (int j = i+1; j < xproject.Project.Objects.Object.Count; j++)
+                {
+                    Object o2 = xproject.Project.Objects.Object[j];
+
+                    if (o1.Name.ToUpper().Equals(o2.Name.ToUpper()))
+                    {
+                        if (o1.Flags.Portable.Equals("1") && o2.Flags.Portable.Equals("1"))
+                        {
+                            MessageBox.Show("WARNING: You have two portable objects named:  " + o1.Name + "\r\nThis is NOT a good idea.");
+                            break;
+                        }
+                    }
+                }
+            }
+ 
+            return true;
+        }
         
     }
 }
