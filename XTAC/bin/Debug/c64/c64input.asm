@@ -14,7 +14,8 @@ readkb
 		tya ;save y
 		pha
 		lda #GT	;  '>'
-		jsr cout1
+		jsr charout
+		
 ;		jsr undrscr
 		ldy #0
 _kblp	jsr getchar
@@ -26,7 +27,7 @@ _kblp	jsr getchar
 		beq _kbout
 		sta $kbdbuf,y; ;store key 
 		jsr cout1 ; echo it
-		;jsr undrscr
+;		jsr undrscr
 		iny
 		jmp _kblp
 _bs		lda #SPACE	; space
@@ -45,10 +46,9 @@ _bs		lda #SPACE	; space
 		jmp _kblp
 _kbout	
 		;dec $24	; back up and rub out the cursor
-		lda #CR	; new line
-		jsr charout
-		lda #CR	; new line
-		jsr charout
+		jsr printcr	; new line
+		jsr printcr	; new line
+		
 		lda #0	; null terminate buffer
 		sta $kbdbuf,y;
 
@@ -89,6 +89,7 @@ getchar
 	pha
 	
 	jsr $GETIN
+;	jsr $FFCF
 	sta $ctemp
 	
 	pla

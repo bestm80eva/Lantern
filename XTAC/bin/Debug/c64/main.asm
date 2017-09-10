@@ -6,7 +6,7 @@
 #define SPACE 32
 #define GT 62
 #define BS 14
-#define CR 20 
+#define CR 12 
 #define UNDRSCR 164
 
 ;#define rdkey $FD0C
@@ -46,7 +46,7 @@ start
 	jsr show_intro
  	jsr look_sub
 _lp
- 	jsr clr_buffr
+; 	jsr clr_buffr ; CAUSE OF CPU JAM
 	jsr clr_words
     jsr printcr
 	jsr print_title_bar
@@ -92,7 +92,7 @@ _x 	jsr printcr
 .include "printing6502.asm"
 .include "c64printing.asm"
 .include "look6502.asm"
-.include "parser6502.asm"
+.include "c64parser.asm"
 .include "tables6502.asm"
 .include "routines6502.asm"
 .include "attributes6502.asm"
