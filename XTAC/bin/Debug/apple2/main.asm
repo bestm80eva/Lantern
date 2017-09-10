@@ -100,7 +100,7 @@ _x 	jsr printcr
 .include "printing6502.asm"
 .include "a2printing.asm"
 .include "look6502.asm"
-.include "parser6502.asm"
+.include "a2parser.asm"
 .include "tables6502.asm"
 .include "routines6502.asm"
 .include "attributes6502.asm"
